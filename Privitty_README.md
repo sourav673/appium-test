@@ -16,6 +16,7 @@ emulator @Pixel_7_Pro_API_35 (@<emulator_name>)
 
 adb install <apk path>
 ```
+
 # Logcat
 
 ```
