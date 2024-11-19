@@ -61,6 +61,8 @@ If you don't have Docker or Podman setup yet, read [how to setup Podman](#setup-
 below. If you don't want to use Docker or Podman, read [how to manually install the
 build environment](#install-build-environment).
 
+NOTE: Make sure you featched all the submodules `git submodule update --init --recursive`. 
+
 First, build the image `deltachat-android` by running
 ```
 podman build --build-arg UID=$(id -u) --build-arg GID=$(id -g) . -t deltachat-android
@@ -68,6 +70,9 @@ podman build --build-arg UID=$(id -u) --build-arg GID=$(id -g) . -t deltachat-an
 or
 ```
 docker build --build-arg UID=$(id -u) --build-arg GID=$(id -g) . -t deltachat-android
+
+on macOS M2:
+docker build --platform linux/x86_64 --build-arg UID=$(id -u) --build-arg GID=$(id -g) . -t deltachat-android
 ```
 
 Then, run the image:
@@ -76,7 +81,7 @@ podman run --userns=keep-id -it --name deltachat -v $(pwd):/home/app:z -w /home/
 ```
 or
 ```
-docker run -it --name deltachat -v $(pwd):/home/app:z -w /home/app localhost/deltachat-android
+docker run -it --name deltachat -v $(pwd):/home/app:z -w /home/app deltachat-android
 ```
 
 You can leave the container with Ctrl+D or by typing `exit` and re-enter it with 
