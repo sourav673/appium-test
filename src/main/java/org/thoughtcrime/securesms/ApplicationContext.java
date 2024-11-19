@@ -85,6 +85,7 @@ public class ApplicationContext extends MultiDexApplication {
     Log.i("DeltaChat", "++++++++++++++++++ ApplicationContext.onCreate() ++++++++++++++++++");
 
     System.loadLibrary("native-utils");
+    System.loadLibrary("priv");
 
     dcAccounts = new DcAccounts(new File(getFilesDir(), "accounts").getAbsolutePath());
     rpc = new Rpc(dcAccounts.getJsonrpcInstance());

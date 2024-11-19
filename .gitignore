@@ -8,7 +8,6 @@ gen/
 /gplay/
 .idea/
 *.iml
-*.so
 out
 tests
 lint.xml
