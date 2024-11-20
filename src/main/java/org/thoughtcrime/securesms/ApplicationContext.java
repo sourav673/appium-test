@@ -26,6 +26,7 @@ import com.b44t.messenger.DcContext;
 import com.b44t.messenger.DcEvent;
 import com.b44t.messenger.DcEventEmitter;
 import com.b44t.messenger.rpc.Rpc;
+import com.b44t.messenger.PrivJNI;
 
 import org.thoughtcrime.securesms.connect.AccountManager;
 import org.thoughtcrime.securesms.connect.DcEventCenter;
@@ -61,6 +62,7 @@ public class ApplicationContext extends MultiDexApplication {
   public DcEventCenter          eventCenter;
   public NotificationCenter     notificationCenter;
   private JobManager            jobManager;
+  public PrivJNI                privJni;
 
   private int                   debugOnAvailableCount;
   private int                   debugOnBlockedStatusChangedCount;
@@ -86,6 +88,12 @@ public class ApplicationContext extends MultiDexApplication {
 
     System.loadLibrary("native-utils");
     System.loadLibrary("priv");
+
+    privJni = new PrivJNI();
+    privJni.registerMsgCallback();
+
+    String curr_path = getFilesDir().getAbsolutePath(); // till files
+    privJni.startEventLoop(curr_path);
 
     dcAccounts = new DcAccounts(new File(getFilesDir(), "accounts").getAbsolutePath());
     rpc = new Rpc(dcAccounts.getJsonrpcInstance());
