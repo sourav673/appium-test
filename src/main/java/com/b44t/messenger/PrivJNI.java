@@ -1,4 +1,12 @@
 package com.b44t.messenger;
+import android.util.Log;
+import com.b44t.messenger.PrivEvent;
+
+import android.content.Context;
+import com.b44t.messenger.DcContext;
+import com.b44t.messenger.DcMsg;
+
+import org.thoughtcrime.securesms.connect.DcHelper;
 
 public class PrivJNI {
 
@@ -53,72 +61,45 @@ public class PrivJNI {
     public void onNativeMsgCallback(String pID, int statusCode, byte[] pdu) {
 
         if (statusCode == PrivJNI.PRV_APP_STATUS_VAULT_IS_READY) {
-            System.out.println("ALICE: Congratulations! Vault is created\n");
-            JEvent jevent = new JEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", "Bob", "009", "", "", "", 0, pdu);
-            produceEvent(jevent);
-            System.out.println("ALICE: Add new peer: BOB (009)");
-        } else if (statusCode == PrivJNI.PRV_APP_STATUS_SEND_PEER_PDU && pID.toLowerCase().contains("009")) {
-            System.out.println("\nBOB: Add Peer Request:" + pID);
-            JEvent jevent = new JEvent(PrivJNI.PRV_EVENT_RECEIVED_PEER_PDU, "", "Alice", "007", "", "", "", 0, pdu);
-            produceEvent(jevent);
-            System.out.println("BOB: Add Peer Accept :" + pID);
-        } else if (statusCode == PrivJNI.PRV_APP_STATUS_SEND_PEER_PDU && pID.toLowerCase().contains("007")) {
-            System.out.println("\nBOB: Add Peer Request:" + pID);
-            JEvent jevent = new JEvent(PrivJNI.PRV_EVENT_RECEIVED_PEER_PDU, "", "Bob", "009", "", "", "", 0, pdu);
-            produceEvent(jevent);
-            System.out.println("BOB: Add Peer Accept :" + pID);
-        } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_ADD_COMPLETE && pID.toLowerCase().contains("009")) {
-            System.out.println("\nALICE: Add peer Complete:" + pID);
-            JEvent jevent = new JEvent(PrivJNI.PRV_EVENT_ENCRYPT_FILE, "", "Bob", "009", "", "/Users/milinddeore/PROJECTS/privitty/privitty-native/libpriv/src/platform/macos", "Antler.pdf", 0, pdu);
-            produceEvent(jevent);
-            System.out.println("\nALICE: Encrypt a the file: Antler.pdf");
+            Log.d("JAVA-Privitty", "Congratulations! Vault is created\n");
+
+        } else if (statusCode == PrivJNI.PRV_APP_STATUS_SEND_PEER_PDU) {
+            Log.d("JAVA-Privitty", "Send add new peer request to chatId:" + pID);
+            //DcContext dcContext = DcHelper.getContext(this);
+            //DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
+            //msg.setSubject("{'privitty':'true', 'pshow':'true'}");
+            //msg.setText(String(pdu));
+            //dcContext.sendMsg(chatId, msg);
+
+
+            // In the receive path:
+            //PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_RECEIVED_PEER_PDU, "", "Alice", "007", "", "", "", 0, pdu);
+            //produceEvent(jevent);
+            //System.out.println("BOB: Add Peer Accept :" + pID);
+        } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_ADD_COMPLETE) {
+            Log.d("JAVA-Privitty", "Add peer Complete with chatID:" + pID);
+            //PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ENCRYPT_FILE, "", "Bob", "009", "", "/Users/milinddeore/PROJECTS/privitty/privitty-native/libpriv/src/platform/macos", "Antler.pdf", 0, pdu);
+            //produceEvent(jevent);
+            //System.out.println("\nALICE: Encrypt a the file: Antler.pdf");
         } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_ENCRYPTED) {
-            System.out.println("\nALICE: Encrypted the given file");
-            JEvent jevent = new JEvent(PrivJNI.PRV_EVENT_DECRYPT_FILE, "", "Bob", "009", "", "", "Antler.prv", 1, new byte[0]);
-            produceEvent(jevent);
-            System.out.println("\nALICE: Decrypt a the file: Antler.pdf");
+            Log.d("JAVA-Privitty", "Encrypted the given file");
+            //PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_DECRYPT_FILE, "", "Bob", "009", "", "", "Antler.prv", 1, new byte[0]);
+            //produceEvent(jevent);
+            //System.out.println("\nALICE: Decrypt a the file: Antler.pdf");
         } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_DECRYPTED) {
-            System.out.println("\nALICE: Decrypted a given file");
+            Log.d("JAVA-Privitty", "Decrypted the given file");
         } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_INACCESSIBLE) {
-            System.out.println("CPP CB: ERROR: Failed to open file for reading");
+            Log.e("JAVA-Privitty", "Failed to open file for reading");
         } else {
-            System.out.println(">> DEFAULT: " + statusCode);
+            Log.e("JAVA-Privitty", "StatusCode: " + statusCode);
         }
     }
-
 
     public native String version();
     public native void startEventLoop(String path);
     public native void stopConsumer();
-    public native void produceEvent(JEvent event);
+    public native void produceEvent(PrivEvent event);
     public native void registerMsgCallback();
 }
 
-class JEvent {
-
-    /* Event Payload JNI <--> Native */
-    public int eventType;
-    public String mID;
-    public String mName;
-    public String pID;
-    public String pCode;
-    public String filePath;
-    public String fileName;
-    public int direction;
-    public byte[] pdu;
-
-
-    // Constructor
-    public JEvent(int event_type, String my_id, String my_name, String peer_id, String pcode, String file_path, String file_name, int dir, byte[] pdu) {
-        this.eventType = event_type;
-        this.mID = my_id;
-        this.mName = my_name;
-        this.pID = peer_id;
-        this.pCode = pcode;
-        this.filePath = file_path;
-        this.fileName = file_name;
-        this.direction = dir;
-        this.pdu = pdu;
-    }
-}
 

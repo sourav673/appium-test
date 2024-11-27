@@ -23,6 +23,7 @@ import com.b44t.messenger.DcContext;
 import com.b44t.messenger.DcLot;
 import com.b44t.messenger.DcMsg;
 import com.b44t.messenger.rpc.Rpc;
+import com.b44t.messenger.PrivJNI;
 
 import org.thoughtcrime.securesms.ApplicationContext;
 import org.thoughtcrime.securesms.BuildConfig;
@@ -80,6 +81,10 @@ public class DcHelper {
 
     public static DcContext getContext(@NonNull Context context) {
         return ApplicationContext.getInstance(context).dcContext;
+    }
+
+    public static PrivJNI getPriv(@NonNull Context context) {
+        return ApplicationContext.getInstance(context).privJni;
     }
 
     public static Rpc getRpc(@NonNull Context context) {

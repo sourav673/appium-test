@@ -35,6 +35,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
@@ -47,6 +48,8 @@ import androidx.constraintlayout.widget.Group;
 import com.b44t.messenger.DcContext;
 import com.b44t.messenger.DcEvent;
 import com.b44t.messenger.DcProvider;
+import com.b44t.messenger.PrivJNI;
+import com.b44t.messenger.PrivEvent;
 import com.b44t.messenger.util.concurrent.ListenableFuture;
 import com.b44t.messenger.util.concurrent.SettableFuture;
 import com.google.android.material.textfield.TextInputEditText;
@@ -309,6 +312,10 @@ public class RegistrationActivity extends BaseActionBarActivity implements DcEve
         checkOauth2start().addListener(new ListenableFuture.Listener<Boolean>() {
             @Override
             public void onSuccess(Boolean oauth2started) {
+                PrivJNI privJni = DcHelper.getPriv(RegistrationActivity.this);
+                PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_CREATE_VAULT, DcHelper.CONFIG_ADDRESS,
+                                                 DcHelper.CONFIG_DISPLAY_NAME, "", DcHelper.CONFIG_MAIL_PASSWORD, "", "", 0, new byte[0]);
+                privJni.produceEvent(jevent);
                 if(!oauth2started) {
                     updateProviderInfo();
                     onLogin();
