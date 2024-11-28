@@ -27,6 +27,7 @@ import com.b44t.messenger.DcEvent;
 import com.b44t.messenger.DcEventEmitter;
 import com.b44t.messenger.rpc.Rpc;
 import com.b44t.messenger.PrivJNI;
+import com.b44t.messenger.DcMsg;
 
 import org.thoughtcrime.securesms.connect.AccountManager;
 import org.thoughtcrime.securesms.connect.DcEventCenter;
@@ -48,9 +49,11 @@ import org.thoughtcrime.securesms.util.DynamicTheme;
 import org.thoughtcrime.securesms.util.Prefs;
 import org.thoughtcrime.securesms.util.SignalProtocolLoggerProvider;
 import org.thoughtcrime.securesms.util.Util;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
+import java.nio.charset.StandardCharsets;
 
 public class ApplicationContext extends MultiDexApplication {
   private static final String TAG = ApplicationContext.class.getSimpleName();
@@ -89,8 +92,8 @@ public class ApplicationContext extends MultiDexApplication {
     System.loadLibrary("native-utils");
     System.loadLibrary("priv");
 
-    privJni = new PrivJNI();
-    privJni.registerMsgCallback();
+    privJni = new PrivJNI(getApplicationContext());
+    registerMsgCallback();
 
     String curr_path = getFilesDir().getAbsolutePath(); // till files
     privJni.startEventLoop(curr_path);
@@ -126,6 +129,23 @@ public class ApplicationContext extends MultiDexApplication {
         if (event==null) {
           break;
         }
+
+        if (event.getId() == DcContext.DC_EVENT_INCOMING_MSG) {
+          try {
+            DcMsg dcMsg = dcContext.getMsg(event.getData2Int());
+            // Convert String to JSON object
+            JSONObject jSubject = new JSONObject(dcMsg.getSubject());
+            if ("true".equalsIgnoreCase(jSubject.getString("privitty"))) {
+              Log.d("JAVA-Privitty", "This is Privitty only message punt it to libpriv");
+
+              dcContext.deleteMsgs(new int[]{event.getData2Int()});
+              continue;
+            }
+          } catch (Exception e) {
+            Log.d("JAVA-Privitty", "This is non-privitty message -- ApplicationContext");
+          }
+        }
+
         eventCenter.handleEvent(event);
       }
       Log.i("DeltaChat", "shutting down event handler");
@@ -246,4 +266,46 @@ public class ApplicationContext extends MultiDexApplication {
   private void initializeJobManager() {
     this.jobManager = new JobManager(this, 5);
   }
+
+  /*
+   * C++ --> JAVA callback, to handle various status types.
+   */
+  public void onNativeMsgCallback(String chatId, int statusCode, byte[] pdu) {
+
+    if (statusCode == PrivJNI.PRV_APP_STATUS_VAULT_IS_READY) {
+      Log.d("JAVA-Privitty", "Congratulations! Vault is created\n");
+
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_SEND_PEER_PDU) {
+      Log.d("JAVA-Privitty", "Send add new peer request to chatId:" + chatId);
+      Util.runOnAnyBackgroundThread(() -> {
+        DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
+        msg.setSubject("{'privitty':'true', 'pshow':'true'}");
+        msg.setText(new String(pdu, StandardCharsets.UTF_8));
+        dcContext.sendMsg(Integer.parseInt(chatId), msg);
+      });
+
+      // In the receive path:
+      //PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_RECEIVED_PEER_PDU, "", "Alice", "007", "", "", "", 0, pdu);
+      //produceEvent(jevent);
+      //System.out.println("BOB: Add Peer Accept :" + pID);
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_ADD_COMPLETE) {
+      Log.d("JAVA-Privitty", "Add peer Complete with chatID:" + chatId);
+      //PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ENCRYPT_FILE, "", "Bob", "009", "", "/Users/milinddeore/PROJECTS/privitty/privitty-native/libpriv/src/platform/macos", "Antler.pdf", 0, pdu);
+      //produceEvent(jevent);
+      //System.out.println("\nALICE: Encrypt a the file: Antler.pdf");
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_ENCRYPTED) {
+      Log.d("JAVA-Privitty", "Encrypted the given file");
+      //PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_DECRYPT_FILE, "", "Bob", "009", "", "", "Antler.prv", 1, new byte[0]);
+      //produceEvent(jevent);
+      //System.out.println("\nALICE: Decrypt a the file: Antler.pdf");
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_DECRYPTED) {
+      Log.d("JAVA-Privitty", "Decrypted the given file");
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_INACCESSIBLE) {
+      Log.e("JAVA-Privitty", "Failed to open file for reading");
+    } else {
+      Log.e("JAVA-Privitty", "StatusCode: " + statusCode);
+    }
+  }
+
+  public native void registerMsgCallback();
 }

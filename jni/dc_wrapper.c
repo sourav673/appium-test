@@ -1618,6 +1618,12 @@ JNIEXPORT jint Java_com_b44t_messenger_DcMsg_getVideochatType(JNIEnv *env, jobje
     return (jint)dc_msg_get_videochat_type(get_dc_msg(env, obj));
 }
 
+JNIEXPORT void Java_com_b44t_messenger_DcMsg_setSubject(JNIEnv *env, jobject obj, jstring text)
+{
+    CHAR_REF(text);
+        dc_msg_set_subject(get_dc_msg(env, obj), textPtr);
+    CHAR_UNREF(text);
+}
 
 JNIEXPORT void Java_com_b44t_messenger_DcMsg_setText(JNIEnv *env, jobject obj, jstring text)
 {

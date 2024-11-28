@@ -57,49 +57,15 @@ public class PrivJNI {
      */ 
     public final static int PRV_APP_STATUS_LIB_LAST                 = 20;
 
-    // Message method to be called by the C++ code
-    public void onNativeMsgCallback(String pID, int statusCode, byte[] pdu) {
-
-        if (statusCode == PrivJNI.PRV_APP_STATUS_VAULT_IS_READY) {
-            Log.d("JAVA-Privitty", "Congratulations! Vault is created\n");
-
-        } else if (statusCode == PrivJNI.PRV_APP_STATUS_SEND_PEER_PDU) {
-            Log.d("JAVA-Privitty", "Send add new peer request to chatId:" + pID);
-            //DcContext dcContext = DcHelper.getContext(this);
-            //DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
-            //msg.setSubject("{'privitty':'true', 'pshow':'true'}");
-            //msg.setText(String(pdu));
-            //dcContext.sendMsg(chatId, msg);
-
-
-            // In the receive path:
-            //PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_RECEIVED_PEER_PDU, "", "Alice", "007", "", "", "", 0, pdu);
-            //produceEvent(jevent);
-            //System.out.println("BOB: Add Peer Accept :" + pID);
-        } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_ADD_COMPLETE) {
-            Log.d("JAVA-Privitty", "Add peer Complete with chatID:" + pID);
-            //PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ENCRYPT_FILE, "", "Bob", "009", "", "/Users/milinddeore/PROJECTS/privitty/privitty-native/libpriv/src/platform/macos", "Antler.pdf", 0, pdu);
-            //produceEvent(jevent);
-            //System.out.println("\nALICE: Encrypt a the file: Antler.pdf");
-        } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_ENCRYPTED) {
-            Log.d("JAVA-Privitty", "Encrypted the given file");
-            //PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_DECRYPT_FILE, "", "Bob", "009", "", "", "Antler.prv", 1, new byte[0]);
-            //produceEvent(jevent);
-            //System.out.println("\nALICE: Decrypt a the file: Antler.pdf");
-        } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_DECRYPTED) {
-            Log.d("JAVA-Privitty", "Decrypted the given file");
-        } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_INACCESSIBLE) {
-            Log.e("JAVA-Privitty", "Failed to open file for reading");
-        } else {
-            Log.e("JAVA-Privitty", "StatusCode: " + statusCode);
-        }
+    private Context context = null;
+    public PrivJNI(Context context) {
+        this.context = context;
     }
 
     public native String version();
     public native void startEventLoop(String path);
     public native void stopConsumer();
     public native void produceEvent(PrivEvent event);
-    public native void registerMsgCallback();
 }
 
 
