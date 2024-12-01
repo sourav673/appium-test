@@ -27,6 +27,7 @@ import com.b44t.messenger.DcEvent;
 import com.b44t.messenger.DcEventEmitter;
 import com.b44t.messenger.rpc.Rpc;
 import com.b44t.messenger.PrivJNI;
+import com.b44t.messenger.PrivEvent;
 import com.b44t.messenger.DcMsg;
 
 import org.thoughtcrime.securesms.connect.AccountManager;
@@ -54,6 +55,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 public class ApplicationContext extends MultiDexApplication {
   private static final String TAG = ApplicationContext.class.getSimpleName();
@@ -133,11 +135,18 @@ public class ApplicationContext extends MultiDexApplication {
         if (event.getId() == DcContext.DC_EVENT_INCOMING_MSG) {
           try {
             DcMsg dcMsg = dcContext.getMsg(event.getData2Int());
-            // Convert String to JSON object
             JSONObject jSubject = new JSONObject(dcMsg.getSubject());
             if ("true".equalsIgnoreCase(jSubject.getString("privitty"))) {
-              Log.d("JAVA-Privitty", "This is Privitty only message punt it to libpriv");
+              Log.d("JAVA-Privitty", "Indeed a Privitty message, punt it to libpriv");
 
+              Util.runOnAnyBackgroundThread(() -> {
+                PrivJNI privJni = DcHelper.getPriv(getApplicationContext());
+                byte[] byteArrayMsg = Base64.getDecoder().decode(dcMsg.getText());
+                PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_RECEIVED_PEER_PDU, "", "",
+                  Integer.toString(event.getData1Int()),
+                  "", "", "", 0, byteArrayMsg);
+                privJni.produceEvent(jevent);
+              });
               dcContext.deleteMsgs(new int[]{event.getData2Int()});
               continue;
             }
@@ -280,16 +289,13 @@ public class ApplicationContext extends MultiDexApplication {
       Util.runOnAnyBackgroundThread(() -> {
         DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
         msg.setSubject("{'privitty':'true', 'pshow':'true'}");
-        msg.setText(new String(pdu, StandardCharsets.UTF_8));
-        dcContext.sendMsg(Integer.parseInt(chatId), msg);
+        String base64Msg = Base64.getEncoder().encodeToString(pdu);
+        msg.setText(base64Msg);
+        int msgId = dcContext.sendMsg(Integer.parseInt(chatId), msg);
       });
 
-      // In the receive path:
-      //PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_RECEIVED_PEER_PDU, "", "Alice", "007", "", "", "", 0, pdu);
-      //produceEvent(jevent);
-      //System.out.println("BOB: Add Peer Accept :" + pID);
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_ADD_COMPLETE) {
-      Log.d("JAVA-Privitty", "Add peer Complete with chatID:" + chatId);
+      Log.d("JAVA-Privitty", "Congratulations! Add new peer handshake is complete with chatID:" + chatId);
       //PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ENCRYPT_FILE, "", "Bob", "009", "", "/Users/milinddeore/PROJECTS/privitty/privitty-native/libpriv/src/platform/macos", "Antler.pdf", 0, pdu);
       //produceEvent(jevent);
       //System.out.println("\nALICE: Encrypt a the file: Antler.pdf");

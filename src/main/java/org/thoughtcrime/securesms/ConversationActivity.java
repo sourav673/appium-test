@@ -72,6 +72,8 @@ import com.b44t.messenger.rpc.Rpc;
 import com.b44t.messenger.rpc.RpcException;
 import com.b44t.messenger.util.concurrent.ListenableFuture;
 import com.b44t.messenger.util.concurrent.SettableFuture;
+import com.b44t.messenger.PrivJNI;
+import com.b44t.messenger.PrivEvent;
 
 import org.thoughtcrime.securesms.attachments.Attachment;
 import org.thoughtcrime.securesms.attachments.UriAttachment;
@@ -1592,6 +1594,11 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
       dcContext.acceptChat(chatId);
       messageRequestBottomView.setVisibility(View.GONE);
       composePanel.setVisibility(View.VISIBLE);
+      PrivJNI privJni = DcHelper.getPriv(ConversationActivity.this);
+      PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", "", Integer.toString(chatId),
+                                       "", "", "", 0, new byte[0]);
+      privJni.produceEvent(jevent);
+      Log.d("JAVA-Privitty", "Adding a new peer");
     });
 
 
