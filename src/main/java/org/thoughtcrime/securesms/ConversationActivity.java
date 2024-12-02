@@ -1594,11 +1594,16 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
       dcContext.acceptChat(chatId);
       messageRequestBottomView.setVisibility(View.GONE);
       composePanel.setVisibility(View.VISIBLE);
-      PrivJNI privJni = DcHelper.getPriv(ConversationActivity.this);
-      PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", "", Integer.toString(chatId),
-                                       "", "", "", 0, new byte[0]);
-      privJni.produceEvent(jevent);
-      Log.d("JAVA-Privitty", "Adding a new peer");
+
+      if(dcChat.isProtected()) {
+        PrivJNI privJni = DcHelper.getPriv(ConversationActivity.this);
+        PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", "", Integer.toString(chatId),
+          "", "", "", 0, new byte[0]);
+        privJni.produceEvent(jevent);
+        Log.d("JAVA-Privitty", "Adding a new peer");
+      } else {
+        Log.d("JAVA-Privitty", "The chatId is not protected");
+      }
     });
 
 

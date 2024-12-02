@@ -146,12 +146,6 @@ public class NewConversationActivity extends ContactSelectionActivity {
   }
 
   private void openConversation(int chatId) {
-
-    PrivJNI privJni = DcHelper.getPriv(NewConversationActivity.this);
-    PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", "", Integer.toString(chatId),
-                                     "", "", "", 0, new byte[0]);
-    privJni.produceEvent(jevent);
-    Log.d("JAVA-Privitty", "Adding a new peer");
     Intent intent = new Intent(this, ConversationActivity.class);
     intent.putExtra(TEXT_EXTRA, getIntent().getStringExtra(TEXT_EXTRA));
     intent.setDataAndType(getIntent().getData(), getIntent().getType());

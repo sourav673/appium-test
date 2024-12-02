@@ -15,21 +15,18 @@ public class PrivJNI {
     public final static int PRV_EVENT_DEINIT                        = 2;
     public final static int PRV_EVENT_ABORT                         = 3;
     public final static int PRV_EVENT_SHUTDOWN                      = 4;
-    public final static int PRV_EVENT_USER_ENTERED_PASSCODE         = 5;
-    public final static int PRV_EVENT_ADD_NEW_PEER                  = 6;
-    public final static int PRV_EVENT_RECEIVED_PEER_PDU             = 7;
-    public final static int PRV_EVENT_ENCRYPT_FILE                  = 8;
-    public final static int PRV_EVENT_DECRYPT_FILE                  = 9;
-    public final static int PRV_EVENT_REQUEST_SSS                   = 10;
-    public final static int PRV_EVENT_RECEIVED_SSS                  = 11;
-    public final static int PRV_EVENT_STOP_RENDERING                = 12;
-    public final static int PRV_EVENT_PEER_OFFLINE                  = 13;
+    public final static int PRV_EVENT_ADD_NEW_PEER                  = 5;
+    public final static int PRV_EVENT_RECEIVED_PEER_PDU             = 6;
+    public final static int PRV_EVENT_ENCRYPT_FILE                  = 7;
+    public final static int PRV_EVENT_DECRYPT_FILE                  = 8;
+    public final static int PRV_EVENT_STOP_RENDERING                = 9;
+    public final static int PRV_EVENT_PEER_OFFLINE                  = 10;
     public final static int PRV_EVENT_PEER_TIMEOUT_REACHED          = 14;
-    public final static int PRV_EVENT_FILE_SANITY_FAILED            = 15;
+    public final static int PRV_EVENT_FILE_SANITY_FAILED            = 12;
     /*
      * NOTE: Add any event above PRV_EVENT_LAST and update PRV_EVENT_LAST
      */ 
-    public final static int PRV_EVENT_LAST                          = 16;
+    public final static int PRV_EVENT_LAST                          = 13;
 
 
     public final static int PRV_APP_STATUS_ERROR                    = 0;
