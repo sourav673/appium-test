@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.util.Log;
 
 import com.b44t.messenger.DcChat;
 import com.b44t.messenger.DcContext;
@@ -40,6 +41,7 @@ import org.thoughtcrime.securesms.util.LRUCache;
 import org.thoughtcrime.securesms.util.StickyHeaderDecoration;
 import org.thoughtcrime.securesms.util.Util;
 import org.thoughtcrime.securesms.util.ViewUtil;
+import org.json.JSONObject;
 
 import java.lang.ref.SoftReference;
 import java.util.Calendar;
@@ -288,6 +290,20 @@ public class ConversationAdapter <V extends View & BindableConversationItem>
   public int getItemViewType(int i) {
     DcMsg dcMsg = getMsg(i);
     int type = dcMsg.getType();
+
+    if(dcMsg.getSubject().contains("privitty'")) {
+      try {
+        JSONObject jSubject = new JSONObject(dcMsg.getSubject());
+        if ("new_peer_add".equalsIgnoreCase(jSubject.getString("type"))) {
+          dcMsg.setText("Privitty guaranteed end-to-end presentation data control and true-revoke. Tap to learn more.");
+          dcMsg.setSubject("");
+          return MESSAGE_TYPE_INFO;
+        }
+      } catch (Exception e) {
+        Log.d("JAVA-Privitty", "This is non-privitty message -- getItemViewType");
+      }
+    }
+
     if (dcMsg.isInfo()) {
       return MESSAGE_TYPE_INFO;
     }

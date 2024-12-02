@@ -288,7 +288,7 @@ public class ApplicationContext extends MultiDexApplication {
       Log.d("JAVA-Privitty", "Send add new peer request to chatId:" + chatId);
       Util.runOnAnyBackgroundThread(() -> {
         DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
-        msg.setSubject("{'privitty':'true', 'pshow':'true'}");
+        msg.setSubject("{'privitty':'true', 'type':'new_peer_add'}");
         String base64Msg = Base64.getEncoder().encodeToString(pdu);
         msg.setText(base64Msg);
         int msgId = dcContext.sendMsg(Integer.parseInt(chatId), msg);
