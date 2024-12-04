@@ -100,10 +100,10 @@ fi
 
 cd jni
 jnidir=$PWD
-rm -f armeabi-v7a/*
-rm -f arm64-v8a/*
-rm -f x86/*
-rm -f x86_64/*
+rm -f armeabi-v7a/libnative-utils.so
+rm -f arm64-v8a/libnative-utils.so
+rm -f x86/libnative-utils.so
+rm -f x86_64/libnative-utils.so
 mkdir -p armeabi-v7a
 mkdir -p arm64-v8a
 mkdir -p x86

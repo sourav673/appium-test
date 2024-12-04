@@ -295,7 +295,11 @@ public class ConversationAdapter <V extends View & BindableConversationItem>
       try {
         JSONObject jSubject = new JSONObject(dcMsg.getSubject());
         if ("new_peer_add".equalsIgnoreCase(jSubject.getString("type"))) {
-          dcMsg.setText("Privitty guaranteed end-to-end presentation data control and true-revoke. Tap to learn more.");
+          dcMsg.setText("Establishing guaranteed full control over your shared data, please wait ...");
+          dcMsg.setSubject("");
+          return MESSAGE_TYPE_INFO;
+        } else if ("new_peer_complete".equalsIgnoreCase(jSubject.getString("type"))) {
+          dcMsg.setText("Your privacy is our priority—enjoy full control over your shared data with the power to truly revoke access anytime. Tap to learn more.");
           dcMsg.setSubject("");
           return MESSAGE_TYPE_INFO;
         }

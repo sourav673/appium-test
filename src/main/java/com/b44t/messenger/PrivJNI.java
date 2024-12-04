@@ -63,6 +63,7 @@ public class PrivJNI {
     public native void startEventLoop(String path);
     public native void stopConsumer();
     public native void produceEvent(PrivEvent event);
+    public native String encryptFile(String pID, String path, String filename);
 }
 
 

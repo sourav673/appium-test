@@ -45,6 +45,8 @@ import com.b44t.messenger.rpc.RpcException;
 import com.b44t.messenger.util.concurrent.ListenableFuture;
 import com.b44t.messenger.util.concurrent.ListenableFuture.Listener;
 import com.b44t.messenger.util.concurrent.SettableFuture;
+import com.b44t.messenger.PrivJNI;
+import com.b44t.messenger.PrivEvent;
 
 import org.thoughtcrime.securesms.ApplicationContext;
 import org.thoughtcrime.securesms.MediaPreviewActivity;
@@ -682,6 +684,24 @@ public class AttachmentManager {
       case AUDIO:    return new AudioSlide(context, uri, dataSize, false, fileName);
       case VIDEO:    return new VideoSlide(context, uri, dataSize);
       case DOCUMENT:
+
+        // Protect files with Privitty
+        if (fileName != null && fileName.endsWith(".pdf")) {
+          DcContext dcContext = DcHelper.getContext(context);
+          DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_FILE);
+          Attachment attachment = new UriAttachment(uri, null, MediaUtil.OCTET, AttachmentDatabase.TRANSFER_PROGRESS_STARTED, 0, 0, 0, fileName, null, false);
+          String path = attachment.getRealPath(context);
+          File file = new File(path);
+
+          PrivJNI privJni = DcHelper.getPriv(context);
+          String prvFile = privJni.encryptFile(Integer.toString(chatId), file.getParent(), fileName);
+          msg.setSubject("{'privitty':'true', 'type':'prv_file'}");
+          msg.setFile(prvFile, MediaUtil.OCTET);
+          dcContext.setDraft(chatId, msg);
+
+          return new DocumentSlide(context, msg);
+        }
+
         // We have to special-case Webxdc slides: The user can interact with them as soon as a draft
         // is set. Therefore we need to create a DcMsg already now.
         if (fileName != null && fileName.endsWith(".xdc")) {

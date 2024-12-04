@@ -24,6 +24,7 @@ import androidx.work.WorkManager;
 import com.b44t.messenger.DcAccounts;
 import com.b44t.messenger.DcContext;
 import com.b44t.messenger.DcEvent;
+import com.b44t.messenger.DcEvent;
 import com.b44t.messenger.DcEventEmitter;
 import com.b44t.messenger.rpc.Rpc;
 import com.b44t.messenger.PrivJNI;
@@ -50,6 +51,7 @@ import org.thoughtcrime.securesms.util.DynamicTheme;
 import org.thoughtcrime.securesms.util.Prefs;
 import org.thoughtcrime.securesms.util.SignalProtocolLoggerProvider;
 import org.thoughtcrime.securesms.util.Util;
+import org.thoughtcrime.securesms.util.MediaUtil;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -296,11 +298,25 @@ public class ApplicationContext extends MultiDexApplication {
 
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_ADD_COMPLETE) {
       Log.d("JAVA-Privitty", "Congratulations! Add new peer handshake is complete with chatID:" + chatId);
-      //PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ENCRYPT_FILE, "", "Bob", "009", "", "/Users/milinddeore/PROJECTS/privitty/privitty-native/libpriv/src/platform/macos", "Antler.pdf", 0, pdu);
-      //produceEvent(jevent);
-      //System.out.println("\nALICE: Encrypt a the file: Antler.pdf");
+      Util.runOnAnyBackgroundThread(() -> {
+        DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
+        msg.setSubject("{'privitty':'true', 'type':'new_peer_complete'}");
+        String base64Msg = Base64.getEncoder().encodeToString(pdu);
+        msg.setText(base64Msg);
+        int msgId = dcContext.sendMsg(Integer.parseInt(chatId), msg);
+      });
+
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_ENCRYPTED) {
-      Log.d("JAVA-Privitty", "Encrypted the given file");
+      String prvFilePath = new String(pdu);
+      Log.d("JAVA-Privitty", "Encrypted the given file: " + prvFilePath);
+      Util.runOnAnyBackgroundThread(() -> {
+        DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
+        msg.setSubject("{'privitty':'true', 'type':'prv_file'}");
+        msg.setFile(prvFilePath, MediaUtil.OCTET);
+        int draftId = dcContext.sendMsg(Integer.parseInt(chatId), msg);
+      });
+      Log.d("JAVA-Privitty", "Encrypted file sent");
+
       //PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_DECRYPT_FILE, "", "Bob", "009", "", "", "Antler.prv", 1, new byte[0]);
       //produceEvent(jevent);
       //System.out.println("\nALICE: Decrypt a the file: Antler.pdf");
