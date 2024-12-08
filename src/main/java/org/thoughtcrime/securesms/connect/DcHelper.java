@@ -24,6 +24,7 @@ import com.b44t.messenger.DcLot;
 import com.b44t.messenger.DcMsg;
 import com.b44t.messenger.rpc.Rpc;
 import com.b44t.messenger.PrivJNI;
+import com.b44t.messenger.DcContact;
 
 import org.thoughtcrime.securesms.ApplicationContext;
 import org.thoughtcrime.securesms.BuildConfig;
@@ -41,6 +42,8 @@ import org.thoughtcrime.securesms.util.MediaUtil;
 import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
+
+import com.b44t.messenger.ActivityPDFViewer;
 
 public class DcHelper {
 
@@ -289,43 +292,63 @@ public class DcHelper {
     DcMsg msg = dcContext.getMsg(msg_id);
     String path = msg.getFile();
     String mimeType = msg.getFilemime();
-    try {
-      File file = new File(path);
-      if (!file.exists()) {
-        Toast.makeText(activity, activity.getString(R.string.file_not_found, path), Toast.LENGTH_LONG).show();
-        return;
-      }
 
-      Uri uri;
-      if (path.startsWith(dcContext.getBlobdir())) {
-        uri = Uri.parse("content://" + BuildConfig.APPLICATION_ID + ".attachments/" + Uri.encode(file.getName()));
-        sharedFiles.put("/" + file.getName(), 1); // as different Android version handle uris in putExtra differently, we also check them on our own
-      } else {
-        if (Build.VERSION.SDK_INT >= 24) {
-          uri = FileProvider.getUriForFile(activity, BuildConfig.APPLICATION_ID + ".fileprovider", file);
-        } else {
-          uri = Uri.fromFile(file);
-        }
-      }
+    File srcP = new File(path);
+    Log.d("JAVA-Privitty", "Message Subject: " + msg.getSubject());
+    String chatId = Integer.toString(msg.getChatId());
 
-      if (cmd.equals(Intent.ACTION_VIEW)) {
-        mimeType = checkMime(path, mimeType);
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(uri, mimeType);
-        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivity((Activity) activity, intent);
-      } else {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType(mimeType);
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
-        intent.putExtra(Intent.EXTRA_TEXT, msg.getText());
-        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        activity.startActivity(Intent.createChooser(intent, activity.getString(R.string.chat_share_with_title)));
-      }
-    } catch (RuntimeException e) {
-      Toast.makeText(activity, String.format("%s (%s)", activity.getString(R.string.no_app_to_handle_data), mimeType), Toast.LENGTH_LONG).show();
-      Log.i(TAG, "opening of external activity failed.", e);
+    PrivJNI privJni = getPriv(activity);
+    String prvFile;
+    if (msg.getFromId() == DcContact.DC_CONTACT_ID_SELF) {
+      prvFile = privJni.decryptFile(chatId, srcP.getParent(), msg.getFilename(), true);
+    } else {
+      prvFile = privJni.decryptFile(chatId, srcP.getParent(), msg.getFilename(), false);
     }
+
+    ActivityPDFViewer.prfFilePath = prvFile;
+    Intent intent = new Intent((Activity) activity, ActivityPDFViewer.class);
+    startActivity((Activity) activity,intent);
+
+//    Log.i("JAVA-Privitty", "Native retunred file: " + path);
+//
+//    try {
+//      File file = new File(path);
+//      if (!file.exists()) {
+//        Toast.makeText(activity, activity.getString(R.string.file_not_found, path), Toast.LENGTH_LONG).show();
+//        return;
+//      }
+//
+//      Uri uri;
+//      if (path.startsWith(dcContext.getBlobdir())) {
+//        uri = Uri.parse("content://" + BuildConfig.APPLICATION_ID + ".attachments/" + Uri.encode(file.getName()));
+//        sharedFiles.put("/" + file.getName(), 1); // as different Android version handle uris in putExtra differently, we also check them on our own
+//      } else {
+//        if (Build.VERSION.SDK_INT >= 24) {
+//          uri = FileProvider.getUriForFile(activity, BuildConfig.APPLICATION_ID + ".fileprovider", file);
+//        } else {
+//          uri = Uri.fromFile(file);
+//        }
+//      }
+//      Log.i("JAVA-Privitty", "URI : " + uri);
+//
+//      if (cmd.equals(Intent.ACTION_VIEW)) {
+//        mimeType = checkMime(path, mimeType);
+//        Intent intent = new Intent(Intent.ACTION_VIEW);
+//        intent.setDataAndType(uri, mimeType);
+//        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//        startActivity((Activity) activity, intent);
+//      } else {
+//        Intent intent = new Intent(Intent.ACTION_SEND);
+//        intent.setType(mimeType);
+//        intent.putExtra(Intent.EXTRA_STREAM, uri);
+//        intent.putExtra(Intent.EXTRA_TEXT, msg.getText());
+//        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//        activity.startActivity(Intent.createChooser(intent, activity.getString(R.string.chat_share_with_title)));
+//      }
+//    } catch (RuntimeException e) {
+//      Toast.makeText(activity, String.format("%s (%s)", activity.getString(R.string.no_app_to_handle_data), mimeType), Toast.LENGTH_LONG).show();
+//      Log.i(TAG, "opening of external activity failed.", e);
+//    }
   }
 
   public static void sendToChat(Context activity, byte[] data, String mimeType, String fileName, String text) {

@@ -386,6 +386,11 @@
         android:configChanges="touchscreen|keyboard|keyboardHidden|orientation|screenLayout|screenSize">
     </activity>
 
+    <activity android:name="com.b44t.messenger.ActivityPDFViewer"
+        android:theme="@style/TextSecure.LightTheme"
+        android:configChanges="touchscreen|keyboard|keyboardHidden|orientation|screenLayout|screenSize">
+    </activity>
+
     <service
         android:name=".connect.KeepAliveService"
         android:foregroundServiceType="dataSync"

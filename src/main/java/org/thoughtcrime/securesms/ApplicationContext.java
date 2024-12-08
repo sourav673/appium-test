@@ -139,7 +139,12 @@ public class ApplicationContext extends MultiDexApplication {
             DcMsg dcMsg = dcContext.getMsg(event.getData2Int());
             JSONObject jSubject = new JSONObject(dcMsg.getSubject());
             if ("true".equalsIgnoreCase(jSubject.getString("privitty"))) {
-              Log.d("JAVA-Privitty", "Indeed a Privitty message, punt it to libpriv");
+              if ("new_peer_concluded".equalsIgnoreCase(jSubject.getString("type"))) {
+                Log.d("JAVA-Privitty", "Privitty message: new_peer_concluded, ignore it");
+                dcContext.deleteMsgs(new int[]{event.getData2Int()});
+                continue;
+              }
+              Log.d("JAVA-Privitty", "Privitty message, punt it to libpriv. Sub: " + dcMsg.getSubject());
 
               Util.runOnAnyBackgroundThread(() -> {
                 PrivJNI privJni = DcHelper.getPriv(getApplicationContext());
@@ -153,7 +158,7 @@ public class ApplicationContext extends MultiDexApplication {
               continue;
             }
           } catch (Exception e) {
-            Log.d("JAVA-Privitty", "This is non-privitty message -- ApplicationContext");
+            Log.d("JAVA-Privitty", "This is non-privitty message");
           }
         }
 
@@ -305,21 +310,18 @@ public class ApplicationContext extends MultiDexApplication {
         msg.setText(base64Msg);
         int msgId = dcContext.sendMsg(Integer.parseInt(chatId), msg);
       });
-
-    } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_ENCRYPTED) {
-      String prvFilePath = new String(pdu);
-      Log.d("JAVA-Privitty", "Encrypted the given file: " + prvFilePath);
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_ADD_CONCLUDED) {
+      Log.d("JAVA-Privitty", "Congratulations! New peer concluded.");
       Util.runOnAnyBackgroundThread(() -> {
         DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
-        msg.setSubject("{'privitty':'true', 'type':'prv_file'}");
-        msg.setFile(prvFilePath, MediaUtil.OCTET);
-        int draftId = dcContext.sendMsg(Integer.parseInt(chatId), msg);
+        msg.setSubject("{'privitty':'true', 'type':'new_peer_conclude'}");
+        String base64Msg = Base64.getEncoder().encodeToString(pdu);
+        msg.setText(base64Msg);
+        int msgId = dcContext.sendMsg(Integer.parseInt(chatId), msg);
       });
-      Log.d("JAVA-Privitty", "Encrypted file sent");
 
-      //PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_DECRYPT_FILE, "", "Bob", "009", "", "", "Antler.prv", 1, new byte[0]);
-      //produceEvent(jevent);
-      //System.out.println("\nALICE: Decrypt a the file: Antler.pdf");
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_ENCRYPTED) {
+      Log.e("JAVA-Privitty", "Event PRV_APP_STATUS_FILE_ENCRYPTED is not implemented via event queue");
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_DECRYPTED) {
       Log.d("JAVA-Privitty", "Decrypted the given file");
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_INACCESSIBLE) {

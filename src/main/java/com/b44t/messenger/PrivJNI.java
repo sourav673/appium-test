@@ -40,19 +40,20 @@ public class PrivJNI {
     public final static int PRV_APP_STATUS_SEND_PEER_PDU            = 8;
     public final static int PRV_APP_STATUS_PEER_ADD_ACCEPTED        = 9;
     public final static int PRV_APP_STATUS_PEER_ADD_COMPLETE        = 10;
-    public final static int PRV_APP_STATUS_PEER_ADD_PENDING         = 11;
-    public final static int PRV_APP_STATUS_PEER_BLOCKED             = 12;
-    public final static int PRV_APP_STATUS_FILE_ENCRYPTED           = 13;
-    public final static int PRV_APP_STATUS_FILE_ENCRYPTION_FAILED   = 14;
-    public final static int PRV_APP_STATUS_FILE_DECRYPTED           = 15;
-    public final static int PRV_APP_STATUS_FILE_DECRYPTION_FAILED   = 16;
-    public final static int PRV_APP_STATUS_INVALID_FILE             = 17;
-    public final static int PRV_APP_STATUS_FILE_INACCESSIBLE        = 18;
-    public final static int PRV_APP_STATUS_AWAITING_PEER_AUTH       = 19;
+    public final static int PRV_APP_STATUS_PEER_ADD_CONCLUDED       = 11;
+    public final static int PRV_APP_STATUS_PEER_ADD_PENDING         = 12;
+    public final static int PRV_APP_STATUS_PEER_BLOCKED             = 13;
+    public final static int PRV_APP_STATUS_FILE_ENCRYPTED           = 14;
+    public final static int PRV_APP_STATUS_FILE_ENCRYPTION_FAILED   = 15;
+    public final static int PRV_APP_STATUS_FILE_DECRYPTED           = 16;
+    public final static int PRV_APP_STATUS_FILE_DECRYPTION_FAILED   = 17;
+    public final static int PRV_APP_STATUS_INVALID_FILE             = 18;
+    public final static int PRV_APP_STATUS_FILE_INACCESSIBLE        = 19;
+    public final static int PRV_APP_STATUS_AWAITING_PEER_AUTH       = 20;
     /*
      * NOTE: Add any event above PRV_APP_STATUS_LIB_LAST and update PRV_APP_STATUS_LIB_LAST
      */ 
-    public final static int PRV_APP_STATUS_LIB_LAST                 = 20;
+    public final static int PRV_APP_STATUS_LIB_LAST                 = 21;
 
     private Context context = null;
     public PrivJNI(Context context) {
@@ -64,6 +65,7 @@ public class PrivJNI {
     public native void stopConsumer();
     public native void produceEvent(PrivEvent event);
     public native String encryptFile(String pID, String path, String filename);
+    public native String decryptFile(String pID, String path, String filename, boolean direction);
 }
 
 

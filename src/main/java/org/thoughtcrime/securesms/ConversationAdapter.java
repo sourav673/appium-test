@@ -298,7 +298,7 @@ public class ConversationAdapter <V extends View & BindableConversationItem>
           dcMsg.setText("Establishing guaranteed full control over your shared data, please wait ...");
           dcMsg.setSubject("");
           return MESSAGE_TYPE_INFO;
-        } else if ("new_peer_complete".equalsIgnoreCase(jSubject.getString("type"))) {
+        } else if ("new_peer_complete".equalsIgnoreCase(jSubject.getString("type")) || "new_peer_conclude".equalsIgnoreCase(jSubject.getString("type"))) {
           dcMsg.setText("Your privacy is our priority—enjoy full control over your shared data with the power to truly revoke access anytime. Tap to learn more.");
           dcMsg.setSubject("");
           return MESSAGE_TYPE_INFO;
