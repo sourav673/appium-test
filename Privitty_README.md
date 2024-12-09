@@ -28,7 +28,7 @@ adb -s emulator-5554 logcat
 Whenever you want to update your private repository with changes from the public repository (i.e. `upstream`), follow these steps:
 
 Where: 
-Public repo: Rocket chat
+Public repo: Delta chat
 Private: Privitty
 
 *Step 1: Clone the Public Repository Locally*
@@ -64,9 +64,9 @@ git push -u origin --tags        # Push all tags
 ```
 *Step 5: Sync Changes from the Public Repository*
 
-1. First, make sure you’re in the root directory of your private repo, then add the public Rocket.Chat repo as an upstream remote:
+1. First, make sure you’re in the root directory of your private repo, then add the public Delta Chat repo as an upstream remote:
 ```
-git remote add upstream https://github.com/RocketChat/Rocket.Chat.ReactNative.git
+git remote add upstream [https://github.com/deltachat/deltachat-android.git](https://github.com/deltachat/deltachat-android.git)
 ```
 
 2. Fetch changes from the upstream repository::
