@@ -66,6 +66,8 @@ public class PrivJNI {
     public native void produceEvent(PrivEvent event);
     public native String encryptFile(String pID, String path, String filename);
     public native String decryptFile(String pID, String path, String filename, boolean direction);
+
+    public native boolean isPeerAdded(String pID);
 }
 
 

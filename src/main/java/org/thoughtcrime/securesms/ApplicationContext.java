@@ -30,6 +30,7 @@ import com.b44t.messenger.rpc.Rpc;
 import com.b44t.messenger.PrivJNI;
 import com.b44t.messenger.PrivEvent;
 import com.b44t.messenger.DcMsg;
+import com.b44t.messenger.DcChat;
 
 import org.thoughtcrime.securesms.connect.AccountManager;
 import org.thoughtcrime.securesms.connect.DcEventCenter;
@@ -134,30 +135,44 @@ public class ApplicationContext extends MultiDexApplication {
         }
 
         if (event.getId() == DcContext.DC_EVENT_INCOMING_MSG) {
+          DcMsg dcMsg = dcContext.getMsg(event.getData2Int());
+          int chatId = event.getData1Int();
           try {
-            DcMsg dcMsg = dcContext.getMsg(event.getData2Int());
-            JSONObject jSubject = new JSONObject(dcMsg.getSubject());
-            if ("true".equalsIgnoreCase(jSubject.getString("privitty"))) {
-              if ("new_peer_concluded".equalsIgnoreCase(jSubject.getString("type"))) {
-                Log.d("JAVA-Privitty", "Privitty message: new_peer_concluded, ignore it");
+            // Encrypted or guaranteed E2E (using QR)
+            Log.d("JAVA-Privitty", "isSecure(): " + dcMsg.showPadlock() + " isPeerAdded: " + privJni.isPeerAdded(Integer.toString(chatId)));
+            if (dcMsg.showPadlock() == 1) {
+              JSONObject jSubject = new JSONObject(dcMsg.getSubject());
+              if ("true".equalsIgnoreCase(jSubject.getString("privitty"))) {
+                if ("new_peer_concluded".equalsIgnoreCase(jSubject.getString("type"))) {
+                  Log.d("JAVA-Privitty", "Privitty message: new_peer_concluded, ignore it");
+                  dcContext.deleteMsgs(new int[]{event.getData2Int()});
+                  continue;
+                }
+                Log.d("JAVA-Privitty", "Privitty message, punt it to libpriv. Sub: " + dcMsg.getSubject());
+
+                Util.runOnAnyBackgroundThread(() -> {
+                  PrivJNI privJni = DcHelper.getPriv(getApplicationContext());
+                  byte[] byteArrayMsg = Base64.getDecoder().decode(dcMsg.getText());
+                  PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_RECEIVED_PEER_PDU, "", "",
+                    Integer.toString(event.getData1Int()),
+                    "", "", "", 0, byteArrayMsg);
+                  privJni.produceEvent(jevent);
+                });
                 dcContext.deleteMsgs(new int[]{event.getData2Int()});
                 continue;
               }
-              Log.d("JAVA-Privitty", "Privitty message, punt it to libpriv. Sub: " + dcMsg.getSubject());
-
-              Util.runOnAnyBackgroundThread(() -> {
-                PrivJNI privJni = DcHelper.getPriv(getApplicationContext());
-                byte[] byteArrayMsg = Base64.getDecoder().decode(dcMsg.getText());
-                PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_RECEIVED_PEER_PDU, "", "",
-                  Integer.toString(event.getData1Int()),
-                  "", "", "", 0, byteArrayMsg);
-                privJni.produceEvent(jevent);
-              });
-              dcContext.deleteMsgs(new int[]{event.getData2Int()});
-              continue;
             }
           } catch (Exception e) {
             Log.d("JAVA-Privitty", "This is non-privitty message");
+            if (!privJni.isPeerAdded(Integer.toString(chatId))) {
+              Util.runOnAnyBackgroundThread(() -> {
+                PrivJNI privJni = DcHelper.getPriv(getApplicationContext());
+                PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", "", Integer.toString(chatId),
+                  "", "", "", 0, new byte[0]);
+                privJni.produceEvent(jevent);
+                Log.d("JAVA-Privitty", "Adding a new peer");
+              });
+            }
           }
         }
 
