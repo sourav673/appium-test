@@ -1584,6 +1584,8 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
       dcContext.acceptChat(chatId);
       messageRequestBottomView.setVisibility(View.GONE);
       composePanel.setVisibility(View.VISIBLE);
+    });
+
 
     if (dcChat.isProtectionBroken()) {
       messageRequestBottomView.setBlockText(R.string.more_info_desktop);
