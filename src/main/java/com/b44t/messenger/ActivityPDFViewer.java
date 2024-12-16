@@ -9,12 +9,16 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.Settings;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.thoughtcrime.securesms.BaseActionBarActivity;
+import org.thoughtcrime.securesms.PdfPageAdapter;
 import org.thoughtcrime.securesms.R;
 
 import java.io.File;
@@ -22,38 +26,59 @@ import java.io.IOException;
 
 public class ActivityPDFViewer extends BaseActionBarActivity
 {
-  private ImageView image_view = null;
   public static String prfFilePath = "";
+  private PdfRenderer pdfRenderer;
+  private ParcelFileDescriptor fileDescriptor;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_pdf_viewer);
-    image_view  = findViewById(R.id.image_view);
-    renderPdfFromDownloads(prfFilePath);
+    getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+
+    System.out.println("===path=>>"+prfFilePath);
+
+    RecyclerView recyclerView = findViewById(R.id.pdf_recycler_view);
+    recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+
+    try {
+//      File file = new File(getFilesDir(), "delta.pdf");
+      File file = new File(prfFilePath);
+      if (!file.exists())
+      {
+        Toast.makeText(this, "PDF file not found!", Toast.LENGTH_SHORT).show();
+        return;
+      }
+
+      fileDescriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY);
+      pdfRenderer = new PdfRenderer(fileDescriptor);
+
+      PdfPageAdapter adapter = new PdfPageAdapter(pdfRenderer);
+      recyclerView.setAdapter(adapter);
+
+      // Ensuring the PDF is rendered as soon as RecyclerView is set
+      recyclerView.post(() -> adapter.notifyDataSetChanged());
+
+    } catch (IOException e) {
+      e.printStackTrace();
+      Toast.makeText(this, "Error loading PDF file", Toast.LENGTH_SHORT).show();
+    }
   }
 
-  public void renderPdfFromDownloads(String sFilePath)
-  {
-    try
-    {
-      //File file = new File(getFilesDir(), "abc.pdf");
-      File file = new File(sFilePath);
-      System.out.println("-------------File absoulute path = "+file.getAbsolutePath());
-      System.out.println("-------------File Size = "+file.length());
-      ParcelFileDescriptor fileDescriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY);
-      System.out.println("-------------File descriptor = "+fileDescriptor.getStatSize());
-      PdfRenderer pdfRenderer = new PdfRenderer(fileDescriptor);
-      System.out.println("-------------File pdfrender = "+pdfRenderer.getPageCount());
-      PdfRenderer.Page page = pdfRenderer.openPage(0);
-      Bitmap bitmap = Bitmap.createBitmap(page.getWidth(), page.getHeight(), Bitmap.Config.ARGB_8888);
-      page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
-      image_view.setImageBitmap(bitmap);
-    }catch (Exception e)
-    {
-      System.out.println("-------------Error = "+e);
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    try {
+      if (pdfRenderer != null) {
+        pdfRenderer.close();
+      }
+      if (fileDescriptor != null) {
+        fileDescriptor.close();
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
     }
-
   }
 }
