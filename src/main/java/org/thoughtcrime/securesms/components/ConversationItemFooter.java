@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.b44t.messenger.DcMsg;
+import com.b44t.messenger.PrivJNI;
 
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.util.DateUtils;
@@ -20,23 +21,26 @@ import org.thoughtcrime.securesms.util.DateUtils;
 public class ConversationItemFooter extends LinearLayout {
 
   private TextView            dateView;
-  private ImageView           secureIndicatorView;
+  private ImageView           secureIndicatorView,securePrvIndicatorView;
   private ImageView           locationIndicatorView;
   private DeliveryStatusView  deliveryStatusView;
   private Integer             textColor = null;
-
+  private PrivJNI             privJNI = null;
   public ConversationItemFooter(Context context) {
     super(context);
+    privJNI = new PrivJNI(context);
     init(null);
   }
 
   public ConversationItemFooter(Context context, @Nullable AttributeSet attrs) {
     super(context, attrs);
+    privJNI = new PrivJNI(context);
     init(attrs);
   }
 
   public ConversationItemFooter(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
+    privJNI = new PrivJNI(context);
     init(attrs);
   }
 
@@ -45,6 +49,7 @@ public class ConversationItemFooter extends LinearLayout {
 
     dateView              = findViewById(R.id.footer_date);
     secureIndicatorView   = findViewById(R.id.footer_secure_indicator);
+    securePrvIndicatorView   = findViewById(R.id.footer_prv_indicator);
     locationIndicatorView = findViewById(R.id.footer_location_indicator);
     deliveryStatusView    = new DeliveryStatusView(findViewById(R.id.delivery_indicator));
 
@@ -58,7 +63,22 @@ public class ConversationItemFooter extends LinearLayout {
 
   public void setMessageRecord(@NonNull DcMsg messageRecord) {
     presentDate(messageRecord);
-    secureIndicatorView.setVisibility(messageRecord.isSecure() ? View.VISIBLE : View.GONE);
+    if(messageRecord.isSecure())
+    {
+      secureIndicatorView.setVisibility(VISIBLE);
+      if (!privJNI.isPrivittySecure(Integer.toString(messageRecord.getId())))
+      {
+        securePrvIndicatorView.setVisibility(VISIBLE);
+      }
+      else
+      {
+        securePrvIndicatorView.setVisibility(GONE);
+      }
+    }
+    else
+    {
+      secureIndicatorView.setVisibility(GONE);
+    }
     locationIndicatorView.setVisibility(messageRecord.hasLocation() ? View.VISIBLE : View.GONE);
     presentDeliveryStatus(messageRecord);
   }
