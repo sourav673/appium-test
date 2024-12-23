@@ -17,16 +17,14 @@ public class PrivJNI {
     public final static int PRV_EVENT_SHUTDOWN                      = 4;
     public final static int PRV_EVENT_ADD_NEW_PEER                  = 5;
     public final static int PRV_EVENT_RECEIVED_PEER_PDU             = 6;
-    public final static int PRV_EVENT_ENCRYPT_FILE                  = 7;
-    public final static int PRV_EVENT_DECRYPT_FILE                  = 8;
-    public final static int PRV_EVENT_STOP_RENDERING                = 9;
-    public final static int PRV_EVENT_PEER_OFFLINE                  = 10;
-    public final static int PRV_EVENT_PEER_TIMEOUT_REACHED          = 14;
-    public final static int PRV_EVENT_FILE_SANITY_FAILED            = 12;
+    public final static int PRV_EVENT_STOP_RENDERING                = 7;
+    public final static int PRV_EVENT_PEER_OFFLINE                  = 8;
+    public final static int PRV_EVENT_PEER_TIMEOUT_REACHED          = 9;
+    public final static int PRV_EVENT_FILE_SANITY_FAILED            = 10;
     /*
      * NOTE: Add any event above PRV_EVENT_LAST and update PRV_EVENT_LAST
      */ 
-    public final static int PRV_EVENT_LAST                          = 13;
+    public final static int PRV_EVENT_LAST                          = 11;
 
 
     public final static int PRV_APP_STATUS_ERROR                    = 0;
@@ -45,15 +43,17 @@ public class PrivJNI {
     public final static int PRV_APP_STATUS_PEER_BLOCKED             = 13;
     public final static int PRV_APP_STATUS_FILE_ENCRYPTED           = 14;
     public final static int PRV_APP_STATUS_FILE_ENCRYPTION_FAILED   = 15;
-    public final static int PRV_APP_STATUS_FILE_DECRYPTED           = 16;
-    public final static int PRV_APP_STATUS_FILE_DECRYPTION_FAILED   = 17;
-    public final static int PRV_APP_STATUS_INVALID_FILE             = 18;
-    public final static int PRV_APP_STATUS_FILE_INACCESSIBLE        = 19;
-    public final static int PRV_APP_STATUS_AWAITING_PEER_AUTH       = 20;
+    public final static int PRV_APP_STATUS_FILE_DECRYPTION_FAILED   = 16;
+    public final static int PRV_APP_STATUS_INVALID_FILE             = 17;
+    public final static int PRV_APP_STATUS_FILE_INACCESSIBLE        = 18;
+    public final static int PRV_APP_STATUS_AWAITING_PEER_AUTH       = 19;
+    public final static int PRV_APP_STATUS_PEER_SSS_REQUEST         = 20;
+    public final static int PRV_APP_STATUS_PEER_SSS_RESPONSE        = 21;
+    public final static int PRV_APP_STATUS_PEER_OTSP_SSS            = 22;
     /*
      * NOTE: Add any event above PRV_APP_STATUS_LIB_LAST and update PRV_APP_STATUS_LIB_LAST
      */ 
-    public final static int PRV_APP_STATUS_LIB_LAST                 = 21;
+    public final static int PRV_APP_STATUS_LIB_LAST                 = 23;
 
     private Context context = null;
     public PrivJNI(Context context) {

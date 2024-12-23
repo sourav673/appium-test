@@ -329,10 +329,35 @@ public class ApplicationContext extends MultiDexApplication {
         int msgId = dcContext.sendMsg(Integer.parseInt(chatId), msg);
       });
 
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_OTSP_SSS) {
+      Log.d("JAVA-Privitty", "Peer OTSP sent");
+      Util.runOnAnyBackgroundThread(() -> {
+        DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
+        msg.setSubject("{'privitty':'true', 'type':'OTSP_SENT'}");
+        String base64Msg = Base64.getEncoder().encodeToString(pdu);
+        msg.setText(base64Msg);
+        int msgId = dcContext.sendMsg(Integer.parseInt(chatId), msg);
+      });
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_SSS_REQUEST) {
+      Log.d("JAVA-Privitty", "Peer SSS request");
+      Util.runOnAnyBackgroundThread(() -> {
+        DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
+        msg.setSubject("{'privitty':'true', 'type':'SSS_REQUEST'}");
+        String base64Msg = Base64.getEncoder().encodeToString(pdu);
+        msg.setText(base64Msg);
+        int msgId = dcContext.sendMsg(Integer.parseInt(chatId), msg);
+      });
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_SSS_RESPONSE) {
+      Log.d("JAVA-Privitty", "Peer SSS response");
+      Util.runOnAnyBackgroundThread(() -> {
+        DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
+        msg.setSubject("{'privitty':'true', 'type':'SSS_RESPONSE'}");
+        String base64Msg = Base64.getEncoder().encodeToString(pdu);
+        msg.setText(base64Msg);
+        int msgId = dcContext.sendMsg(Integer.parseInt(chatId), msg);
+      });
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_ENCRYPTED) {
       Log.e("JAVA-Privitty", "Event PRV_APP_STATUS_FILE_ENCRYPTED is not implemented via event queue");
-    } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_DECRYPTED) {
-      Log.d("JAVA-Privitty", "Decrypted the given file");
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_INACCESSIBLE) {
       Log.e("JAVA-Privitty", "Failed to open file for reading");
     } else {

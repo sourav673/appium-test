@@ -302,6 +302,18 @@ public class ConversationAdapter <V extends View & BindableConversationItem>
           dcMsg.setText("Your privacy is our priority—enjoy full control over your shared data with the power to truly revoke access anytime. Tap to learn more.");
           dcMsg.setSubject("");
           return MESSAGE_TYPE_INFO;
+        } else if ("OTSP_SENT".equalsIgnoreCase(jSubject.getString("type"))) {
+          dcMsg.setText("You granted 15 mins viewing access.");
+          dcMsg.setSubject("");
+          return MESSAGE_TYPE_INFO;
+        } else if ("SSS_REQUEST".equalsIgnoreCase(jSubject.getString("type"))) {
+          dcMsg.setText("Requesting access permission from the document owner...");
+          dcMsg.setSubject("");
+          return MESSAGE_TYPE_INFO;
+        } else if ("SSS_RESPONSE".equalsIgnoreCase(jSubject.getString("type"))) {
+          dcMsg.setText("Granted access for next 15 mins.");
+          dcMsg.setSubject("");
+          return MESSAGE_TYPE_INFO;
         }
       } catch (Exception e) {
         Log.d("JAVA-Privitty", "This is non-privitty message -- getItemViewType");
