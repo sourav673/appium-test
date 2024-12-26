@@ -139,7 +139,7 @@ public class ApplicationContext extends MultiDexApplication {
           int chatId = event.getData1Int();
           try {
             // Encrypted or guaranteed E2E (using QR)
-            Log.d("JAVA-Privitty", "isSecure(): " + dcMsg.showPadlock() + " isPeerAdded: " + privJni.isPeerAdded(Integer.toString(chatId)));
+            Log.d("JAVA-Privitty", "isSecure(): " + dcMsg.showPadlock() + " isPeerAdded: " + privJni.isPeerAdded(chatId));
             if (dcMsg.showPadlock() == 1) {
               JSONObject jSubject = new JSONObject(dcMsg.getSubject());
               if ("true".equalsIgnoreCase(jSubject.getString("privitty"))) {
@@ -154,7 +154,7 @@ public class ApplicationContext extends MultiDexApplication {
                   PrivJNI privJni = DcHelper.getPriv(getApplicationContext());
                   byte[] byteArrayMsg = Base64.getDecoder().decode(dcMsg.getText());
                   PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_RECEIVED_PEER_PDU, "", "",
-                    Integer.toString(event.getData1Int()),
+                    event.getData1Int(),
                     "", "", "", 0, byteArrayMsg);
                   privJni.produceEvent(jevent);
                 });
@@ -164,10 +164,10 @@ public class ApplicationContext extends MultiDexApplication {
             }
           } catch (Exception e) {
             Log.d("JAVA-Privitty", "This is non-privitty message");
-            if (!privJni.isPeerAdded(Integer.toString(chatId))) {
+            if (!privJni.isPeerAdded(chatId)) {
               Util.runOnAnyBackgroundThread(() -> {
                 PrivJNI privJni = DcHelper.getPriv(getApplicationContext());
-                PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", "", Integer.toString(chatId),
+                PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", "", chatId,
                   "", "", "", 0, new byte[0]);
                 privJni.produceEvent(jevent);
                 Log.d("JAVA-Privitty", "Adding a new peer");
@@ -295,7 +295,7 @@ public class ApplicationContext extends MultiDexApplication {
   /*
    * C++ --> JAVA callback, to handle various status types.
    */
-  public void onNativeMsgCallback(String chatId, int statusCode, byte[] pdu) {
+  public void onNativeMsgCallback(int chatId, int statusCode, byte[] pdu) {
 
     if (statusCode == PrivJNI.PRV_APP_STATUS_VAULT_IS_READY) {
       Log.d("JAVA-Privitty", "Congratulations! Vault is created\n");
@@ -307,7 +307,23 @@ public class ApplicationContext extends MultiDexApplication {
         msg.setSubject("{'privitty':'true', 'type':'new_peer_add'}");
         String base64Msg = Base64.getEncoder().encodeToString(pdu);
         msg.setText(base64Msg);
-        int msgId = dcContext.sendMsg(Integer.parseInt(chatId), msg);
+        int msgId = dcContext.sendMsg(chatId, msg);
+
+        int fromId = msg.getFromId();
+        String msgText = "new_peer_add";
+        String msgType = "system";
+        String mediaPath = "";
+        String filename = "";
+        int fileSessionTimeout = 0;
+        int canDownload = 0;
+        int canForward = 0;
+        int numPeerSssRequest = 0;
+        String forwardedTo = "";
+        int sentPrivittyProtected = 0;
+
+        privJni.addMessage(msgId, chatId, fromId, msgText, msgType, mediaPath, filename,
+          fileSessionTimeout, canDownload, canForward,
+          numPeerSssRequest, forwardedTo, sentPrivittyProtected);
       });
 
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_ADD_COMPLETE) {
@@ -317,7 +333,7 @@ public class ApplicationContext extends MultiDexApplication {
         msg.setSubject("{'privitty':'true', 'type':'new_peer_complete'}");
         String base64Msg = Base64.getEncoder().encodeToString(pdu);
         msg.setText(base64Msg);
-        int msgId = dcContext.sendMsg(Integer.parseInt(chatId), msg);
+        int msgId = dcContext.sendMsg(chatId, msg);
       });
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_ADD_CONCLUDED) {
       Log.d("JAVA-Privitty", "Congratulations! New peer concluded.");
@@ -326,7 +342,7 @@ public class ApplicationContext extends MultiDexApplication {
         msg.setSubject("{'privitty':'true', 'type':'new_peer_conclude'}");
         String base64Msg = Base64.getEncoder().encodeToString(pdu);
         msg.setText(base64Msg);
-        int msgId = dcContext.sendMsg(Integer.parseInt(chatId), msg);
+        int msgId = dcContext.sendMsg(chatId, msg);
       });
 
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_OTSP_SSS) {
@@ -336,7 +352,7 @@ public class ApplicationContext extends MultiDexApplication {
         msg.setSubject("{'privitty':'true', 'type':'OTSP_SENT'}");
         String base64Msg = Base64.getEncoder().encodeToString(pdu);
         msg.setText(base64Msg);
-        int msgId = dcContext.sendMsg(Integer.parseInt(chatId), msg);
+        int msgId = dcContext.sendMsg(chatId, msg);
       });
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_SSS_REQUEST) {
       Log.d("JAVA-Privitty", "Peer SSS request");
@@ -345,7 +361,7 @@ public class ApplicationContext extends MultiDexApplication {
         msg.setSubject("{'privitty':'true', 'type':'SSS_REQUEST'}");
         String base64Msg = Base64.getEncoder().encodeToString(pdu);
         msg.setText(base64Msg);
-        int msgId = dcContext.sendMsg(Integer.parseInt(chatId), msg);
+        int msgId = dcContext.sendMsg(chatId, msg);
       });
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_SSS_RESPONSE) {
       Log.d("JAVA-Privitty", "Peer SSS response");
@@ -354,7 +370,7 @@ public class ApplicationContext extends MultiDexApplication {
         msg.setSubject("{'privitty':'true', 'type':'SSS_RESPONSE'}");
         String base64Msg = Base64.getEncoder().encodeToString(pdu);
         msg.setText(base64Msg);
-        int msgId = dcContext.sendMsg(Integer.parseInt(chatId), msg);
+        int msgId = dcContext.sendMsg(chatId, msg);
       });
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_ENCRYPTED) {
       Log.e("JAVA-Privitty", "Event PRV_APP_STATUS_FILE_ENCRYPTED is not implemented via event queue");

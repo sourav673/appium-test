@@ -64,10 +64,14 @@ public class PrivJNI {
     public native void startEventLoop(String path);
     public native void stopConsumer();
     public native void produceEvent(PrivEvent event);
-    public native String encryptFile(String pID, String path, String filename);
-    public native String decryptFile(String pID, String path, String filename, boolean direction);
-    public native boolean isPeerAdded(String pID);
-    public native boolean isPrivittySecure(String pID);
+    public native String encryptFile(int chatId, String path, String filename);
+    public native String decryptFile(int chatId, String path, String filename, boolean direction);
+    public native boolean isPeerAdded(int chatId);
+    public native boolean isChatPrivittyProtected(int chatId);
+    public native void addMessage(int msg_id, int chat_id, int p_id, String msg_text, String msg_type,
+                                  String media_path, String file_name, int file_session_timeout,
+                                  int can_download, int can_forward, int num_peer_sss_request,
+                                  String forwarded_to, int sent_privitty_protected);
 }
 
 

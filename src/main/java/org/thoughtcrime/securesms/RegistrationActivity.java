@@ -250,7 +250,7 @@ public class RegistrationActivity extends BaseActionBarActivity implements DcEve
             Toast.makeText(this, errorText, Toast.LENGTH_LONG).show();
           }
         }
-
+        
         if (expandAdvanced) { onAdvancedSettings(); }
         registerForEvents();
     }
@@ -314,7 +314,7 @@ public class RegistrationActivity extends BaseActionBarActivity implements DcEve
             public void onSuccess(Boolean oauth2started) {
                 PrivJNI privJni = DcHelper.getPriv(RegistrationActivity.this);
                 PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_CREATE_VAULT, DcHelper.CONFIG_ADDRESS,
-                                                 DcHelper.CONFIG_DISPLAY_NAME, "", DcHelper.CONFIG_MAIL_PASSWORD, "", "", 0, new byte[0]);
+                                                 DcHelper.CONFIG_DISPLAY_NAME, 0, DcHelper.CONFIG_MAIL_PASSWORD, "", "", 0, new byte[0]);
                 privJni.produceEvent(jevent);
                 if(!oauth2started) {
                     updateProviderInfo();

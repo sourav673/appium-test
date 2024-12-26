@@ -293,14 +293,13 @@ public class DcHelper {
 
     File srcP = new File(path);
     Log.d("JAVA-Privitty", "Message Subject: " + msg.getSubject());
-    String chatId = Integer.toString(msg.getChatId());
 
     PrivJNI privJni = getPriv(activity);
     String prvFile;
     if (msg.getFromId() == DcContact.DC_CONTACT_ID_SELF) {
-      prvFile = privJni.decryptFile(chatId, srcP.getParent(), msg.getFilename(), true);
+      prvFile = privJni.decryptFile(msg.getChatId(), srcP.getParent(), msg.getFilename(), true);
     } else {
-      prvFile = privJni.decryptFile(chatId, srcP.getParent(), msg.getFilename(), false);
+      prvFile = privJni.decryptFile(msg.getChatId(), srcP.getParent(), msg.getFilename(), false);
     }
 
     ActivityPDFViewer.prfFilePath = prvFile;

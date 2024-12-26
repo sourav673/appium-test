@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -63,20 +64,14 @@ public class ConversationItemFooter extends LinearLayout {
 
   public void setMessageRecord(@NonNull DcMsg messageRecord) {
     presentDate(messageRecord);
-    if(messageRecord.isSecure())
-    {
+    if(messageRecord.isSecure()) {
       secureIndicatorView.setVisibility(VISIBLE);
-      if (!privJNI.isPrivittySecure(Integer.toString(messageRecord.getId())))
-      {
+      if (privJNI.isChatPrivittyProtected(messageRecord.getChatId()) && (messageRecord.getType() == DcMsg.DC_MSG_FILE)) {
         securePrvIndicatorView.setVisibility(VISIBLE);
-      }
-      else
-      {
+      } else {
         securePrvIndicatorView.setVisibility(GONE);
       }
-    }
-    else
-    {
+    } else {
       secureIndicatorView.setVisibility(GONE);
     }
     locationIndicatorView.setVisibility(messageRecord.hasLocation() ? View.VISIBLE : View.GONE);

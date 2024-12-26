@@ -6,18 +6,18 @@ public class PrivEvent
   public int eventType;
   public String mID;
   public String mName;
-  public String pID;
+  public int chatId;
   public String pCode;
   public String filePath;
   public String fileName;
   public int direction;
   public byte[] pdu;
 
-  public PrivEvent(int eventType, String mID, String mName, String pID, String pCode, String filePath, String fileName, int direction, byte[] pdu) {
+  public PrivEvent(int eventType, String mID, String mName, int chatId, String pCode, String filePath, String fileName, int direction, byte[] pdu) {
     this.eventType = eventType;
     this.mID = mID;
     this.mName = mName;
-    this.pID = pID;
+    this.chatId = chatId;
     this.pCode = pCode;
     this.filePath = filePath;
     this.fileName = fileName;

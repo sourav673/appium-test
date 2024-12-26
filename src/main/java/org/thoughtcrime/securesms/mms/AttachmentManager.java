@@ -723,10 +723,29 @@ public class AttachmentManager {
           File file = new File(path);
 
           PrivJNI privJni = DcHelper.getPriv(context);
-          String prvFile = privJni.encryptFile(Integer.toString(chatId), file.getParent(), fileName);
+          String prvFile = privJni.encryptFile(chatId, file.getParent(), fileName);
           msg.setFile(prvFile, MediaUtil.OCTET);
           msg.setSubject("{'privitty':'true', 'type':'prv_file'}");
           dcContext.setDraft(chatId, msg);
+
+          /* Adding message detail to the DB
+          int fromId = msg.getFromId();
+          String msgText = "prv_file";
+          String msgType = "file";
+          String mediaPath = file.getParent();
+          String filename = fileName;
+          int fileSessionTimeout = 15;
+          int canDownload = 0;
+          int canForward = 0;
+          int numPeerSssRequest = 0;
+          String forwardedTo = "";
+          int sentPrivittyProtected = 1;
+
+          Log.d("JAVA-Privitty", "Attachment --- chatId: " + chatId + " msgId: " + msg.getId() + " type: " + msg.getType());
+          privJni.addMessage(msg.getId(), chatId, fromId, msgText, msgType, mediaPath, filename,
+            fileSessionTimeout, canDownload, canForward,
+            numPeerSssRequest, forwardedTo, sentPrivittyProtected);
+           */
 
           return new DocumentSlide(context, msg);
         }
