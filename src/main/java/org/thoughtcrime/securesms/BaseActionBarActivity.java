@@ -12,11 +12,15 @@ import android.view.WindowManager;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.scottyab.rootbeer.RootBeer;
+
 import org.thoughtcrime.securesms.util.DynamicTheme;
 import org.thoughtcrime.securesms.util.Prefs;
+import org.thoughtcrime.securesms.util.RootUtil;
 
 import java.lang.reflect.Field;
 
@@ -34,6 +38,14 @@ public abstract class BaseActionBarActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     onPreCreate();
     super.onCreate(savedInstanceState);
+
+
+    if (!isSecured())
+    {
+      AlertDialog alertDialog = getSecureAlertDialog();
+      alertDialog.show();
+    }
+
   }
 
   @Override
@@ -104,5 +116,38 @@ public abstract class BaseActionBarActivity extends AppCompatActivity {
       .replace(target, fragment)
       .commitAllowingStateLoss();
     return fragment;
+  }
+
+  public boolean isSecured()
+  {
+    RootBeer rootBeer = new RootBeer(this);
+    if (RootUtil.isDeviceRooted() || rootBeer.isRooted() || rootBeer.isRootedWithBusyBoxCheck() ||
+      RootUtil.checkForSuspiciousSharedObjects() || RootUtil.isDebuggable(this) || RootUtil.isUsbDebuggingEnabled(this) ||
+      RootUtil.isRootManagementAppInstalled(this) || RootUtil.checkRootMethod2() || RootUtil.checkForRootProcesses() ||
+      RootUtil.checkForModifiedBuildProps() || RootUtil.checkSuBinary() || RootUtil.checkForUnusualFiles())
+    {
+      return false;
+    }
+    else
+    {
+      return true;
+    }
+
+  }
+  private @NonNull AlertDialog getSecureAlertDialog()
+  {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setTitle("Alert");
+    builder.setMessage("Device is not secured.");
+    builder.setPositiveButton("OK", (dialog, which) ->
+    {
+      dialog.dismiss();
+      finish();
+    });
+
+    AlertDialog alertDialog = builder.create();
+    alertDialog.setCancelable(false); // Disable dismissing the dialog by clicking outside
+    alertDialog.setCanceledOnTouchOutside(false); // Disable dismissing the dialog by touching outside
+    return alertDialog;
   }
 }
