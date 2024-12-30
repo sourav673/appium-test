@@ -1,5 +1,7 @@
 package org.thoughtcrime.securesms;
 
+import static org.thoughtcrime.securesms.util.RootUtil.isSecured;
+
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,15 +40,6 @@ public abstract class BaseActionBarActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     onPreCreate();
     super.onCreate(savedInstanceState);
-
-
-    if (!BuildConfig.DEBUG) {
-      if (!isSecured()) {
-        AlertDialog alertDialog = getSecureAlertDialog();
-        alertDialog.show();
-      }
-    }
-
   }
 
   @Override
@@ -54,6 +47,12 @@ public abstract class BaseActionBarActivity extends AppCompatActivity {
     super.onResume();
     initializeScreenshotSecurity();
     dynamicTheme.onResume(this);
+
+    if (!isSecured(this))
+    {
+      AlertDialog alertDialog = getSecureAlertDialog();
+      alertDialog.show();
+    }
   }
 
   private void initializeScreenshotSecurity() {
@@ -119,22 +118,6 @@ public abstract class BaseActionBarActivity extends AppCompatActivity {
     return fragment;
   }
 
-  public boolean isSecured()
-  {
-    RootBeer rootBeer = new RootBeer(this);
-    if (RootUtil.isDeviceRooted() || rootBeer.isRooted() || rootBeer.isRootedWithBusyBoxCheck() ||
-      RootUtil.checkForSuspiciousSharedObjects() || RootUtil.isDebuggable(this) || RootUtil.isUsbDebuggingEnabled(this) ||
-      RootUtil.isRootManagementAppInstalled(this) || RootUtil.checkRootMethod2() || RootUtil.checkForRootProcesses() ||
-      RootUtil.checkForModifiedBuildProps() || RootUtil.checkSuBinary() || RootUtil.checkForUnusualFiles())
-    {
-      return false;
-    }
-    else
-    {
-      return true;
-    }
-
-  }
   private @NonNull AlertDialog getSecureAlertDialog()
   {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
