@@ -40,10 +40,11 @@ public abstract class BaseActionBarActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
 
 
-    if (!isSecured())
-    {
-      AlertDialog alertDialog = getSecureAlertDialog();
-      alertDialog.show();
+    if (!BuildConfig.DEBUG) {
+      if (!isSecured()) {
+        AlertDialog alertDialog = getSecureAlertDialog();
+        alertDialog.show();
+      }
     }
 
   }
