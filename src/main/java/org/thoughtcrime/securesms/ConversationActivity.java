@@ -72,6 +72,7 @@ import com.b44t.messenger.rpc.Rpc;
 import com.b44t.messenger.rpc.RpcException;
 import com.b44t.messenger.util.concurrent.ListenableFuture;
 import com.b44t.messenger.util.concurrent.SettableFuture;
+import com.b44t.messenger.PrivJNI;
 
 import org.thoughtcrime.securesms.attachments.Attachment;
 import org.thoughtcrime.securesms.attachments.UriAttachment;
@@ -618,6 +619,11 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     AlertDialog dialog = new AlertDialog.Builder(this)
         .setMessage(getResources().getString(R.string.ask_delete_named_chat, dcChat.getName()))
         .setPositiveButton(R.string.delete, (d, which) -> {
+          PrivJNI privJni = null;
+          Log.d("JAVA-Privitty", "Selected chatId: " + (int)chatId);
+          privJni = new PrivJNI(context);
+          privJni.deleteChat((int) chatId);
+
           dcContext.deleteChat(chatId);
           DirectShareUtil.clearShortcut(this, chatId);
           finish();
