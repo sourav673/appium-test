@@ -299,7 +299,7 @@ public class ConversationAdapter <V extends View & BindableConversationItem>
           dcMsg.setSubject("");
           return MESSAGE_TYPE_INFO;
         } else if ("new_peer_complete".equalsIgnoreCase(jSubject.getString("type")) || "new_peer_conclude".equalsIgnoreCase(jSubject.getString("type"))) {
-          dcMsg.setText("Your privacy is our priority—enjoy full control over your shared data with the power to truly revoke access anytime. Tap to learn more.");
+          dcMsg.setText("Your privacy matters—take control and revoke shared data anytime. Tap to learn about Privitty.");
           dcMsg.setSubject("");
           return MESSAGE_TYPE_INFO;
         } else if ("OTSP_SENT".equalsIgnoreCase(jSubject.getString("type"))) {
@@ -307,7 +307,7 @@ public class ConversationAdapter <V extends View & BindableConversationItem>
           dcMsg.setSubject("");
           return MESSAGE_TYPE_INFO;
         } else if ("SSS_REQUEST".equalsIgnoreCase(jSubject.getString("type"))) {
-          dcMsg.setText("Requesting access permission from the document owner...");
+          dcMsg.setText("Requesting access from the owner ...");
           dcMsg.setSubject("");
           return MESSAGE_TYPE_INFO;
         } else if ("SSS_RESPONSE".equalsIgnoreCase(jSubject.getString("type"))) {

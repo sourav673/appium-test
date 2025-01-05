@@ -137,10 +137,11 @@ public class ApplicationContext extends MultiDexApplication {
         if (event.getId() == DcContext.DC_EVENT_INCOMING_MSG) {
           DcMsg dcMsg = dcContext.getMsg(event.getData2Int());
           int chatId = event.getData1Int();
-          try {
-            // Encrypted or guaranteed E2E (using QR)
-            Log.d("JAVA-Privitty", "isSecure(): " + dcMsg.showPadlock() + " isPeerAdded: " + privJni.isPeerAdded(chatId));
-            if (dcMsg.showPadlock() == 1) {
+          Log.d("JAVA-Privitty", " ------ isSecure(): " + dcMsg.showPadlock() + " contactRequested: " + dcContext.getChat(chatId).isContactRequest());
+          if ((dcMsg.showPadlock() == 1) && !dcContext.getChat(chatId).isContactRequest()) {
+            try {
+              // Encrypted or guaranteed E2E (using QR)
+              Log.d("JAVA-Privitty", "isSecure(): " + dcMsg.showPadlock() + " isPeerAdded: " + privJni.isPeerAdded(chatId));
               JSONObject jSubject = new JSONObject(dcMsg.getSubject());
               if ("true".equalsIgnoreCase(jSubject.getString("privitty"))) {
                 if ("new_peer_concluded".equalsIgnoreCase(jSubject.getString("type"))) {
@@ -161,17 +162,17 @@ public class ApplicationContext extends MultiDexApplication {
                 dcContext.deleteMsgs(new int[]{event.getData2Int()});
                 continue;
               }
-            }
-          } catch (Exception e) {
-            Log.d("JAVA-Privitty", "This is non-privitty message");
-            if (!privJni.isPeerAdded(chatId)) {
-              Util.runOnAnyBackgroundThread(() -> {
-                PrivJNI privJni = DcHelper.getPriv(getApplicationContext());
-                PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", "", chatId,
-                  "", "", "", 0, new byte[0]);
-                privJni.produceEvent(jevent);
-                Log.d("JAVA-Privitty", "Adding a new peer");
-              });
+            } catch (Exception e) {
+              Log.d("JAVA-Privitty", "This is non-privitty message");
+              if (!privJni.isPeerAdded(chatId)) {
+                Util.runOnAnyBackgroundThread(() -> {
+                  PrivJNI privJni = DcHelper.getPriv(getApplicationContext());
+                  PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", "", chatId,
+                    "", "", "", 0, new byte[0]);
+                  privJni.produceEvent(jevent);
+                  Log.d("JAVA-Privitty", "Adding a new peer");
+                });
+              }
             }
           }
         }
@@ -372,10 +373,19 @@ public class ApplicationContext extends MultiDexApplication {
         msg.setText(base64Msg);
         int msgId = dcContext.sendMsg(chatId, msg);
       });
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_DELETE_CHAT) {
+      Log.d("JAVA-Privitty", "Delete chat");
+      Util.runOnAnyBackgroundThread(() -> {
+        DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
+        msg.setSubject("{'privitty':'true', 'type':'DELETE_CHAT'}");
+        String base64Msg = Base64.getEncoder().encodeToString(pdu);
+        msg.setText(base64Msg);
+        int msgId = dcContext.sendMsg(chatId, msg);
+      });
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_ENCRYPTED) {
-      Log.e("JAVA-Privitty", "Event PRV_APP_STATUS_FILE_ENCRYPTED is not implemented via event queue");
+      Log.d("JAVA-Privitty", "Event PRV_APP_STATUS_FILE_ENCRYPTED is not implemented via event queue");
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_INACCESSIBLE) {
-      Log.e("JAVA-Privitty", "Failed to open file for reading");
+      Log.d("JAVA-Privitty", "Failed to open file for reading");
     } else {
       Log.e("JAVA-Privitty", "StatusCode: " + statusCode);
     }

@@ -50,10 +50,11 @@ public class PrivJNI {
     public final static int PRV_APP_STATUS_PEER_SSS_REQUEST         = 20;
     public final static int PRV_APP_STATUS_PEER_SSS_RESPONSE        = 21;
     public final static int PRV_APP_STATUS_PEER_OTSP_SSS            = 22;
+    public final static int PRV_APP_STATUS_DELETE_CHAT              = 23;
     /*
      * NOTE: Add any event above PRV_APP_STATUS_LIB_LAST and update PRV_APP_STATUS_LIB_LAST
      */ 
-    public final static int PRV_APP_STATUS_LIB_LAST                 = 23;
+    public final static int PRV_APP_STATUS_LIB_LAST                 = 24;
 
     private Context context = null;
     public PrivJNI(Context context) {
@@ -72,6 +73,7 @@ public class PrivJNI {
                                   String media_path, String file_name, int file_session_timeout,
                                   int can_download, int can_forward, int num_peer_sss_request,
                                   String forwarded_to, int sent_privitty_protected);
+    public native boolean deleteChat(int chatId);
 }
 
 

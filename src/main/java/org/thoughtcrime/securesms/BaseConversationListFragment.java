@@ -25,9 +25,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import android.util.Log;
 
 import com.b44t.messenger.DcChat;
 import com.b44t.messenger.DcContext;
+import com.b44t.messenger.PrivJNI;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.thoughtcrime.securesms.components.registration.PulsingFloatingActionButton;
@@ -285,8 +287,12 @@ public abstract class BaseConversationListFragment extends Fragment implements A
           @Override
           protected Void doInBackground(Void... params) {
             int accountId = dcContext.getAccountId();
+            PrivJNI privJni = null;
             for (long chatId : selectedChats) {
               DcHelper.getNotificationCenter(requireContext()).removeNotifications(accountId, (int) chatId);
+              Log.d("JAVA-Privitty", "Selected chatId: " + (int)chatId);
+              privJni = new PrivJNI(getContext());
+              privJni.deleteChat((int) chatId);
               dcContext.deleteChat((int) chatId);
               DirectShareUtil.clearShortcut(requireContext(), (int) chatId);
             }

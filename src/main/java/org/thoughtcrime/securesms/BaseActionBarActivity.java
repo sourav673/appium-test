@@ -48,7 +48,7 @@ public abstract class BaseActionBarActivity extends AppCompatActivity {
     initializeScreenshotSecurity();
     dynamicTheme.onResume(this);
 
-    if (!isSecured(this))
+    if (!isSecured(this) && !BuildConfig.DEBUG)
     {
       AlertDialog alertDialog = getSecureAlertDialog();
       alertDialog.show();
