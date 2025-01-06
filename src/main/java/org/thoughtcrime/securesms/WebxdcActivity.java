@@ -67,6 +67,7 @@ public class WebxdcActivity extends WebViewActivity implements DcEventCenter.DcE
   private static final String EXTRA_HIDE_ACTION_BAR = "hideActionBar";
   private static final String EXTRA_HREF = "href";
   private static final int REQUEST_CODE_FILE_PICKER = 51426;
+  private static long lastOpenTime = 0;
 
   private ValueCallback<Uri[]> filePathCallback;
   private DcContext dcContext;
@@ -74,7 +75,9 @@ public class WebxdcActivity extends WebViewActivity implements DcEventCenter.DcE
   private DcMsg dcAppMsg;
   private String baseURL;
   private String sourceCodeUrl = "";
-  private String selfAddr = "";
+  private String selfAddr;
+  private int sendUpdateMaxSize;
+  private int sendUpdateInterval;
   private boolean internetAccess = false;
   private boolean hideActionBar = false;
 
@@ -199,7 +202,9 @@ public class WebxdcActivity extends WebViewActivity implements DcEventCenter.DcE
 
     final JSONObject info = this.dcAppMsg.getWebxdcInfo();
     internetAccess = JsonUtils.optBoolean(info, "internet_access");
-    selfAddr = JsonUtils.optString(info, "self_addr");
+    selfAddr = info.optString("self_addr");
+    sendUpdateMaxSize = info.optInt("send_update_max_size");
+    sendUpdateInterval = info.optInt("send_update_interval");
 
     toggleFakeProxy(!internetAccess);
 
@@ -229,7 +234,16 @@ public class WebxdcActivity extends WebViewActivity implements DcEventCenter.DcE
       e.printStackTrace();
     }
 
-    webView.loadUrl(this.baseURL + "/webxdc_bootstrap324567869.html?i=" + (internetAccess? "1" : "0") + "&href=" + encodedHref);
+    long timeDelta = System.currentTimeMillis() - lastOpenTime;
+    final String url = this.baseURL + "/webxdc_bootstrap324567869.html?i=" + (internetAccess? "1" : "0") + "&href=" + encodedHref;
+    Util.runOnAnyBackgroundThread(() -> {
+      if (timeDelta < 2000) {
+        // this is to avoid getting stuck in the FILL500 in some devices if the
+        // previous webview was not destroyed yet and a new app is opened too soon
+        Util.sleep(1000);
+      }
+      Util.runOnMain(() -> webView.loadUrl(url));
+    });
 
     Util.runOnAnyBackgroundThread(() -> {
       final DcChat chat = dcContext.getChat(dcAppMsg.getChatId());
@@ -253,6 +267,7 @@ public class WebxdcActivity extends WebViewActivity implements DcEventCenter.DcE
 
   @Override
   protected void onDestroy() {
+    lastOpenTime = System.currentTimeMillis();
     DcHelper.getEventCenter(this.getApplicationContext()).removeObservers(this);
     leaveRealtimeChannel();
     super.onDestroy();
@@ -494,6 +509,16 @@ public class WebxdcActivity extends WebViewActivity implements DcEventCenter.DcE
   }
 
   class InternalJSApi {
+    @JavascriptInterface
+    public int sendUpdateMaxSize() {
+      return WebxdcActivity.this.sendUpdateMaxSize;
+    }
+
+    @JavascriptInterface
+    public int sendUpdateInterval() {
+      return WebxdcActivity.this.sendUpdateInterval;
+    }
+
     @JavascriptInterface
     public String selfAddr() {
       return WebxdcActivity.this.selfAddr;

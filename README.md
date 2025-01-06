@@ -252,4 +252,3 @@ Licensed GPLv3+, see the LICENSE file for details.
 
 Copyright © 2022 Delta Chat contributors.
 
-

@@ -686,6 +686,8 @@
     <string name="pref_screen_security_explain">请求系统在最近任务列表中和本应用内阻止截屏</string>
     <string name="pref_screen_security_please_restart_hint">要应用屏幕安全设置，请重新启动本应用。</string>
     <string name="pref_notifications">通知</string>
+    <string name="pref_mention_notifications">提及</string>
+    <string name="pref_mention_notifications_explain">在静音群中，通知直接与你相关的消息，比如回复或回应</string>
     <string name="pref_notifications_show">显示</string>
     <string name="pref_notifications_priority">优先级</string>
     <string name="pref_notifications_explain">为新消息启用系统通知</string>
@@ -1150,8 +1152,6 @@
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat 使用麦克风来录制、发送语音消息和带有声音的视频。</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat 将让您选择要从图库中发送哪些照片。</string>
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat 想将图像保存到图库。</string>
-
-
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
     <string name="pref_instant_delivery">即时传送</string>
     <string name="pref_background_notifications">使用后台连接</string>

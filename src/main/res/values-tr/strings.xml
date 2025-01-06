@@ -702,6 +702,8 @@
     <string name="pref_screen_security_explain">Son listesinde ve uygulamanın içinde ekran görüntülerinin engellenmesini iste</string>
     <string name="pref_screen_security_please_restart_hint">Ekran güvenliği ayarını uygulamak için lütfen uygulamayı yeniden başlatın.</string>
     <string name="pref_notifications">Bildirimler</string>
+    <string name="pref_mention_notifications">Anmalar</string>
+    <string name="pref_mention_notifications_explain">Sessize alınan öbeklerde, yanıtlar ya da tepkiler gibi size yönlendirilen iletileri bildirin</string>
     <string name="pref_notifications_show">Göster</string>
     <string name="pref_notifications_priority">Öncelik</string>
     <string name="pref_notifications_explain">Yeni iletiler için sistem bildirimlerini etkinleştir</string>
@@ -1166,8 +1168,6 @@
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat, sesli iletiler ve sesli videolar kaydetmek ve göndermek için mikrofonunuzu kullanır.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat, kitaplığınızdan hangi fotoğrafların gönderileceğini seçmenize izin verir.</string>
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat, görselleri fotoğraf kitaplığınıza kaydetmek istiyor.</string>
-
-
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
     <string name="pref_instant_delivery">Anında Teslimat</string>
     <string name="pref_background_notifications">Arka Plan Bağlantısı Kullan</string>
