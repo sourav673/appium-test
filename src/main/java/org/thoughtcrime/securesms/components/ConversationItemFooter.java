@@ -24,6 +24,7 @@ public class ConversationItemFooter extends LinearLayout {
   private TextView            dateView;
   private ImageView           secureIndicatorView,securePrvIndicatorView;
   private ImageView           locationIndicatorView;
+  private View                view_file_state_indicator;
   private DeliveryStatusView  deliveryStatusView;
   private Integer             textColor = null;
   private PrivJNI             privJNI = null;
@@ -51,6 +52,7 @@ public class ConversationItemFooter extends LinearLayout {
     dateView              = findViewById(R.id.footer_date);
     secureIndicatorView   = findViewById(R.id.footer_secure_indicator);
     securePrvIndicatorView   = findViewById(R.id.footer_prv_indicator);
+    view_file_state_indicator   = findViewById(R.id.view_file_state_indicator);
     locationIndicatorView = findViewById(R.id.footer_location_indicator);
     deliveryStatusView    = new DeliveryStatusView(findViewById(R.id.delivery_indicator));
 
@@ -66,10 +68,20 @@ public class ConversationItemFooter extends LinearLayout {
     presentDate(messageRecord);
     if(messageRecord.isSecure()) {
       secureIndicatorView.setVisibility(VISIBLE);
-      if (privJNI.isChatPrivittyProtected(messageRecord.getChatId()) && (messageRecord.getType() == DcMsg.DC_MSG_FILE)) {
+      if (privJNI.isChatPrivittyProtected(messageRecord.getChatId()) && (messageRecord.getType() == DcMsg.DC_MSG_FILE))
+      {
         securePrvIndicatorView.setVisibility(VISIBLE);
-      } else {
+        view_file_state_indicator.setVisibility(VISIBLE);
+
+        // Here we nee to add one state and put switch or if-else case
+        view_file_state_indicator.setBackgroundResource(R.drawable.prv_file_indicator_background_blue);     // access requested
+//        view_file_state_indicator.setBackgroundResource(R.drawable.prv_file_indicator_background_red);    // access blocked or expired
+//        view_file_state_indicator.setBackgroundResource(R.drawable.prv_file_indicator_background_green);  // access allowed
+      }
+      else
+      {
         securePrvIndicatorView.setVisibility(GONE);
+        view_file_state_indicator.setVisibility(GONE);
       }
     } else {
       secureIndicatorView.setVisibility(GONE);
