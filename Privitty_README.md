@@ -31,58 +31,36 @@ Where:
 Public repo: Delta chat
 Private: Privitty
 
-*Step 1: Clone the Public Repository Locally*
-Clone the Public repository to your local machine.
-
+*Step 1: Clone the Private Repository Locally*
 ```
-git clone https://github.com/username/public-repo.git
-cd public-repo
-```
-
-*Step 2: Create a Private Repository on GitHub*
-Go to your GitHub account and create a new private repository (we’ll refer to it as private-repo).
-
-*Step 3: Add the Private Repository as a New Remote*
-In your local clone of the public repository, add your private repository as a new remote named origin:
-
-```
-git remote rename origin upstream
-git remote add origin https://github.com/your-username/private-repo.git
+git clone https://github.com/Privitty/priv-deltachat-android.git
+cd priv-deltachat-android
+git submodule update --init --recursive
 ```
 
-Now, your setup has:
-
-upstream: The original public repository.
-origin: Your private repository.
-
-*Step 4: Push the Initial Code to Your Private Repository*
-Push all local branches and tags to your private repository:
+*Step 2: Add the Public Repo as an Upstream Remote*
 
 ```
-git push -u origin --all         # Push all branches
-git push -u origin --tags        # Push all tags
-```
-*Step 5: Sync Changes from the Public Repository*
-
-1. First, make sure you’re in the root directory of your private repo, then add the public Delta Chat repo as an upstream remote:
-```
-git remote add upstream [https://github.com/deltachat/deltachat-android.git](https://github.com/deltachat/deltachat-android.git)
+git remote add upstream https://github.com/Privitty/deltachat-android.git
+git remote -v
 ```
 
-2. Fetch changes from the upstream repository::
+*Step 3: Fetch Changes from the Public Repo*
 ```
 git fetch upstream
 ```
 
-2. Merge changes from the `upstream` repository into your local branches:
+*Step 4: Merge Upstream Changes into Your Branch*
 
 ```
-git checkout develop
-git merge upstream/develop       # Replace 'develop' with the default branch name if different
+git checkout main
+git merge upstream/main
 ```
+Solve all the merge conflicts is any and later `git add && git commit`
 
-3. Push changes to your private repository:
+*Step 5: Push the Changes to Your Private Repo*
+Push all local branches and tags to your private repository:
 
 ```
-git push origin develop
+git push origin main             # Push all branches
 ```
