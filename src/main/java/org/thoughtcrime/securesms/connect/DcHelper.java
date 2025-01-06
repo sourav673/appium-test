@@ -489,12 +489,18 @@ public class DcHelper {
   }
 
   public static void showProtectionEnabledDialog(Context context) {
-    new AlertDialog.Builder(context)
+/*    new AlertDialog.Builder(context)
       .setMessage(context.getString(R.string.chat_protection_enabled_explanation))
       .setNeutralButton(R.string.learn_more, (d, w) -> openHelp(context, "#e2eeguarantee"))
       .setPositiveButton(R.string.ok, null)
       .setCancelable(true)
-      .show();
+      .show();*/
+
+    // Opening security details in external browser
+    String url = "https://www.privittytech.com";
+    Intent i = new Intent(Intent.ACTION_VIEW);
+    i.setData(Uri.parse(url));
+    context.startActivity(i);
   }
 
   public static void showInvalidUnencryptedDialog(Context context) {
