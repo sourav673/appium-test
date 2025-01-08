@@ -56,6 +56,15 @@ public class PrivJNI {
      */ 
     public final static int PRV_APP_STATUS_LIB_LAST                 = 24;
 
+    /*
+     * NOTE: SSS status types
+     */
+    public final static int PRV_SSS_STATE_TYPE_NONE                 = 0;
+    public final static int PRV_SSS_STATE_TYPE_SSS_ACTIVE           = 1;
+    public final static int PRV_SSS_STATE_TYPE_SSS_REQUEST          = 2;
+    public final static int PRV_SSS_STATE_TYPE_SSS_BLOCKED          = 3;
+
+
     private Context context = null;
     public PrivJNI(Context context) {
         this.context = context;
@@ -74,6 +83,7 @@ public class PrivJNI {
                                   int can_download, int can_forward, int num_peer_sss_request,
                                   String forwarded_to, int sent_privitty_protected);
     public native boolean deleteChat(int chatId);
+    public native int getFileAccessState(int chat_id, String file_name);
 }
 
 

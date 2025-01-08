@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.b44t.messenger.DcMsg;
+import com.b44t.messenger.DcContact;
 import com.b44t.messenger.PrivJNI;
 
 import org.thoughtcrime.securesms.R;
@@ -73,10 +74,21 @@ public class ConversationItemFooter extends LinearLayout {
         securePrvIndicatorView.setVisibility(VISIBLE);
         view_file_state_indicator.setVisibility(VISIBLE);
 
-        // Here we nee to add one state and put switch or if-else case
-        view_file_state_indicator.setBackgroundResource(R.drawable.prv_file_indicator_background_blue);     // access requested
-//        view_file_state_indicator.setBackgroundResource(R.drawable.prv_file_indicator_background_red);    // access blocked or expired
-//        view_file_state_indicator.setBackgroundResource(R.drawable.prv_file_indicator_background_green);  // access allowed
+        if (messageRecord.getFromId() != DcContact.DC_CONTACT_ID_SELF) {
+          int fileState = privJNI.getFileAccessState(messageRecord.getChatId(), messageRecord.getFilename());
+          if (fileState == PrivJNI.PRV_SSS_STATE_TYPE_SSS_ACTIVE) {
+            // access allowed
+            view_file_state_indicator.setBackgroundResource(R.drawable.prv_file_indicator_background_green);
+          } else if (fileState == PrivJNI.PRV_SSS_STATE_TYPE_SSS_REQUEST) {
+            // access requested
+            view_file_state_indicator.setBackgroundResource(R.drawable.prv_file_indicator_background_blue);
+          } else if (fileState == PrivJNI.PRV_SSS_STATE_TYPE_SSS_BLOCKED) {
+            // access blocked or expired or Revoked
+            view_file_state_indicator.setBackgroundResource(R.drawable.prv_file_indicator_background_red);
+          }
+        } else {
+          view_file_state_indicator.setBackgroundResource(R.drawable.prv_file_indicator_background_green);
+        }
       }
       else
       {

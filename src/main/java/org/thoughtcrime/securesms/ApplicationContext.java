@@ -155,7 +155,7 @@ public class ApplicationContext extends MultiDexApplication {
                   PrivJNI privJni = DcHelper.getPriv(getApplicationContext());
                   byte[] byteArrayMsg = Base64.getDecoder().decode(dcMsg.getText());
                   PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_RECEIVED_PEER_PDU, "", "",
-                    event.getData1Int(),
+                    dcMsg.getId(), dcMsg.getFromId(), event.getData1Int(),
                     "", "", "", 0, byteArrayMsg);
                   privJni.produceEvent(jevent);
                 });
@@ -167,7 +167,8 @@ public class ApplicationContext extends MultiDexApplication {
               if (!privJni.isPeerAdded(chatId)) {
                 Util.runOnAnyBackgroundThread(() -> {
                   PrivJNI privJni = DcHelper.getPriv(getApplicationContext());
-                  PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", "", chatId,
+                  PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", "",
+                    dcMsg.getId(), dcMsg.getFromId(), chatId,
                     "", "", "", 0, new byte[0]);
                   privJni.produceEvent(jevent);
                   Log.d("JAVA-Privitty", "Adding a new peer");
@@ -309,22 +310,6 @@ public class ApplicationContext extends MultiDexApplication {
         String base64Msg = Base64.getEncoder().encodeToString(pdu);
         msg.setText(base64Msg);
         int msgId = dcContext.sendMsg(chatId, msg);
-
-        int fromId = msg.getFromId();
-        String msgText = "new_peer_add";
-        String msgType = "system";
-        String mediaPath = "";
-        String filename = "";
-        int fileSessionTimeout = 0;
-        int canDownload = 0;
-        int canForward = 0;
-        int numPeerSssRequest = 0;
-        String forwardedTo = "";
-        int sentPrivittyProtected = 0;
-
-        privJni.addMessage(msgId, chatId, fromId, msgText, msgType, mediaPath, filename,
-          fileSessionTimeout, canDownload, canForward,
-          numPeerSssRequest, forwardedTo, sentPrivittyProtected);
       });
 
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_ADD_COMPLETE) {
@@ -354,6 +339,22 @@ public class ApplicationContext extends MultiDexApplication {
         String base64Msg = Base64.getEncoder().encodeToString(pdu);
         msg.setText(base64Msg);
         int msgId = dcContext.sendMsg(chatId, msg);
+
+        int fromId = msg.getFromId();
+        String msgText = "OTSP_SENT";
+        String msgType = "system";
+        String mediaPath = "";
+        String filename = "";
+        int fileSessionTimeout = 0;
+        int canDownload = 0;
+        int canForward = 0;
+        int numPeerSssRequest = 0;
+        String forwardedTo = "";
+        int sentPrivittyProtected = 0;
+
+        privJni.addMessage(msgId, chatId, fromId, msgText, msgType, mediaPath, filename,
+          fileSessionTimeout, canDownload, canForward,
+          numPeerSssRequest, forwardedTo, sentPrivittyProtected);
       });
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_SSS_REQUEST) {
       Log.d("JAVA-Privitty", "Peer SSS request");
