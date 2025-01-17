@@ -41,7 +41,7 @@ git submodule update --init --recursive
 *Step 2: Add the Public Repo as an Upstream Remote*
 
 ```
-git remote add upstream https://github.com/Privitty/deltachat-android.git
+git remote add upstream https://github.com/deltachat/deltachat-android.git
 git remote -v
 ```
 
