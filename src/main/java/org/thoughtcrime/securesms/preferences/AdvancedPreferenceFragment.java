@@ -245,9 +245,7 @@ public class AdvancedPreferenceFragment extends ListSummaryPreferenceFragment
     super.onResume();
     ((ApplicationPreferencesActivity) getActivity()).getSupportActionBar().setTitle(R.string.menu_advanced);
 
-    // Privitty: We always keep 'DC_SHOW_EMAILS_OFF (0)' as default.
-    //String value = Integer.toString(dcContext.getConfigInt("show_emails"));
-    String value = "0";
+    String value = Integer.toString(dcContext.getConfigInt("show_emails"));
     showEmails.setValue(value);
     updateListSummary(showEmails, value);
 

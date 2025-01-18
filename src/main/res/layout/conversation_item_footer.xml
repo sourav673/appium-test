@@ -11,7 +11,7 @@
     <View
         android:id="@+id/view_file_state_indicator"
         android:layout_gravity="center_vertical|end"
-        android:background="@drawable/prv_file_indicator_background_blue"
+        android:background="@android:color/transparent"
         android:visibility="gone"
         android:layout_width="8dp"
         android:layout_height="8dp"
