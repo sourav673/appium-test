@@ -632,7 +632,7 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
           PrivJNI privJni = null;
           Log.d("JAVA-Privitty", "Selected chatId: " + (int)chatId);
           privJni = new PrivJNI(context);
-          privJni.deleteChat((int) chatId);
+          privJni.cleanChat((int) chatId);
 
           dcContext.deleteChat(chatId);
           DirectShareUtil.clearShortcut(this, chatId);

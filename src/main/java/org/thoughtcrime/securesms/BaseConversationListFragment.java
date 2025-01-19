@@ -292,7 +292,7 @@ public abstract class BaseConversationListFragment extends Fragment implements A
               DcHelper.getNotificationCenter(requireContext()).removeNotifications(accountId, (int) chatId);
               Log.d("JAVA-Privitty", "Selected chatId: " + (int)chatId);
               privJni = new PrivJNI(getContext());
-              privJni.deleteChat((int) chatId);
+              privJni.cleanChat((int) chatId);
               dcContext.deleteChat((int) chatId);
               DirectShareUtil.clearShortcut(requireContext(), (int) chatId);
             }

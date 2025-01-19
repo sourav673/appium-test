@@ -156,31 +156,29 @@ public class ApplicationContext extends MultiDexApplication {
                   continue;
                 }
                 Log.d("JAVA-Privitty", "Privitty message, punt it to libpriv. Sub: " + dcMsg.getSubject());
+                PrivJNI privJni = DcHelper.getPriv(getApplicationContext());
+                byte[] byteArrayMsg = Base64.getDecoder().decode(dcMsg.getText());
+                PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_RECEIVED_PEER_PDU, "", "",
+                  dcMsg.getId(), dcMsg.getFromId(), event.getData1Int(),
+                  "", "", "", 0, byteArrayMsg);
+                privJni.produceEvent(jevent);
 
-                Util.runOnAnyBackgroundThread(() -> {
-                  PrivJNI privJni = DcHelper.getPriv(getApplicationContext());
-                  byte[] byteArrayMsg = Base64.getDecoder().decode(dcMsg.getText());
-                  PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_RECEIVED_PEER_PDU, "", "",
-                    dcMsg.getId(), dcMsg.getFromId(), event.getData1Int(),
-                    "", "", "", 0, byteArrayMsg);
-                  privJni.produceEvent(jevent);
-                });
                 dcContext.deleteMsgs(new int[]{event.getData2Int()});
                 continue;
               }
             } catch (Exception e) {
               Log.d("JAVA-Privitty", "This is non-privitty message");
               if (!privJni.isPeerAdded(chatId)) {
-                Util.runOnAnyBackgroundThread(() -> {
-                  PrivJNI privJni = DcHelper.getPriv(getApplicationContext());
-                  PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", "",
-                    dcMsg.getId(), dcMsg.getFromId(), chatId,
-                    "", "", "", 0, new byte[0]);
-                  privJni.produceEvent(jevent);
-                  Log.d("JAVA-Privitty", "Adding a new peer");
-                });
+                PrivJNI privJni = DcHelper.getPriv(getApplicationContext());
+                PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", "",
+                  dcMsg.getId(), dcMsg.getFromId(), chatId,
+                  "", "", "", 0, new byte[0]);
+                privJni.produceEvent(jevent);
+                Log.d("JAVA-Privitty", "Adding a new peer");
               }
             }
+          } else {
+            Log.d("JAVA-Privitty", "Can we collaborate request?");
           }
         }
 
@@ -376,15 +374,6 @@ public class ApplicationContext extends MultiDexApplication {
       Util.runOnAnyBackgroundThread(() -> {
         DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
         msg.setSubject("{'privitty':'true', 'type':'SSS_RESPONSE'}");
-        String base64Msg = Base64.getEncoder().encodeToString(pdu);
-        msg.setText(base64Msg);
-        int msgId = dcContext.sendMsg(chatId, msg);
-      });
-    } else if (statusCode == PrivJNI.PRV_APP_STATUS_DELETE_CHAT) {
-      Log.d("JAVA-Privitty", "Delete chat");
-      Util.runOnAnyBackgroundThread(() -> {
-        DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
-        msg.setSubject("{'privitty':'true', 'type':'DELETE_CHAT'}");
         String base64Msg = Base64.getEncoder().encodeToString(pdu);
         msg.setText(base64Msg);
         int msgId = dcContext.sendMsg(chatId, msg);

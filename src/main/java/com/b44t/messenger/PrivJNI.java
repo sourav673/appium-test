@@ -82,7 +82,8 @@ public class PrivJNI {
                                   String media_path, String file_name, int file_session_timeout,
                                   int can_download, int can_forward, int num_peer_sss_request,
                                   String forwarded_to, int sent_privitty_protected);
-    public native boolean deleteChat(int chatId);
+
+    public native boolean cleanChat(int chatId);
     public native int getFileAccessState(int chat_id, String file_name);
 }
 
