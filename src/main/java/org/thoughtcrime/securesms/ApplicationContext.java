@@ -1,6 +1,7 @@
 package org.thoughtcrime.securesms;
 
 import static org.thoughtcrime.securesms.connect.DcHelper.CONFIG_VERIFIED_ONE_ON_ONE_CHATS;
+import static org.thoughtcrime.securesms.connect.DcHelper.CONFIG_SHOW_EMAILS;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -124,6 +125,11 @@ public class ApplicationContext extends MultiDexApplication {
       dcAccounts.addAccount();
     }
     dcContext = dcAccounts.getSelectedAccount();
+
+    // Privitty Specific Configuration
+    dcContext.setConfig(CONFIG_SHOW_EMAILS, "0");
+    Log.d("JAVA-Privitty", "Show Email: " + dcContext.getConfig(CONFIG_SHOW_EMAILS));
+
     notificationCenter = new NotificationCenter(this);
     eventCenter = new DcEventCenter(this);
     new Thread(() -> {
