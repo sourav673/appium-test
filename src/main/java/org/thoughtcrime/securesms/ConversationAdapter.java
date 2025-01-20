@@ -320,7 +320,7 @@ public class ConversationAdapter <V extends View & BindableConversationItem>
       }
     }
 
-    if (dcMsg.isInfo()) {
+    if (dcMsg.isInfo() || dcMsg.getSubject().isEmpty()) {
       return MESSAGE_TYPE_INFO;
     }
     else if (type==DcMsg.DC_MSG_AUDIO || type==DcMsg.DC_MSG_VOICE) {
