@@ -772,6 +772,13 @@ JNIEXPORT jboolean Java_com_b44t_messenger_DcContext_wasDeviceMsgEverAdded(JNIEn
     return ret;
 }
 
+JNIEXPORT jstring Java_com_b44t_messenger_DcContext_getMimeHeaders(JNIEnv *env, jobject obj, jint msg_id)
+{
+    char* temp = dc_get_mime_headers(get_dc_context(env, obj), msg_id);
+        jstring ret = JSTRING_NEW(temp);
+    dc_str_unref(temp);
+    return ret;
+}
 
 /* DcContext - handle config */
 

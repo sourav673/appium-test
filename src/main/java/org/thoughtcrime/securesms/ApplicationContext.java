@@ -128,7 +128,7 @@ public class ApplicationContext extends MultiDexApplication {
 
     // Privitty Specific Configuration
     dcContext.setConfig(CONFIG_SHOW_EMAILS, "0");
-    Log.d("JAVA-Privitty", "Show Email: " + dcContext.getConfig(CONFIG_SHOW_EMAILS));
+    dcContext.setConfig("save_mime_headers", "1");
 
     notificationCenter = new NotificationCenter(this);
     eventCenter = new DcEventCenter(this);
@@ -143,7 +143,7 @@ public class ApplicationContext extends MultiDexApplication {
         if (event.getId() == DcContext.DC_EVENT_INCOMING_MSG) {
           DcMsg dcMsg = dcContext.getMsg(event.getData2Int());
           int chatId = event.getData1Int();
-          Log.d("JAVA-Privitty", " ------ isSecure(): " + dcMsg.showPadlock() + " contactRequested: " + dcContext.getChat(chatId).isContactRequest());
+
           if ((dcMsg.showPadlock() == 1) && !dcContext.getChat(chatId).isContactRequest()) {
             try {
               // Encrypted or guaranteed E2E (using QR)
@@ -178,7 +178,13 @@ public class ApplicationContext extends MultiDexApplication {
               }
             }
           } else {
-            Log.d("JAVA-Privitty", "Can we collaborate request?");
+            if (!privJni.isChatVersion(dcContext.getMimeHeaders(event.getData2Int()))) {
+              Log.d("JAVA-Privitty", "This message is from E-MAIL client");
+              DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
+              String user_msg = "Please install privitty chat APP to secure your data";
+              msg.setText(user_msg);
+              int msgId = dcContext.sendMsg(chatId, msg);
+            }
           }
         }
 

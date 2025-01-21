@@ -203,6 +203,7 @@ public class DcContext {
     public native int          initWebxdcIntegration(int chat_id);
     public native int          addDeviceMsg         (String label, DcMsg msg);
     public native boolean      wasDeviceMsgEverAdded(String label);
+    public native String       getMimeHeaders(int msg_id);
     public DcLot               checkQr              (String qr) { return new DcLot(checkQrCPtr(qr)); }
     public native String       getSecurejoinQr      (int chat_id);
     public native String       getSecurejoinQrSvg   (int chat_id);

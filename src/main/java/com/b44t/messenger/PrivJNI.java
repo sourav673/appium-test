@@ -84,6 +84,7 @@ public class PrivJNI {
                                   String forwarded_to, int sent_privitty_protected);
 
     public native boolean cleanChat(int chatId);
+    public native boolean isChatVersion(String mime_header);
     public native int getFileAccessState(int chat_id, String file_name);
 }
 
