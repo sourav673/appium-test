@@ -29,8 +29,10 @@ import com.b44t.messenger.DcChat;
 import com.b44t.messenger.DcChatlist;
 import com.b44t.messenger.DcContext;
 import com.b44t.messenger.DcLot;
+import com.b44t.messenger.DcMsg;
 
 import org.thoughtcrime.securesms.connect.DcHelper;
+import org.thoughtcrime.securesms.database.model.ThreadRecord;
 import org.thoughtcrime.securesms.mms.GlideRequests;
 import org.thoughtcrime.securesms.util.ViewUtil;
 
@@ -130,6 +132,16 @@ class ConversationListAdapter extends BaseConversationListAdapter<ConversationLi
 
     DcChat chat = dcContext.getChat(dcChatlist.getChatId(i));
     DcLot summary = dcChatlist.getSummary(i, chat);
+    DcMsg dcmsg = dcChatlist.getMsg(i);
+    ThreadRecord threadRecord = DcHelper.getThreadRecord(context, summary, chat);
+    if(dcmsg.getSubject().contains("priv"))   // as per subject of message we are differentiating
+    {
+      threadRecord.setIgnore(true);
+    }
+    else
+    {
+      threadRecord.setIgnore(false);
+    }
     viewHolder.getItem().bind(DcHelper.getThreadRecord(context, summary, chat), dcChatlist.getMsgId(i), summary, glideRequests, batchSet, batchMode);
   }
 

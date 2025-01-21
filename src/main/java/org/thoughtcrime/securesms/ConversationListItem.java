@@ -138,6 +138,16 @@ public class ConversationListItem extends RelativeLayout
       this.fromView.setText(recipient, state!=DcMsg.DC_STATE_IN_FRESH);
     }
 
+
+    if(thread.isIgnore())
+    {
+      this.subjectView.setText("This is raw data"); // this text will be shown in list of chat in case of any raw or encrypted data.
+    }
+    else
+    {
+      this.subjectView.setText(thread.getDisplayBody());
+    }
+
     this.subjectView.setText(thread.getDisplayBody());
     this.subjectView.setTypeface(state==DcMsg.DC_STATE_IN_FRESH ? BOLD_TYPEFACE : LIGHT_TYPEFACE);
     this.subjectView.setTextColor(state==DcMsg.DC_STATE_IN_FRESH ? ThemeUtil.getThemedColor(getContext(), R.attr.conversation_list_item_unread_color)

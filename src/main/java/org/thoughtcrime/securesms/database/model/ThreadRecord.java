@@ -131,4 +131,14 @@ public class ThreadRecord {
   public boolean isContactRequest() {
     return isContactRequest;
   }
+
+  boolean isIgnore = false;
+
+  public boolean isIgnore() {
+    return isIgnore;
+  }
+
+  public void setIgnore(boolean ignore) {
+    isIgnore = ignore;
+  }
 }
