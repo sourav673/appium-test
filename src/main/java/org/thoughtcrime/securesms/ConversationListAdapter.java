@@ -134,7 +134,7 @@ class ConversationListAdapter extends BaseConversationListAdapter<ConversationLi
     DcLot summary = dcChatlist.getSummary(i, chat);
     DcMsg dcmsg = dcChatlist.getMsg(i);
     ThreadRecord threadRecord = DcHelper.getThreadRecord(context, summary, chat);
-    if(dcmsg.getSubject().contains("priv"))   // as per subject of message we are differentiating
+    if(dcmsg.getSubject().contains("new_peer_add"))   // as per subject of message we are differentiating
     {
       threadRecord.setIgnore(true);
     }
@@ -142,7 +142,8 @@ class ConversationListAdapter extends BaseConversationListAdapter<ConversationLi
     {
       threadRecord.setIgnore(false);
     }
-    viewHolder.getItem().bind(DcHelper.getThreadRecord(context, summary, chat), dcChatlist.getMsgId(i), summary, glideRequests, batchSet, batchMode);
+//    viewHolder.getItem().bind(DcHelper.getThreadRecord(context, summary, chat), dcChatlist.getMsgId(i), summary, glideRequests, batchSet, batchMode); // original code was
+    viewHolder.getItem().bind(threadRecord, dcChatlist.getMsgId(i), summary, glideRequests, batchSet, batchMode);
   }
 
   @Override
