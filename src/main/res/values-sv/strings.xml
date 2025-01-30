@@ -1140,4 +1140,5 @@
 
     <string name="update_1_46_ios">Ny Onboarding 🐣 och mer:\n\n⚡️ Registrera dig för säkra snabba chatmailservrar (https://delta.chat/chatmail) eller använd klassiska e-postservrar\n\n👉 PUSH-meddelanden för alla chatmailservrar\n\n👤 Ta emot \"bifogade kontakter\" och anslut till dina vänner\n\n🥰 Snabbare reaktionsval ... och MER på %1$s</string>
     <string name="update_switch_profile_placement">ℹ️ Alternativet \"Byt profil\" har flyttats: Tryck på din profilbild i det övre hörnet av huvudskärmen för att lägga till eller byta profil 💡</string>
+    <string name="revoke_access">Revoke Access</string>
 </resources>

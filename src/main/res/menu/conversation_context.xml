@@ -34,7 +34,9 @@
         android:id="@+id/menu_context_forward"
         android:icon="?menu_forward_icon"
         app:showAsAction="always" />
-
+    <item android:title="@string/revoke_access"
+        android:id="@+id/menu_context_revoke_access"
+        app:showAsAction="never" />
     <item android:title="@string/menu_export_attachments"
         android:id="@+id/menu_context_save_attachment"
         android:visible="false"
