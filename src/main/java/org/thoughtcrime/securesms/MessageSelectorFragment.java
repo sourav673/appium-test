@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.b44t.messenger.DcChat;
 import com.b44t.messenger.DcContext;
 import com.b44t.messenger.DcMsg;
+import com.b44t.messenger.PrivJNI;
 
 import org.thoughtcrime.securesms.connect.DcEventCenter;
 import org.thoughtcrime.securesms.connect.DcHelper;
@@ -71,6 +72,16 @@ public abstract class MessageSelectorFragment
             .setMessage(text)
             .setCancelable(true)
             .setPositiveButton(R.string.delete, (d, which) -> {
+
+                // Privitty msg Delete
+                String[] filenames = new String[messageIds.length];
+                PrivJNI privJni = new PrivJNI(getContext());
+                for (int i = 0; i < messageIds.length; i++) {
+                  DcMsg dcMsg = DcHelper.getContext(getActivity()).getMsg(messageIds[i]); 
+                  filenames[i] = dcMsg.getFile();  
+                }
+                privJni.cleanMsgs(chatId, filenames);
+
                 dcContext.deleteMsgs(messageIds);
                 if (actionMode != null) actionMode.finish();
             })
