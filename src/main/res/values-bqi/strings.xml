@@ -380,4 +380,5 @@
     <string name="message_detail_received_desktop">گرؽڌه وابی</string>
     <string name="show_window">نشۉ داڌن نیمدری</string>
     <string name="open_settings">گۊشیڌن سامووا</string>
-    </resources>
+    <string name="revoke_access">Revoke Access</string>
+</resources>

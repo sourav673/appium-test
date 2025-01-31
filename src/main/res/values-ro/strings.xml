@@ -632,4 +632,5 @@
     <string name="pref_manage_keys">Gestionați Cheile</string>
     <string name="pref_use_system_emoji">Utilizați emoji de sistem</string>
     <string name="pref_use_system_emoji_explain">Dezactivați suportul emoji încorporat în Delta Chat</string>
-    </resources>
+    <string name="revoke_access">Revoke Access</string>
+</resources>

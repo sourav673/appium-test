@@ -320,16 +320,19 @@ public class ConversationFragment extends MessageSelectorFragment
             return;
         }
 
-        if (messageRecords.size() > 1) {
+        if (messageRecords.size() > 1)
+        {
             menu.findItem(R.id.menu_context_details).setVisible(false);
             menu.findItem(R.id.menu_context_share).setVisible(false);
             menu.findItem(R.id.menu_context_reply).setVisible(false);
             menu.findItem(R.id.menu_context_reply_privately).setVisible(false);
             menu.findItem(R.id.menu_add_to_home_screen).setVisible(false);
+            menu.findItem(R.id.menu_context_revoke_access).setVisible(false);
         } else {
             DcMsg messageRecord = messageRecords.iterator().next();
             DcChat chat = getListAdapter().getChat();
             menu.findItem(R.id.menu_context_details).setVisible(true);
+            menu.findItem(R.id.menu_context_revoke_access).setVisible(true);
             menu.findItem(R.id.menu_context_share).setVisible(messageRecord.hasFile());
             boolean canReply = canReplyToMsg(messageRecord);
             menu.findItem(R.id.menu_context_reply).setVisible(chat.canSend() && canReply);
@@ -460,7 +463,10 @@ public class ConversationFragment extends MessageSelectorFragment
 
         listener.handleReplyMessage(message);
     }
-
+    private void handleRevokeAccess(final DcMsg msg)
+    {
+      // put here file access revoke code. for single message
+    }
     private void handleReplyMessagePrivately(final DcMsg msg) {
 
         if (getActivity() != null) {
@@ -955,6 +961,9 @@ public class ConversationFragment extends MessageSelectorFragment
                     return true;
                 case R.id.menu_resend:
                     handleResendMessage(getListAdapter().getSelectedItems());
+                    return true;
+              case R.id.menu_context_revoke_access:
+                    handleRevokeAccess(getSelectedMessageRecord(getListAdapter().getSelectedItems()));
                     return true;
             }
 
