@@ -75,6 +75,7 @@ public class PrivJNI {
     public native void stopConsumer();
     public native void produceEvent(PrivEvent event);
     public native String encryptFile(int chatId, String path, String filename);
+    public native String freshOtsp(int chatId, String path);
     public native String decryptFile(int chatId, String path, String filename, boolean direction);
     public native boolean isPeerAdded(int chatId);
     public native boolean isChatPrivittyProtected(int chatId);
@@ -85,6 +86,7 @@ public class PrivJNI {
 
     public native boolean cleanChat(int chatId);
     public native boolean cleanMsgs(int chatId, String[] filenames);
+    public native void deleteStagingFile(int chat_id, String filenames, int direction);
     public native boolean isChatVersion(String mime_header);
     public native int getFileAccessState(int chat_id, String file_name);
 }

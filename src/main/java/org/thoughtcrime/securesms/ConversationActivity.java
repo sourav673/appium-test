@@ -1115,6 +1115,30 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
             }
 
             Util.runOnMain(()-> sendComplete(dcChat.getId()));
+
+            String filename = msg.getFile();
+            if (filename.toLowerCase().endsWith(".prv")) {
+              PrivJNI privJni = new PrivJNI(context);
+              privJni.freshOtsp(dcChat.getId(), filename);
+              Log.d("JAVA-Privitty", "chatId: " + dcChat.getId() + " | Filename: " + filename);
+
+              privJni.deleteStagingFile(dcChat.getId(), filename, 1);
+
+              int fromId = msg.getFromId();
+              String msgText = "PRV_FILE_SENT";
+              String msgType = "system";
+              String mediaPath = "";
+              int fileSessionTimeout = 0;
+              int canDownload = 0;
+              int canForward = 0;
+              int numPeerSssRequest = 0;
+              String forwardedTo = "";
+              int sentPrivittyProtected = 0;
+
+              privJni.addMessage(msg.getId(), chatId, fromId, msgText, msgType, mediaPath, filename,
+                fileSessionTimeout, canDownload, canForward,
+                numPeerSssRequest, forwardedTo, sentPrivittyProtected);
+            }
           }
         }
         else {
