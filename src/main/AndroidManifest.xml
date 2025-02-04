@@ -56,8 +56,7 @@
                  tools:ignore="GoogleAppIndexingWarning"
                  android:requestLegacyExternalStorage="true"
                  tools:targetApi="TIRAMISU"
-                 android:hasFragileUserData="true"
-        >
+                 android:hasFragileUserData="true">
 
     <!-- android car support, see https://developer.android.com/training/auto/start/,
          as this potentially blocks releases on gplay due to extra-checks,
@@ -393,6 +392,10 @@
     </activity>
 
     <activity android:name="com.b44t.messenger.ActivityPDFViewer"
+        android:theme="@style/TextSecure.LightTheme"
+        android:configChanges="touchscreen|keyboard|keyboardHidden|orientation|screenLayout|screenSize">
+    </activity>
+    <activity android:name="com.b44t.messenger.ActivityImageViewer"
         android:theme="@style/TextSecure.LightTheme"
         android:configChanges="touchscreen|keyboard|keyboardHidden|orientation|screenLayout|screenSize">
     </activity>
