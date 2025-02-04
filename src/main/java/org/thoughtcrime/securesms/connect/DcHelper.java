@@ -18,6 +18,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 
 import com.b44t.messenger.ActivityImageViewer;
+import com.b44t.messenger.ActivityVideoViewer;
 import com.b44t.messenger.DcAccounts;
 import com.b44t.messenger.DcChat;
 import com.b44t.messenger.DcContext;
@@ -312,6 +313,11 @@ public class DcHelper {
     ActivityImageViewer.prfFilePath = prvFile;
     Intent intentImage = new Intent((Activity) activity, ActivityImageViewer.class);
     startActivity((Activity) activity,intentImage);
+*/
+/*    // Open Video
+    ActivityVideoViewer.prfFilePath = prvFile;
+    Intent intentVideo = new Intent((Activity) activity, ActivityVideoViewer.class);
+    startActivity((Activity) activity,intentVideo);
 */
 
 //    Log.i("JAVA-Privitty", "Native retunred file: " + path);
