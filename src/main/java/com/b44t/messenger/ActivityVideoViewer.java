@@ -2,6 +2,7 @@ package com.b44t.messenger;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -22,8 +23,8 @@ public class ActivityVideoViewer extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_viewer);
-
-        VideoView videoView = findViewById(R.id.videoView);
+      getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+      VideoView videoView = findViewById(R.id.videoView);
         System.out.println("===path=>>"+prfFilePath);
 //        File vdoFile = new  File(this.getBaseContext().getFilesDir(), "abc5.mov");
       File file = new File(prfFilePath);

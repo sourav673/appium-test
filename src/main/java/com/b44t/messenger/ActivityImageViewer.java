@@ -2,6 +2,7 @@ package com.b44t.messenger;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +18,8 @@ public class ActivityImageViewer extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_viewer);
-        File file = new File(prfFilePath);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+      File file = new File(prfFilePath);
         if (!file.exists())
         {
           Toast.makeText(this, "PDF file not found!", Toast.LENGTH_SHORT).show();
