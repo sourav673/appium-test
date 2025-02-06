@@ -290,9 +290,10 @@ public class DcHelper {
       return;
     }
 
+
+
     DcMsg msg = dcContext.getMsg(msg_id);
     String path = msg.getFile();
-    String mimeType = msg.getFilemime();
 
     File srcP = new File(path);
     Log.d("JAVA-Privitty", "Message Subject: " + msg.getSubject());
@@ -315,15 +316,18 @@ public class DcHelper {
       // Open pdf
       ActivityPDFViewer.prfFilePath = prvFile;
       intent = new Intent((Activity) activity, ActivityPDFViewer.class);
+      activity.startActivity(intent);
     } else if (prvFile.endsWith(".png") || prvFile.endsWith(".jpg") || prvFile.endsWith(".jpeg")) {
       // Open Image
       ActivityImageViewer.prfFilePath = prvFile;
       intent = new Intent((Activity) activity, ActivityImageViewer.class);
+      activity.startActivity(intent);
     } else if (prvFile.endsWith(".mp4") || prvFile.endsWith(".mov") || prvFile.endsWith(".mkv") ||
       prvFile.endsWith(".3gp")) {
       // Open Video
       ActivityVideoViewer.prfFilePath = prvFile;
       intent = new Intent((Activity) activity, ActivityVideoViewer.class);
+      activity.startActivity(intent);
     } else if (prvFile.endsWith(".doc") || prvFile.endsWith(".docx") || prvFile.endsWith(".xlsx") ||
       prvFile.endsWith(".xlsx") || prvFile.endsWith(".pptx") || prvFile.endsWith(".ppt")) {
       // MS office
@@ -332,7 +336,6 @@ public class DcHelper {
       Toast.makeText(activity, "Unsupported file format", Toast.LENGTH_LONG).show();
     }
 
-    //startActivity((Activity) activity, intent);
 
 //    Log.i("JAVA-Privitty", "Native retunred file: " + path);
 //

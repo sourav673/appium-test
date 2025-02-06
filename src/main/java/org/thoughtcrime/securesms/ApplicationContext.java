@@ -33,7 +33,6 @@ import com.b44t.messenger.PrivEvent;
 import com.b44t.messenger.DcMsg;
 import com.b44t.messenger.DcChat;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.thoughtcrime.securesms.connect.AccountManager;
 import org.thoughtcrime.securesms.connect.DcEventCenter;
