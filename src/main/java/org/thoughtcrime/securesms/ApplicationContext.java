@@ -32,6 +32,8 @@ import com.b44t.messenger.PrivJNI;
 import com.b44t.messenger.PrivEvent;
 import com.b44t.messenger.DcMsg;
 import com.b44t.messenger.DcChat;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.thoughtcrime.securesms.connect.AccountManager;
 import org.thoughtcrime.securesms.connect.DcEventCenter;
@@ -84,6 +86,7 @@ public class ApplicationContext extends MultiDexApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+    Fresco.initialize(getApplicationContext());
 
     // if (LeakCanary.isInAnalyzerProcess(this)) {
     //   // This process is dedicated to LeakCanary for heap analysis.

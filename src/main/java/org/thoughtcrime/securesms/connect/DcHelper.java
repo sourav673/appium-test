@@ -1,6 +1,7 @@
 package org.thoughtcrime.securesms.connect;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -51,106 +52,106 @@ public class DcHelper {
 
   private static final String TAG = DcHelper.class.getSimpleName();
 
-    public static final String CONFIG_ADDRESS = "addr";
-    public static final String CONFIG_CONFIGURED_ADDRESS = "configured_addr";
-    public static final String CONFIG_MAIL_SERVER = "mail_server";
-    public static final String CONFIG_MAIL_USER = "mail_user";
-    public static final String CONFIG_MAIL_PASSWORD = "mail_pw";
-    public static final String CONFIG_MAIL_PORT = "mail_port";
-    public static final String CONFIG_MAIL_SECURITY = "mail_security";
-    public static final String CONFIG_SEND_SERVER = "send_server";
-    public static final String CONFIG_SEND_USER = "send_user";
-    public static final String CONFIG_SEND_PASSWORD = "send_pw";
-    public static final String CONFIG_SEND_PORT = "send_port";
-    public static final String CONFIG_SEND_SECURITY = "send_security";
-    public static final String CONFIG_SERVER_FLAGS = "server_flags";
-    public static final String CONFIG_DISPLAY_NAME = "displayname";
-    public static final String CONFIG_SELF_STATUS = "selfstatus";
-    public static final String CONFIG_SELF_AVATAR = "selfavatar";
-    public static final String CONFIG_E2EE_ENABLED = "e2ee_enabled";
-    public static final String CONFIG_QR_OVERLAY_LOGO = "qr_overlay_logo";
-    public static final String CONFIG_INBOX_WATCH = "inbox_watch";
-    public static final String CONFIG_SENTBOX_WATCH = "sentbox_watch";
-    public static final String CONFIG_MVBOX_WATCH = "mvbox_watch";
-    public static final String CONFIG_MVBOX_MOVE = "mvbox_move";
-    public static final String CONFIG_ONLY_FETCH_MVBOX = "only_fetch_mvbox";
-    public static final String CONFIG_BCC_SELF = "bcc_self";
-    public static final String CONFIG_SHOW_EMAILS = "show_emails";
-    public static final String CONFIG_MEDIA_QUALITY = "media_quality";
-    public static final String CONFIG_WEBRTC_INSTANCE = "webrtc_instance";
-    public static final String CONFIG_PROXY_ENABLED = "proxy_enabled";
-    public static final String CONFIG_PROXY_URL = "proxy_url";
-    public static final String CONFIG_VERIFIED_ONE_ON_ONE_CHATS = "verified_one_on_one_chats";
-    public static final String CONFIG_WEBXDC_REALTIME_ENABLED = "webxdc_realtime_enabled";
-    public static final String CONFIG_PRIVATE_TAG = "private_tag";
+  public static final String CONFIG_ADDRESS = "addr";
+  public static final String CONFIG_CONFIGURED_ADDRESS = "configured_addr";
+  public static final String CONFIG_MAIL_SERVER = "mail_server";
+  public static final String CONFIG_MAIL_USER = "mail_user";
+  public static final String CONFIG_MAIL_PASSWORD = "mail_pw";
+  public static final String CONFIG_MAIL_PORT = "mail_port";
+  public static final String CONFIG_MAIL_SECURITY = "mail_security";
+  public static final String CONFIG_SEND_SERVER = "send_server";
+  public static final String CONFIG_SEND_USER = "send_user";
+  public static final String CONFIG_SEND_PASSWORD = "send_pw";
+  public static final String CONFIG_SEND_PORT = "send_port";
+  public static final String CONFIG_SEND_SECURITY = "send_security";
+  public static final String CONFIG_SERVER_FLAGS = "server_flags";
+  public static final String CONFIG_DISPLAY_NAME = "displayname";
+  public static final String CONFIG_SELF_STATUS = "selfstatus";
+  public static final String CONFIG_SELF_AVATAR = "selfavatar";
+  public static final String CONFIG_E2EE_ENABLED = "e2ee_enabled";
+  public static final String CONFIG_QR_OVERLAY_LOGO = "qr_overlay_logo";
+  public static final String CONFIG_INBOX_WATCH = "inbox_watch";
+  public static final String CONFIG_SENTBOX_WATCH = "sentbox_watch";
+  public static final String CONFIG_MVBOX_WATCH = "mvbox_watch";
+  public static final String CONFIG_MVBOX_MOVE = "mvbox_move";
+  public static final String CONFIG_ONLY_FETCH_MVBOX = "only_fetch_mvbox";
+  public static final String CONFIG_BCC_SELF = "bcc_self";
+  public static final String CONFIG_SHOW_EMAILS = "show_emails";
+  public static final String CONFIG_MEDIA_QUALITY = "media_quality";
+  public static final String CONFIG_WEBRTC_INSTANCE = "webrtc_instance";
+  public static final String CONFIG_PROXY_ENABLED = "proxy_enabled";
+  public static final String CONFIG_PROXY_URL = "proxy_url";
+  public static final String CONFIG_VERIFIED_ONE_ON_ONE_CHATS = "verified_one_on_one_chats";
+  public static final String CONFIG_WEBXDC_REALTIME_ENABLED = "webxdc_realtime_enabled";
+  public static final String CONFIG_PRIVATE_TAG = "private_tag";
 
-    public static DcContext getContext(@NonNull Context context) {
-        return ApplicationContext.getInstance(context).dcContext;
-    }
+  public static DcContext getContext(@NonNull Context context) {
+    return ApplicationContext.getInstance(context).dcContext;
+  }
 
-    public static PrivJNI getPriv(@NonNull Context context) {
-        return ApplicationContext.getInstance(context).privJni;
-    }
+  public static PrivJNI getPriv(@NonNull Context context) {
+    return ApplicationContext.getInstance(context).privJni;
+  }
 
-    public static Rpc getRpc(@NonNull Context context) {
-        return ApplicationContext.getInstance(context).rpc;
-    }
+  public static Rpc getRpc(@NonNull Context context) {
+    return ApplicationContext.getInstance(context).rpc;
+  }
 
-    public static DcAccounts getAccounts(@NonNull Context context) {
-        return ApplicationContext.getInstance(context).dcAccounts;
-    }
+  public static DcAccounts getAccounts(@NonNull Context context) {
+    return ApplicationContext.getInstance(context).dcAccounts;
+  }
 
-    public static DcEventCenter getEventCenter(@NonNull Context context) {
-        return ApplicationContext.getInstance(context).eventCenter;
-    }
+  public static DcEventCenter getEventCenter(@NonNull Context context) {
+    return ApplicationContext.getInstance(context).eventCenter;
+  }
 
-    public static NotificationCenter getNotificationCenter(@NonNull Context context) {
-        return ApplicationContext.getInstance(context).notificationCenter;
-    }
+  public static NotificationCenter getNotificationCenter(@NonNull Context context) {
+    return ApplicationContext.getInstance(context).notificationCenter;
+  }
 
-    public static boolean hasAnyConfiguredContext(Context context) {
-      DcAccounts accounts = getAccounts(context);
-      int[] accountIds = accounts.getAll();
-      for (int accountId : accountIds) {
-        if (accounts.getAccount(accountId).isConfigured() == 1) {
-          return true;
-        }
+  public static boolean hasAnyConfiguredContext(Context context) {
+    DcAccounts accounts = getAccounts(context);
+    int[] accountIds = accounts.getAll();
+    for (int accountId : accountIds) {
+      if (accounts.getAccount(accountId).isConfigured() == 1) {
+        return true;
       }
-      return false;
     }
+    return false;
+  }
 
-    public static boolean isConfigured(Context context) {
-        DcContext dcContext = getContext(context);
-        return dcContext.isConfigured() == 1;
-    }
+  public static boolean isConfigured(Context context) {
+    DcContext dcContext = getContext(context);
+    return dcContext.isConfigured() == 1;
+  }
 
-    public static String getSelfAddr(Context context) {
-        DcContext dcContext = getContext(context);
-        return dcContext.getConfig(CONFIG_CONFIGURED_ADDRESS);
-    }
+  public static String getSelfAddr(Context context) {
+    DcContext dcContext = getContext(context);
+    return dcContext.getConfig(CONFIG_CONFIGURED_ADDRESS);
+  }
 
-    public static int getInt(Context context, String key) {
-        DcContext dcContext = getContext(context);
-        return dcContext.getConfigInt(key);
-    }
+  public static int getInt(Context context, String key) {
+    DcContext dcContext = getContext(context);
+    return dcContext.getConfigInt(key);
+  }
 
-    public static String get(Context context, String key) {
-        DcContext dcContext = getContext(context);
-        return dcContext.getConfig(key);
-    }
+  public static String get(Context context, String key) {
+    DcContext dcContext = getContext(context);
+    return dcContext.getConfig(key);
+  }
 
-    @Deprecated public static int getInt(Context context, String key, int defaultValue) {
-        return getInt(context, key);
-    }
+  @Deprecated public static int getInt(Context context, String key, int defaultValue) {
+    return getInt(context, key);
+  }
 
-    @Deprecated public static String get(Context context, String key, String defaultValue) {
-        return get(context, key);
-    }
+  @Deprecated public static String get(Context context, String key, String defaultValue) {
+    return get(context, key);
+  }
 
-    public static void set(Context context, String key, String value) {
-        DcContext dcContext = getContext(context);
-        dcContext.setConfig(key, value);
-    }
+  public static void set(Context context, String key, String value) {
+    DcContext dcContext = getContext(context);
+    dcContext.setConfig(key, value);
+  }
 
   public static void setStockTranslations(Context context) {
     DcContext dcContext = getContext(context);
@@ -281,7 +282,7 @@ public class DcHelper {
   public static void openForViewOrShare(Context activity, int msg_id, String cmd) {
     DcContext dcContext = getContext(activity);
 
-    if(!(activity instanceof Activity)) {
+    if (!(activity instanceof Activity)) {
       // would be nicer to accepting only Activity objects,
       // however, typically in Android just Context objects are passed around (as this normally does not make a difference).
       // Accepting only Activity here would force callers to cast, which would easily result in even more ugliness.
@@ -303,22 +304,35 @@ public class DcHelper {
     } else {
       prvFile = privJni.decryptFile(msg.getChatId(), srcP.getParent(), msg.getFilename(), false);
     }
+    Log.d("JAVA-Privitty", "File Name: " + prvFile);
 
-    ActivityPDFViewer.prfFilePath = prvFile;
-    Intent intent = new Intent((Activity) activity, ActivityPDFViewer.class);
-    startActivity((Activity) activity,intent);
+    Intent intent = null;
 
+    if (prvFile.equals("SSS_EXPIRED") || prvFile.equals("SSS_REQUESTED")) {
+      Toast.makeText(activity, "Access expired, requesting again", Toast.LENGTH_LONG).show();
+      return;
+    } else if (prvFile.endsWith(".pdf")) {
+      // Open pdf
+      ActivityPDFViewer.prfFilePath = prvFile;
+      intent = new Intent((Activity) activity, ActivityPDFViewer.class);
+    } else if (prvFile.endsWith(".png") || prvFile.endsWith(".jpg") || prvFile.endsWith(".jpeg")) {
+      // Open Image
+      ActivityImageViewer.prfFilePath = prvFile;
+      intent = new Intent((Activity) activity, ActivityImageViewer.class);
+    } else if (prvFile.endsWith(".mp4") || prvFile.endsWith(".mov") || prvFile.endsWith(".mkv") ||
+      prvFile.endsWith(".3gp")) {
+      // Open Video
+      ActivityVideoViewer.prfFilePath = prvFile;
+      intent = new Intent((Activity) activity, ActivityVideoViewer.class);
+    } else if (prvFile.endsWith(".doc") || prvFile.endsWith(".docx") || prvFile.endsWith(".xlsx") ||
+      prvFile.endsWith(".xlsx") || prvFile.endsWith(".pptx") || prvFile.endsWith(".ppt")) {
+      // MS office
+      openOfficeFile(prvFile, activity);
+    } else {
+      Toast.makeText(activity, "Unsupported file format", Toast.LENGTH_LONG).show();
+    }
 
-/*    // Open Image
-    ActivityImageViewer.prfFilePath = prvFile;
-    Intent intentImage = new Intent((Activity) activity, ActivityImageViewer.class);
-    startActivity((Activity) activity,intentImage);
-*/
-/*    // Open Video
-    ActivityVideoViewer.prfFilePath = prvFile;
-    Intent intentVideo = new Intent((Activity) activity, ActivityVideoViewer.class);
-    startActivity((Activity) activity,intentVideo);
-*/
+    //startActivity((Activity) activity, intent);
 
 //    Log.i("JAVA-Privitty", "Native retunred file: " + path);
 //
@@ -362,25 +376,73 @@ public class DcHelper {
 //    }
   }
 
+  private static void openOfficeFile(String fileName,Context activity)
+  {
+    File file = new File(fileName);
+    if (!file.exists())
+    {
+      Toast.makeText(activity, "File not found: " + fileName, Toast.LENGTH_LONG).show();
+      return;
+    }
+
+    Uri uri = FileProvider.getUriForFile(activity, "com.b44t.messenger.beta.fileprovider", file);
+
+    // Get the MIME type based on file extension
+    String mimeType = getMimeType(fileName);
+
+    Intent intent = new Intent(Intent.ACTION_VIEW);
+    intent.setDataAndType(uri, mimeType);
+    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+    try
+    {
+      activity.startActivity(Intent.createChooser(intent, "Open with"));
+    }
+    catch (ActivityNotFoundException e)
+    {
+      Toast.makeText(activity, "No app found to open this file", Toast.LENGTH_LONG).show();
+    }
+  }
+
+  // Helper method to get the correct MIME type
+  private static String getMimeType(String fileName) {
+    if (fileName.endsWith(".docx"))
+    {
+      return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    } else if (fileName.endsWith(".doc")) {
+      return "application/msword";
+    } else if (fileName.endsWith(".xlsx")) {
+      return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    } else if (fileName.endsWith(".xls")) {
+      return "application/vnd.ms-excel";
+    } else if (fileName.endsWith(".pptx")) {
+      return "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+    } else if (fileName.endsWith(".ppt")) {
+      return "application/vnd.ms-powerpoint";
+    } else {
+      return "/"; // Default type
+    }
+  }
+
   public static void sendToChat(Context activity, byte[] data, String mimeType, String fileName, String text) {
-      Intent intent = new Intent(activity, ShareActivity.class);
-      intent.setAction(Intent.ACTION_SEND);
+    Intent intent = new Intent(activity, ShareActivity.class);
+    intent.setAction(Intent.ACTION_SEND);
 
-      if (data != null) {
-          Uri uri = PersistentBlobProvider.getInstance().create(activity, data, mimeType, fileName);
-          intent.setType(mimeType);
-          intent.putExtra(Intent.EXTRA_STREAM, uri);
-          intent.putExtra(ShareActivity.EXTRA_TITLE, activity.getString(R.string.send_file_to, fileName));
+    if (data != null) {
+      Uri uri = PersistentBlobProvider.getInstance().create(activity, data, mimeType, fileName);
+      intent.setType(mimeType);
+      intent.putExtra(Intent.EXTRA_STREAM, uri);
+      intent.putExtra(ShareActivity.EXTRA_TITLE, activity.getString(R.string.send_file_to, fileName));
+    }
+
+    if (text != null) {
+      intent.putExtra(Intent.EXTRA_TEXT, text);
+      if (data == null) {
+        intent.putExtra(ShareActivity.EXTRA_TITLE, activity.getString(R.string.send_message_to));
       }
+    }
 
-      if (text != null) {
-          intent.putExtra(Intent.EXTRA_TEXT, text);
-          if (data == null) {
-              intent.putExtra(ShareActivity.EXTRA_TITLE, activity.getString(R.string.send_message_to));
-          }
-      }
-
-      activity.startActivity(intent);
+    activity.startActivity(intent);
   }
 
   private static void startActivity(Activity activity, Intent intent) {
@@ -480,16 +542,16 @@ public class DcHelper {
    * @return
    */
   public static String getConnectivitySummary(Context context, String connectedString) {
-      int connectivity = getContext(context).getConnectivity();
-      if (connectivity >= DcContext.DC_CONNECTIVITY_CONNECTED) {
-          return connectedString;
-      } else if (connectivity >= DcContext.DC_CONNECTIVITY_WORKING) {
-          return context.getString(R.string.connectivity_updating);
-      } else if (connectivity >= DcContext.DC_CONNECTIVITY_CONNECTING) {
-          return context.getString(R.string.connectivity_connecting);
-      } else {
-          return context.getString(R.string.connectivity_not_connected);
-      }
+    int connectivity = getContext(context).getConnectivity();
+    if (connectivity >= DcContext.DC_CONNECTIVITY_CONNECTED) {
+      return connectedString;
+    } else if (connectivity >= DcContext.DC_CONNECTIVITY_WORKING) {
+      return context.getString(R.string.connectivity_updating);
+    } else if (connectivity >= DcContext.DC_CONNECTIVITY_CONNECTING) {
+      return context.getString(R.string.connectivity_connecting);
+    } else {
+      return context.getString(R.string.connectivity_not_connected);
+    }
   }
 
   public static void showVerificationBrokenDialog(Context context, String name) {
