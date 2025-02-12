@@ -54,6 +54,7 @@ import com.b44t.messenger.DcContact;
 import com.b44t.messenger.DcContext;
 import com.b44t.messenger.DcEvent;
 import com.b44t.messenger.DcMsg;
+import com.b44t.messenger.PrivJNI;
 
 import org.thoughtcrime.securesms.ConversationAdapter.ItemClickListener;
 import org.thoughtcrime.securesms.components.reminder.DozeReminder;
@@ -463,10 +464,25 @@ public class ConversationFragment extends MessageSelectorFragment
 
         listener.handleReplyMessage(message);
     }
-    private void handleRevokeAccess(final DcMsg msg)
-    {
-      // put here file access revoke code. for single message
+
+    private void handleRevokeMessage(int chatId, final DcMsg dcMsg) {
+
+      AlertDialog dialog = new AlertDialog.Builder(getActivity())
+        .setMessage(getActivity().getString(R.string.ask_revoke_message))
+        .setCancelable(true)
+        .setPositiveButton(R.string.revoke, (d, which) -> {
+
+          // Privitty msg revoked
+          PrivJNI privJni = new PrivJNI(getContext());
+          String filename = dcMsg.getFile();
+          privJni.revokeMsgs(chatId, filename);
+          if (actionMode != null) actionMode.finish();
+        })
+        .setNegativeButton(android.R.string.cancel, null)
+        .show();
+      Util.redPositiveButton(dialog);
     }
+
     private void handleReplyMessagePrivately(final DcMsg msg) {
 
         if (getActivity() != null) {
@@ -963,7 +979,7 @@ public class ConversationFragment extends MessageSelectorFragment
                     handleResendMessage(getListAdapter().getSelectedItems());
                     return true;
               case R.id.menu_context_revoke_access:
-                    handleRevokeAccess(getSelectedMessageRecord(getListAdapter().getSelectedItems()));
+                    handleRevokeMessage((int) chatId, getSelectedMessageRecord(getListAdapter().getSelectedItems()));
                     return true;
             }
 

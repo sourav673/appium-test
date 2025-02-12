@@ -49,12 +49,14 @@ public class PrivJNI {
     public final static int PRV_APP_STATUS_AWAITING_PEER_AUTH       = 19;
     public final static int PRV_APP_STATUS_PEER_SSS_REQUEST         = 20;
     public final static int PRV_APP_STATUS_PEER_SSS_RESPONSE        = 21;
-    public final static int PRV_APP_STATUS_PEER_OTSP_SSS            = 22;
-    public final static int PRV_APP_STATUS_DELETE_CHAT              = 23;
+    public final static int PRV_APP_STATUS_PEER_SSS_REVOKED         = 22;
+    public final static int PRV_APP_STATUS_PEER_OTSP_SSS            = 23;
+    public final static int PRV_APP_STATUS_DELETE_CHAT              = 24;
+
     /*
      * NOTE: Add any event above PRV_APP_STATUS_LIB_LAST and update PRV_APP_STATUS_LIB_LAST
      */ 
-    public final static int PRV_APP_STATUS_LIB_LAST                 = 24;
+    public final static int PRV_APP_STATUS_LIB_LAST                 = 25;
 
     /*
      * NOTE: SSS status types
@@ -86,6 +88,7 @@ public class PrivJNI {
 
     public native boolean cleanChat(int chatId);
     public native boolean cleanMsgs(int chatId, String[] filenames);
+    public native boolean revokeMsgs(int chatId, String filenames);
     public native void deleteStagingFile(int chat_id, String filenames, int direction);
     public native boolean isChatVersion(String mime_header);
     public native int getFileAccessState(int chat_id, String file_name);

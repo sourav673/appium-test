@@ -30,6 +30,7 @@
     <string name="join">Join</string>
     <string name="rejoin">Rejoin</string>
     <string name="delete">Delete</string>
+    <string name="revoke">Revoke</string>
     <string name="info">Info</string>
     <string name="update">Update</string>
     <string name="emoji">Emoji</string>
@@ -365,6 +366,7 @@
         <item quantity="one">Delete %d message?</item>
         <item quantity="other">Delete %d messages?</item>
     </plurals>
+    <string name="ask_revoke_message">Are you sure you want to revoke this message?</string>
     <string name="ask_forward">Forward messages to %1$s?</string>
     <string name="ask_forward_multiple">Forward messages to %1$d chats?</string>
     <string name="ask_export_attachment">Exporting attachments will allow other apps on your device to access them.\n\nContinue?</string>
