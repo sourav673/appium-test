@@ -299,7 +299,7 @@ public class ConversationAdapter <V extends View & BindableConversationItem>
           dcMsg.setSubject("");
           return MESSAGE_TYPE_INFO;
         } else if ("new_peer_complete".equalsIgnoreCase(jSubject.getString("type")) || "new_peer_conclude".equalsIgnoreCase(jSubject.getString("type"))) {
-          dcMsg.setText("Your privacy matters—take control and revoke shared data anytime. Tap to learn about Privitty.");
+          dcMsg.setText("You are Privitty secure—take control and revoke data anytime.");
           dcMsg.setSubject("");
           return MESSAGE_TYPE_INFO;
         } else if ("OTSP_SENT".equalsIgnoreCase(jSubject.getString("type"))) {
@@ -312,6 +312,10 @@ public class ConversationAdapter <V extends View & BindableConversationItem>
           return MESSAGE_TYPE_INFO;
         } else if ("SSS_RESPONSE".equalsIgnoreCase(jSubject.getString("type"))) {
           dcMsg.setText("Granted access for next 15 mins.");
+          dcMsg.setSubject("");
+          return MESSAGE_TYPE_INFO;
+        } else if ("SSS_REVOKED".equalsIgnoreCase(jSubject.getString("type"))) {
+          dcMsg.setText("You revoked access");
           dcMsg.setSubject("");
           return MESSAGE_TYPE_INFO;
         }

@@ -82,7 +82,7 @@ public class ConversationItemFooter extends LinearLayout {
           } else if (fileState == PrivJNI.PRV_SSS_STATE_TYPE_SSS_REQUEST) {
             // access requested
             view_file_state_indicator.setBackgroundResource(R.drawable.prv_file_indicator_background_blue);
-          } else if (fileState == PrivJNI.PRV_SSS_STATE_TYPE_SSS_BLOCKED) {
+          } else if ((fileState == PrivJNI.PRV_SSS_STATE_TYPE_SSS_BLOCKED) || (fileState == PrivJNI.PRV_SSS_STATE_TYPE_SSS_REVOKED)) {
             // access blocked or expired or Revoked
             view_file_state_indicator.setBackgroundResource(R.drawable.prv_file_indicator_background_red);
           }

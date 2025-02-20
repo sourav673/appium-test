@@ -64,7 +64,8 @@ public class PrivJNI {
     public final static int PRV_SSS_STATE_TYPE_NONE                 = 0;
     public final static int PRV_SSS_STATE_TYPE_SSS_ACTIVE           = 1;
     public final static int PRV_SSS_STATE_TYPE_SSS_REQUEST          = 2;
-    public final static int PRV_SSS_STATE_TYPE_SSS_BLOCKED          = 3;
+    public final static int PRV_SSS_STATE_TYPE_SSS_REVOKED          = 3;
+    public final static int PRV_SSS_STATE_TYPE_SSS_BLOCKED          = 4;
 
 
     private Context context = null;
@@ -89,7 +90,6 @@ public class PrivJNI {
     public native boolean cleanChat(int chatId);
     public native boolean cleanMsgs(int chatId, String[] filenames);
     public native boolean revokeMsgs(int chatId, String filenames);
-    public native void deleteStagingFile(int chat_id, String filenames, int direction);
     public native boolean isChatVersion(String mime_header);
     public native int getFileAccessState(int chat_id, String file_name);
 }

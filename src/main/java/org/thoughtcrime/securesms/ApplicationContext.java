@@ -386,6 +386,15 @@ public class ApplicationContext extends MultiDexApplication {
         msg.setText(base64Msg);
         int msgId = dcContext.sendMsg(chatId, msg);
       });
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_SSS_REVOKED) {
+      Log.d("JAVA-Privitty", "Peer SSS revoked");
+      Util.runOnAnyBackgroundThread(() -> {
+        DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
+        msg.setSubject("{'privitty':'true', 'type':'SSS_REVOKED'}");
+        String base64Msg = Base64.getEncoder().encodeToString(pdu);
+        msg.setText(base64Msg);
+        int msgId = dcContext.sendMsg(chatId, msg);
+      });
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_ENCRYPTED) {
       Log.d("JAVA-Privitty", "Event PRV_APP_STATUS_FILE_ENCRYPTED is not implemented via event queue");
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_INACCESSIBLE) {

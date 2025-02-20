@@ -290,8 +290,6 @@ public class DcHelper {
       return;
     }
 
-
-
     DcMsg msg = dcContext.getMsg(msg_id);
     String path = msg.getFile();
 
@@ -311,6 +309,9 @@ public class DcHelper {
 
     if (prvFile.equals("SSS_EXPIRED") || prvFile.equals("SSS_REQUESTED")) {
       Toast.makeText(activity, "Access expired, requesting again", Toast.LENGTH_LONG).show();
+      return;
+    } else if (prvFile.equals("SSS_REVOKED")) {
+      Toast.makeText(activity, "Access revoked !", Toast.LENGTH_LONG).show();
       return;
     } else if (prvFile.endsWith(".pdf")) {
       // Open pdf

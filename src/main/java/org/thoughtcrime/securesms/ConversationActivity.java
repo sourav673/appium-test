@@ -1122,8 +1122,6 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
               privJni.freshOtsp(dcChat.getId(), filename);
               Log.d("JAVA-Privitty", "chatId: " + dcChat.getId() + " | Filename: " + filename);
 
-              privJni.deleteStagingFile(dcChat.getId(), filename, 1);
-
               int fromId = msg.getFromId();
               String msgText = "PRV_FILE_SENT";
               String msgType = "system";
