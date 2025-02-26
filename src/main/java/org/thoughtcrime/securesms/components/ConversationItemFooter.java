@@ -25,7 +25,7 @@ public class ConversationItemFooter extends LinearLayout {
   private TextView            dateView;
   private ImageView           secureIndicatorView,securePrvIndicatorView;
   private ImageView           locationIndicatorView;
-  private View                view_file_state_indicator;
+  private ImageView           imageview_file_state_indicator;
   private DeliveryStatusView  deliveryStatusView;
   private Integer             textColor = null;
   private PrivJNI             privJNI = null;
@@ -53,7 +53,7 @@ public class ConversationItemFooter extends LinearLayout {
     dateView              = findViewById(R.id.footer_date);
     secureIndicatorView   = findViewById(R.id.footer_secure_indicator);
     securePrvIndicatorView   = findViewById(R.id.footer_prv_indicator);
-    view_file_state_indicator   = findViewById(R.id.view_file_state_indicator);
+    imageview_file_state_indicator   = findViewById(R.id.imageview_file_state_indicator);
     locationIndicatorView = findViewById(R.id.footer_location_indicator);
     deliveryStatusView    = new DeliveryStatusView(findViewById(R.id.delivery_indicator));
 
@@ -72,28 +72,28 @@ public class ConversationItemFooter extends LinearLayout {
       if (privJNI.isChatPrivittyProtected(messageRecord.getChatId()) && (messageRecord.getType() == DcMsg.DC_MSG_FILE))
       {
         securePrvIndicatorView.setVisibility(VISIBLE);
-        view_file_state_indicator.setVisibility(VISIBLE);
+        imageview_file_state_indicator.setVisibility(VISIBLE);
 
         if (messageRecord.getFromId() != DcContact.DC_CONTACT_ID_SELF) {
           int fileState = privJNI.getFileAccessState(messageRecord.getChatId(), messageRecord.getFilename());
           if (fileState == PrivJNI.PRV_SSS_STATE_TYPE_SSS_ACTIVE) {
             // access allowed
-            view_file_state_indicator.setBackgroundResource(R.drawable.prv_file_indicator_background_green);
+            imageview_file_state_indicator.setImageResource(R.drawable.file_allowed);
           } else if (fileState == PrivJNI.PRV_SSS_STATE_TYPE_SSS_REQUEST) {
             // access requested
-            view_file_state_indicator.setBackgroundResource(R.drawable.prv_file_indicator_background_blue);
+            imageview_file_state_indicator.setImageResource(R.drawable.file_inprogress);
           } else if ((fileState == PrivJNI.PRV_SSS_STATE_TYPE_SSS_BLOCKED) || (fileState == PrivJNI.PRV_SSS_STATE_TYPE_SSS_REVOKED)) {
             // access blocked or expired or Revoked
-            view_file_state_indicator.setBackgroundResource(R.drawable.prv_file_indicator_background_red);
+            imageview_file_state_indicator.setImageResource(R.drawable.file_disallowed);
           }
         } else {
-          view_file_state_indicator.setBackgroundResource(R.drawable.prv_file_indicator_background_green);
+          imageview_file_state_indicator.setImageResource(R.drawable.file_allowed);
         }
       }
       else
       {
         securePrvIndicatorView.setVisibility(GONE);
-        view_file_state_indicator.setVisibility(GONE);
+        imageview_file_state_indicator.setVisibility(GONE);
       }
     } else {
       secureIndicatorView.setVisibility(GONE);
