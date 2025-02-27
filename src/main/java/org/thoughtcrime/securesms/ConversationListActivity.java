@@ -22,6 +22,9 @@ import static org.thoughtcrime.securesms.connect.DcHelper.CONFIG_ADDRESS;
 import static org.thoughtcrime.securesms.connect.DcHelper.CONFIG_PROXY_ENABLED;
 import static org.thoughtcrime.securesms.connect.DcHelper.CONFIG_SERVER_FLAGS;
 import static org.thoughtcrime.securesms.connect.DcHelper.CONFIG_PROXY_URL;
+import static org.thoughtcrime.securesms.connect.DcHelper.CONFIG_ADDRESS;
+import static org.thoughtcrime.securesms.connect.DcHelper.CONFIG_DISPLAY_NAME;
+import static org.thoughtcrime.securesms.connect.DcHelper.CONFIG_MAIL_PASSWORD;
 import static org.thoughtcrime.securesms.util.RelayUtil.acquireRelayMessageContent;
 import static org.thoughtcrime.securesms.util.RelayUtil.getDirectSharingChatId;
 import static org.thoughtcrime.securesms.util.RelayUtil.getSharedTitle;
@@ -55,6 +58,8 @@ import com.b44t.messenger.DcAccounts;
 import com.b44t.messenger.DcContact;
 import com.b44t.messenger.DcContext;
 import com.b44t.messenger.DcMsg;
+import com.b44t.messenger.PrivJNI;
+import com.b44t.messenger.PrivEvent;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -191,6 +196,20 @@ public class ConversationListActivity extends PassphraseRequiredActionBarActivit
         AccountManager.getInstance().showSwitchAccountMenu(this);
       }
     });
+
+    if(!Prefs.getBooleanPreference(this, "is_privitty_messenger_registration_done", false))
+    {
+      // Privitty Registration
+      PrivJNI privJni = DcHelper.getPriv(ConversationListActivity.this);
+      PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_CREATE_VAULT,
+        DcHelper.get(ConversationListActivity.this, DcHelper.CONFIG_ADDRESS),
+        DcHelper.get(ConversationListActivity.this, DcHelper.CONFIG_DISPLAY_NAME),
+        0, 0, 0, DcHelper.get(ConversationListActivity.this, DcHelper.CONFIG_MAIL_PASSWORD),
+        "", "", 0, new byte[0]);
+      privJni.produceEvent(jevent);
+      // do our registration process then use below line to store
+      Prefs.setBooleanPreference(this, "is_privitty_messenger_registration_done", true);
+    }
 
     refresh();
 
