@@ -29,6 +29,7 @@ import android.util.Log;
 
 import com.b44t.messenger.DcChat;
 import com.b44t.messenger.DcContext;
+import com.b44t.messenger.DcMsg;
 import com.b44t.messenger.PrivJNI;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -44,6 +45,7 @@ import org.thoughtcrime.securesms.util.views.ProgressDialog;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.io.File;
 
 public abstract class BaseConversationListFragment extends Fragment implements ActionMode.Callback {
   protected ActionMode actionMode;
@@ -293,6 +295,27 @@ public abstract class BaseConversationListFragment extends Fragment implements A
               Log.d("JAVA-Privitty", "Selected chatId: " + (int)chatId);
               privJni = new PrivJNI(getContext());
               privJni.cleanChat((int) chatId);
+
+              int[] msgs = dcContext.getChatMsgs((int) chatId, 0, 0);
+              for(int i=0 ; i<msgs.length ; i++)
+              {
+                DcMsg dcMsg = dcContext.getMsg(msgs[i]);
+                if(dcMsg.hasFile()) {
+                  String filePath = dcMsg.getFile();
+                  String baseFilePath = filePath.replaceFirst("\\.prv$", "");
+                  System.out.println("File Path : "+filePath);
+                  File prvFile = new File(filePath);
+                  if(prvFile.exists()) {
+                    prvFile.delete();
+                  }
+
+                  File baseFile = new File(baseFilePath);
+                  if(baseFile.exists()) {
+                    baseFile.delete();
+                  }
+                }
+              }
+
               dcContext.deleteChat((int) chatId);
               DirectShareUtil.clearShortcut(requireContext(), (int) chatId);
             }

@@ -145,9 +145,8 @@ public class ApplicationContext extends MultiDexApplication {
         if (event.getId() == DcContext.DC_EVENT_INCOMING_MSG) {
           DcMsg dcMsg = dcContext.getMsg(event.getData2Int());
           int chatId = event.getData1Int();
-          
-          if ( ((dcMsg.showPadlock() == 1) && !dcContext.getChat(chatId).isContactRequest()) ||
-              ((dcMsg.showPadlock() == 1) && !dcContext.getChat(chatId).isProtected()) ) {
+
+          if ( ((dcMsg.showPadlock() == 1) && !dcContext.getChat(chatId).isContactRequest()) ) {
             try {
               // Encrypted or guaranteed E2E (using QR)
               Log.d("JAVA-Privitty", "isSecure(): " + dcMsg.showPadlock() + " isPeerAdded: " + privJni.isPeerAdded(chatId));

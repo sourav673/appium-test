@@ -629,10 +629,28 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     AlertDialog dialog = new AlertDialog.Builder(this)
         .setMessage(getResources().getString(R.string.ask_delete_named_chat, dcChat.getName()))
         .setPositiveButton(R.string.delete, (d, which) -> {
-          PrivJNI privJni = null;
           Log.d("JAVA-Privitty", "Selected chatId: " + (int)chatId);
-          privJni = new PrivJNI(context);
+          PrivJNI privJni = new PrivJNI(context);
           privJni.cleanChat((int) chatId);
+
+          int[] msgs = dcContext.getChatMsgs((int) chatId, 0, 0);
+          for(int i=0 ; i<msgs.length ; i++) {
+            DcMsg dcMsg = dcContext.getMsg(msgs[i]);
+            if(dcMsg.hasFile()) {
+              String filePath = dcMsg.getFile();
+              String baseFilePath = filePath.replaceFirst("\\.prv$", "");
+              System.out.println("File Path : "+filePath);
+              File prvFile = new File(filePath);
+              if(prvFile.exists()) {
+                prvFile.delete();
+              }
+
+              File baseFile = new File(baseFilePath);
+              if(baseFile.exists()) {
+                baseFile.delete();
+              }
+            }
+          }
 
           dcContext.deleteChat(chatId);
           DirectShareUtil.clearShortcut(this, chatId);
@@ -644,10 +662,13 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
   }
 
   private void handleAddAttachment() {
-    if (attachmentTypeSelector == null) {
-      attachmentTypeSelector = new AttachmentTypeSelector(this, getSupportLoaderManager(), new AttachmentTypeListener(), chatId);
-    }
-    attachmentTypeSelector.show(this, attachButton);
+    addAttachment(PICK_DOCUMENT);
+
+    // Note: Need to confirm Nilesh.
+    //if (attachmentTypeSelector == null) {
+    //  attachmentTypeSelector = new AttachmentTypeSelector(this, getSupportLoaderManager(), new AttachmentTypeListener(), chatId);
+    //}
+    //attachmentTypeSelector.show(this, attachButton);
   }
 
   private void handleSecurityChange(boolean isSecureText, boolean isDefaultSms) {
@@ -852,7 +873,7 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
 
     composeText.setOnEditorActionListener(sendButtonListener);
     attachButton.setOnClickListener(new AttachButtonListener());
-    attachButton.setOnLongClickListener(new AttachButtonLongClickListener());
+    //attachButton.setOnLongClickListener(new AttachButtonLongClickListener());  // Note: Need to confirm Nilesh.
     sendButton.setOnClickListener(sendButtonListener);
     sendButton.setEnabled(true);
     sendButton.addOnTransportChangedListener((newTransport, manuallySelected) -> {
