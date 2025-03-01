@@ -28,7 +28,8 @@
     <item android:title="@string/menu_copy_text_to_clipboard"
         android:id="@+id/menu_context_copy"
         android:icon="?menu_copy_icon"
-        app:showAsAction="always" />
+        app:showAsAction="always" 
+        android:visible="false"/>
 
     <item android:title="@string/menu_forward"
         android:id="@+id/menu_context_forward"

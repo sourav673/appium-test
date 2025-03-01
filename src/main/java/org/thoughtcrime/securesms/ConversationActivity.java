@@ -662,7 +662,12 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
   }
 
   private void handleAddAttachment() {
-    addAttachment(PICK_DOCUMENT);
+    PrivJNI privJni = new PrivJNI(context);
+    if(privJni.isChatPrivittyProtected(chatId)) {
+      addAttachment(PICK_DOCUMENT);
+    } else {
+      Toast.makeText(ConversationActivity.this, "Privitty handshake not established. Re-initiate now to secure this chat", Toast.LENGTH_LONG).show();
+    }
 
     // Note: Need to confirm Nilesh.
     //if (attachmentTypeSelector == null) {

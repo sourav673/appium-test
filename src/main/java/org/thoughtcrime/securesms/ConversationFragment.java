@@ -357,7 +357,7 @@ public class ConversationFragment extends MessageSelectorFragment
                 break;
             }
         }
-        menu.findItem(R.id.menu_context_save_attachment).setVisible(canSave);
+        //menu.findItem(R.id.menu_context_save_attachment).setVisible(canSave);
         menu.findItem(R.id.menu_resend).setVisible(canResend);
     }
 

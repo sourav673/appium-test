@@ -140,7 +140,7 @@ public class ConversationListItem extends RelativeLayout
 
     if(thread.isIgnore())
     {
-      this.subjectView.setText("This is raw data"); // this text will be shown in list of chat in case of any raw or encrypted data.
+      this.subjectView.setText("Privitty message"); // this text will be shown in list of chat in case of any raw or encrypted data.
     }
     else
     {

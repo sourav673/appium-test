@@ -720,12 +720,12 @@ public class AttachmentManager {
           PrivJNI privJni = DcHelper.getPriv(context);
           String prvFile = privJni.encryptFile(chatId, file.getParent(), fileName);
           msg.setFile(prvFile, MediaUtil.OCTET);
-          msg.setSubject("{'privitty':'true', 'type':'prv_file'}");
+          msg.setSubject("{'privitty':'true', 'type':'privfile'}");
           dcContext.setDraft(chatId, msg);
 
           /* Adding message detail to the DB
           int fromId = msg.getFromId();
-          String msgText = "prv_file";
+          String msgText = "privfile";
           String msgType = "file";
           String mediaPath = file.getParent();
           String filename = fileName;

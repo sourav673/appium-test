@@ -134,7 +134,8 @@ class ConversationListAdapter extends BaseConversationListAdapter<ConversationLi
     DcLot summary = dcChatlist.getSummary(i, chat);
     DcMsg dcmsg = dcChatlist.getMsg(i);
     ThreadRecord threadRecord = DcHelper.getThreadRecord(context, summary, chat);
-    if(dcmsg.getSubject().contains("new_peer_add"))   // as per subject of message we are differentiating
+    //if(dcmsg.getSubject().contains("new_peer_add"))   // as per subject of message we are differentiating
+    if(dcmsg.getSubject().contains("privitty"))   // as per subject of message we are differentiating
     {
       threadRecord.setIgnore(true);
     }
