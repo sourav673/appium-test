@@ -142,8 +142,9 @@ public class AccountManager {
     // ui
 
     public void showSwitchAccountMenu(Activity activity) {
-        AccountSelectionListFragment dialog = new AccountSelectionListFragment();
-        dialog.show(((FragmentActivity) activity).getSupportFragmentManager(), null);
+//      currently commented to restrict profile switching
+//        AccountSelectionListFragment dialog = new AccountSelectionListFragment();
+//        dialog.show(((FragmentActivity) activity).getSupportFragmentManager(), null);
     }
 
     public void addAccountFromQr(Activity activity, String qr) {
