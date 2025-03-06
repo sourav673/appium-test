@@ -38,4 +38,11 @@ public class ThemeUtil {
   public static int getDummyContactColor(@NonNull Context context) {
     return context.getResources().getColor(R.color.dummy_avatar_color);
   }
+  public static int getThemeAttributeResourceId(Context context, int attr) {
+    TypedValue typedValue = new TypedValue();
+    if (context.getTheme().resolveAttribute(attr, typedValue, true)) {
+      return typedValue.resourceId;
+    }
+    return 0; // Default or error case
+  }
 }

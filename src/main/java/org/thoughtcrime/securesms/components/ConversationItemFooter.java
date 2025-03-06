@@ -1,9 +1,12 @@
 package org.thoughtcrime.securesms.components;
 
+import static org.thoughtcrime.securesms.util.Prefs.getTheme;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,6 +22,7 @@ import com.b44t.messenger.PrivJNI;
 
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.util.DateUtils;
+import org.thoughtcrime.securesms.util.ThemeUtil;
 
 public class ConversationItemFooter extends LinearLayout {
 
@@ -74,20 +78,26 @@ public class ConversationItemFooter extends LinearLayout {
         securePrvIndicatorView.setVisibility(VISIBLE);
         imageview_file_state_indicator.setVisibility(VISIBLE);
 
+
+
         if (messageRecord.getFromId() != DcContact.DC_CONTACT_ID_SELF) {
           int fileState = privJNI.getFileAccessState(messageRecord.getChatId(), messageRecord.getFilename());
           if (fileState == PrivJNI.PRV_SSS_STATE_TYPE_SSS_ACTIVE) {
             // access allowed
-            imageview_file_state_indicator.setImageResource(R.drawable.file_allowed);
+            int resId = ThemeUtil.getThemeAttributeResourceId(getContext(), R.attr.file_allowed_icon);
+            imageview_file_state_indicator.setImageResource(resId);
           } else if (fileState == PrivJNI.PRV_SSS_STATE_TYPE_SSS_REQUEST) {
             // access requested
-            imageview_file_state_indicator.setImageResource(R.drawable.file_inprogress);
+            int resId = ThemeUtil.getThemeAttributeResourceId(getContext(), R.attr.file_inprogress_icon);
+            imageview_file_state_indicator.setImageResource(resId);
           } else if ((fileState == PrivJNI.PRV_SSS_STATE_TYPE_SSS_BLOCKED) || (fileState == PrivJNI.PRV_SSS_STATE_TYPE_SSS_REVOKED)) {
             // access blocked or expired or Revoked
-            imageview_file_state_indicator.setImageResource(R.drawable.file_disallowed);
+            int resId = ThemeUtil.getThemeAttributeResourceId(getContext(), R.attr.file_disallowed_icon);
+            imageview_file_state_indicator.setImageResource(resId);
           }
         } else {
-          imageview_file_state_indicator.setImageResource(R.drawable.file_allowed);
+          int resId = ThemeUtil.getThemeAttributeResourceId(getContext(), R.attr.file_allowed_icon);
+          imageview_file_state_indicator.setImageResource(resId);
         }
       }
       else
