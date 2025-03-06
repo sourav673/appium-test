@@ -77,11 +77,11 @@ android {
         }
         release {
             // can be defined at `~/.gradle/gradle.properties` or at "Build/Generate signed APK"
-            if(project.hasProperty("DC_RELEASE_STORE_FILE")) {
-                storeFile file(DC_RELEASE_STORE_FILE)
-                storePassword DC_RELEASE_STORE_PASSWORD
-                keyAlias DC_RELEASE_KEY_ALIAS
-                keyPassword DC_RELEASE_KEY_PASSWORD
+            if(project.hasProperty("PRIV_RELEASE_STORE_FILE")) {
+                storeFile file(PRIV_RELEASE_STORE_FILE)
+                storePassword PRIV_RELEASE_STORE_PASSWORD
+                keyAlias PRIV_RELEASE_KEY_ALIAS
+                keyPassword PRIV_RELEASE_KEY_PASSWORD
             }
         }
     }
