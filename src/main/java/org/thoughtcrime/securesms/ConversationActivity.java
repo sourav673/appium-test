@@ -202,7 +202,7 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     this.context = ApplicationContext.getInstance(getApplicationContext());
     this.dcContext = DcHelper.getContext(context);
     this.rpc = DcHelper.getRpc(context);
-
+    getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
     supportRequestWindowFeature(WindowCompat.FEATURE_ACTION_BAR_OVERLAY);
     setContentView(R.layout.conversation_activity);
 
