@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <color name="delta_primary">#ff415e6b</color>
-    <color name="delta_primary_lite">#4c6e7d</color>
+    <color name="delta_primary">#180830</color>
+    <color name="delta_primary_lite">#4a2e74</color>
 
     <!-- delta_accent fits in light and in darkmode;
      delta_accent_darker can be used for less-covered areas as non-bold text  -->
-    <color name="delta_accent">#42A5F5</color>
-    <color name="delta_accent_darker">#ff2090ea</color>
+    <color name="delta_accent">#594b6e</color>
+    <color name="delta_accent_darker">#372552</color>
 
     <color name="primary_alpha_focus">#882090ea</color>
     <color name="primary_alpha33">#552090ea</color>
