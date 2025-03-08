@@ -433,4 +433,6 @@
     <string name="name_desktop">Navn</string>
     <string name="export_backup_desktop">Eksporter sikkerhetskopi</string>
     <string name="revoke_access">Revoke Access</string>
+    <string name="previous_page">Previous Page</string>
+    <string name="next_page">Next Page</string>
 </resources>

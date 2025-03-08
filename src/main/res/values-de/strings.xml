@@ -1190,4 +1190,6 @@
     <string name="update_1_46_ios">Neuer Startbildschirm 🐣 und mehr:\n\n⚡️ Melden Sie sich bei sicheren, schnellen Chatmail-Servern (https://delta.chat/chatmail) an oder nutzen Sie klassische E-Mail-Server\n\n👉 PUSH-Benachrichtigungen auf allen Chatmail-Server\n\n👤 Empfangen Sie „Angehängte Kontakte“ von Ihren Freunden\n\n🥰 Direktere Auswahl von Reaktionen ... und MEHR auf %1$s</string>
     <string name="update_switch_profile_placement">ℹ️ \"Profil wechseln\" verschoben: Tippen Sie auf Ihr Profilbild in der oberen Ecke des Hauptbildschirms, um Profile hinzuzufügen oder zu wechseln 💡.</string>
     <string name="revoke_access">Revoke Access</string>
+    <string name="previous_page">Previous Page</string>
+    <string name="next_page">Next Page</string>
 </resources>

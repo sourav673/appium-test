@@ -845,5 +845,7 @@
     <string name="perm_enable_bg_reminder_title">Stiskni zde a přijímání zpráv bude probíhat při chodu Delta Chatu na pozadí.</string>
     <string name="perm_enable_bg_already_done">Přijímání zpráv na pozadí je Delta Chatu již povoleno.\n\nV případě nepřicházení nových zpráv si prosím zkontroluj své systémové nastavení.</string>
     <string name="revoke_access">Revoke Access</string>
+    <string name="previous_page">Previous Page</string>
+    <string name="next_page">Next Page</string>
 
 </resources>

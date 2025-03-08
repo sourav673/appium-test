@@ -487,4 +487,6 @@
     <string name="more_info_desktop">Àteras informatziones</string>
     <string name="a11y_encryption_padlock">Luchete de tzifradura</string>
     <string name="revoke_access">Revoke Access</string>
+    <string name="previous_page">Previous Page</string>
+    <string name="next_page">Next Page</string>
 </resources>

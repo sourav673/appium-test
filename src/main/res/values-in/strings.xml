@@ -671,4 +671,6 @@
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat akan memungkinkan Anda memilih foto dari perpustakaan Anda untuk dikirim.</string>
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat ingin menyimpan gambar ke kumpulan foto anda.</string>
     <string name="revoke_access">Revoke Access</string>
+    <string name="previous_page">Previous Page</string>
+    <string name="next_page">Next Page</string>
 </resources>

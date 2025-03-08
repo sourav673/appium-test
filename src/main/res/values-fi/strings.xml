@@ -1131,4 +1131,6 @@
 
     <string name="update_1_46_ios">Uusittu käyttöönotto 🐣 ja muuta:\n\n⚡️ Rekisteröidy nopeille chatmail -palvelimille (https://delta.chat/chatmail) tai käytä tavanomaisia sähköpostipalvelimia\n\n👉 PUSH -ilmoitukset toimivat millä tahansa chatmail -palvelimella\n\n👤 Vastaanota \"Liitettyjä yhteystietoja\" ja ota yhteys ystäviisi\n\n🥰 Nopeampi reaktioiden valinta ... LISÄÄ osoitteessa %1$s</string>
     <string name="revoke_access">Revoke Access</string>
+    <string name="previous_page">Previous Page</string>
+    <string name="next_page">Next Page</string>
 </resources>

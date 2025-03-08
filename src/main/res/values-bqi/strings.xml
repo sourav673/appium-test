@@ -381,4 +381,6 @@
     <string name="show_window">نشۉ داڌن نیمدری</string>
     <string name="open_settings">گۊشیڌن سامووا</string>
     <string name="revoke_access">Revoke Access</string>
+    <string name="previous_page">Previous Page</string>
+    <string name="next_page">Next Page</string>
 </resources>

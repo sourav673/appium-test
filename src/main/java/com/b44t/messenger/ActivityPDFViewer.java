@@ -1,69 +1,91 @@
 package com.b44t.messenger;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfRenderer;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.ParcelFileDescriptor;
-import android.provider.Settings;
 import android.view.WindowManager;
-import android.widget.ImageView;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.content.FileProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import org.thoughtcrime.securesms.BaseActionBarActivity;
-import org.thoughtcrime.securesms.PdfPageAdapter;
+import androidx.appcompat.app.AppCompatActivity;
 import org.thoughtcrime.securesms.R;
-
 import java.io.File;
 import java.io.IOException;
 
-public class ActivityPDFViewer extends BaseActionBarActivity
-{
+public class ActivityPDFViewer extends AppCompatActivity {
   public static String prfFilePath = "";
   private PdfRenderer pdfRenderer;
   private ParcelFileDescriptor fileDescriptor;
-
+  private PinchZoomImageView ivPDF;
+  private Button btNext, btPrev;
+  private TextView tvPageNumber;
+  private int currentPageIndex = 0;
+  private int totalPages = 0;
 
   @Override
-  protected void onCreate(Bundle savedInstanceState)
-  {
+  protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_pdf_viewer);
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
-    System.out.println("===path=>>"+prfFilePath);
+    ivPDF = findViewById(R.id.ivPDF);
+    btNext = findViewById(R.id.btNext);
+    btPrev = findViewById(R.id.btPrev);
+    tvPageNumber = findViewById(R.id.tvPageNumber);
 
-    RecyclerView recyclerView = findViewById(R.id.pdf_recycler_view);
-    recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+    if (!openPdfFile()) {
+      Toast.makeText(this, "Failed to open PDF", Toast.LENGTH_SHORT).show();
+      finish();
+      return;
+    }
 
+    totalPages = pdfRenderer.getPageCount();
+    showPage(currentPageIndex);
+
+    btNext.setOnClickListener(v -> nextPage());
+    btPrev.setOnClickListener(v -> prevPage());
+  }
+
+  private boolean openPdfFile() {
     try {
-//      File file = new File(getFilesDir(), "delta.pdf");
       File file = new File(prfFilePath);
-      if (!file.exists())
-      {
-        Toast.makeText(this, "PDF file not found!", Toast.LENGTH_SHORT).show();
-        return;
+      if (!file.exists()) {
+        return false;
       }
-
       fileDescriptor = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY);
       pdfRenderer = new PdfRenderer(fileDescriptor);
-
-      PdfPageAdapter adapter = new PdfPageAdapter(pdfRenderer);
-      recyclerView.setAdapter(adapter);
-
-      // Ensuring the PDF is rendered as soon as RecyclerView is set
-      recyclerView.post(() -> adapter.notifyDataSetChanged());
-
+      return true;
     } catch (IOException e) {
       e.printStackTrace();
-      Toast.makeText(this, "Error loading PDF file", Toast.LENGTH_SHORT).show();
+      return false;
+    }
+  }
+
+  private void showPage(int index) {
+    if (pdfRenderer == null || index < 0 || index >= totalPages) return;
+
+    PdfRenderer.Page page = pdfRenderer.openPage(index);
+    Bitmap bitmap = Bitmap.createBitmap(page.getWidth(), page.getHeight(), Bitmap.Config.ARGB_8888);
+    page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
+    ivPDF.setImageBitmap(bitmap);
+    page.close();
+
+    tvPageNumber.setText(String.format("Page %d / %d", index + 1, totalPages));
+  }
+
+  private void nextPage() {
+    if (currentPageIndex < totalPages - 1) {
+      currentPageIndex++;
+      showPage(currentPageIndex);
+    }
+  }
+
+  private void prevPage() {
+    if (currentPageIndex > 0) {
+      currentPageIndex--;
+      showPage(currentPageIndex);
     }
   }
 
@@ -71,12 +93,8 @@ public class ActivityPDFViewer extends BaseActionBarActivity
   protected void onDestroy() {
     super.onDestroy();
     try {
-      if (pdfRenderer != null) {
-        pdfRenderer.close();
-      }
-      if (fileDescriptor != null) {
-        fileDescriptor.close();
-      }
+      if (pdfRenderer != null) pdfRenderer.close();
+      if (fileDescriptor != null) fileDescriptor.close();
     } catch (IOException e) {
       e.printStackTrace();
     }

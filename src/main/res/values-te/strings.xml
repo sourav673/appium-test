@@ -214,4 +214,6 @@
     <string name="save_desktop">భద్రపరుచు</string>
     <string name="export_backup_desktop">బ్యాకప్ ఎగుమతి చెయి</string>
     <string name="revoke_access">Revoke Access</string>
+    <string name="previous_page">Previous Page</string>
+    <string name="next_page">Next Page</string>
 </resources>

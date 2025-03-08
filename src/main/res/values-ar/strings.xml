@@ -230,4 +230,6 @@
     <string name="save_desktop">حفظ</string>
     <string name="name_desktop">الاسم</string>
     <string name="revoke_access">Revoke Access</string>
+    <string name="previous_page">Previous Page</string>
+    <string name="next_page">Next Page</string>
 </resources>

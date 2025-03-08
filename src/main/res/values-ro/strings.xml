@@ -633,4 +633,6 @@
     <string name="pref_use_system_emoji">Utilizați emoji de sistem</string>
     <string name="pref_use_system_emoji_explain">Dezactivați suportul emoji încorporat în Delta Chat</string>
     <string name="revoke_access">Revoke Access</string>
+    <string name="previous_page">Previous Page</string>
+    <string name="next_page">Next Page</string>
 </resources>
