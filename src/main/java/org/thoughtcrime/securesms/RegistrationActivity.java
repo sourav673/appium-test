@@ -250,12 +250,6 @@ public class RegistrationActivity extends BaseActionBarActivity implements DcEve
             Toast.makeText(this, errorText, Toast.LENGTH_LONG).show();
           }
         }
-      //emailInput.setText("milind.deore@privittytech.com");
-      //passwordInput.setText("Fr1ctio3@");
-      //imapServerInput.setText("imap.secureserver.net");
-      imapPortInput.setText("993");
-      //smtpServerInput.setText("smtpout.secureserver.net");
-      smtpPortInput.setText("465");
 
         if (expandAdvanced) { onAdvancedSettings(); }
         registerForEvents();

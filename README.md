@@ -245,6 +245,16 @@ Android metadata and changelogs are translated using [Weblate](https://hosted.we
 Many of the user interface classes were based on the Android Signal messenger when we ported it from the former Telegram-UI base in 2019. 
 Meanwhile, development has diverged in many areas. 
 
+## Privitty Integration
+
+This project integrates the [Privitty](https://privittytech.com) library for enhanced cryptographic security. Privitty ensures end-to-end protection using advanced cryptographic techniques.
+
+**Integration Details:**
+- Privitty enhances Delta Chat’s security by [allow users to share data with only intended person(s), let them download/share/screenshot. Data owner can revoke their data any time they like.].
+- This integration follows open-source licensing compliance.
+
+For more details, visit [Privitty's official documentation](https://github.com/Privitty/priv-deltachat-android/blob/main/Privitty_README.md).
+
 
 # License
 
