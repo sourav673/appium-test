@@ -253,7 +253,7 @@ This project integrates the [Privitty](https://privittytech.com) library for enh
 - Privitty enhances Delta Chat’s security by [allow users to share data with only intended person(s), let them download/share/screenshot. Data owner can revoke their data any time they like.].
 - This integration follows open-source licensing compliance.
 
-For more details, visit [Privitty's official documentation](https://github.com/Privitty/priv-deltachat-android/blob/main/Privitty_README.md).
+For more details, visit [Privitty's official documentation](/Privitty_README.md).
 
 
 # License
