@@ -69,7 +69,7 @@ public class InstantOnboardingActivity extends BaseActionBarActivity implements 
   private static final String DCACCOUNT = "dcaccount";
   private static final String DCLOGIN = "dclogin";
   private static final String INSTANCES_URL = "https://delta.chat/chatmail";
-  private static final String DEFAULT_CHATMAIL_HOST = "privitty-demo-server.com";
+  private static final String DEFAULT_CHATMAIL_HOST = "nine.testrun.org";
 
   public static final String QR_ACCOUNT_EXTRA = "qr_account_extra";
   public static final String FROM_WELCOME = "from_welcome";
@@ -338,7 +338,7 @@ public class InstantOnboardingActivity extends BaseActionBarActivity implements 
     signUpBtn.setOnClickListener(view -> createProfile());
 
     Button otherOptionsBtn = findViewById(R.id.other_options_button);
-    otherOptionsBtn.setOnClickListener(view -> showOtherOptionsDialog());
+    otherOptionsBtn.setOnClickListener(view -> startRegistrationActivity());
   }
 
   private void showOtherOptionsDialog() {
