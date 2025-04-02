@@ -122,7 +122,7 @@ public abstract class BaseActionBarActivity extends AppCompatActivity {
   {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle("Alert");
-    builder.setMessage("Device is not secured.");
+    builder.setMessage("Either your phone is rooted or Developer Mode is enabled. This may pose a security risk. Please disable Developer Mode or use a non-rooted device for better security.");
     builder.setPositiveButton("OK", (dialog, which) ->
     {
       dialog.dismiss();
