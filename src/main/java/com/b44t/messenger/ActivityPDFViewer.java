@@ -13,8 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.thoughtcrime.securesms.R;
 import java.io.File;
 import java.io.IOException;
+import android.util.Log;
 
 public class ActivityPDFViewer extends AppCompatActivity {
+  private static final String TAG = ActivityPDFViewer.class.getSimpleName();
+
   public static String prfFilePath = "";
   private PdfRenderer pdfRenderer;
   private ParcelFileDescriptor fileDescriptor;
@@ -23,6 +26,7 @@ public class ActivityPDFViewer extends AppCompatActivity {
   private TextView tvPageNumber;
   private int currentPageIndex = 0;
   private int totalPages = 0;
+  private File file = null;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +54,7 @@ public class ActivityPDFViewer extends AppCompatActivity {
 
   private boolean openPdfFile() {
     try {
-      File file = new File(prfFilePath);
+      file = new File(prfFilePath);
       if (!file.exists()) {
         return false;
       }
@@ -98,5 +102,15 @@ public class ActivityPDFViewer extends AppCompatActivity {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  @Override
+  public void finish()
+  {
+    if(file != null) {
+      file.delete();
+      Log.d(TAG, "File destroyed after viewing");
+    }
+    super.finish();
   }
 }

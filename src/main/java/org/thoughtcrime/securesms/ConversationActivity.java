@@ -666,7 +666,7 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     if(privJni.isChatPrivittyProtected(chatId)) {
       addAttachment(PICK_DOCUMENT);
     } else {
-      Toast.makeText(ConversationActivity.this, "Privitty handshake not established. Re-initiate now to secure this chat", Toast.LENGTH_LONG).show();
+      Toast.makeText(ConversationActivity.this, "Send a message to enable Privitty security.", Toast.LENGTH_LONG).show();
     }
 
     // Note: Need to confirm Nilesh.

@@ -156,6 +156,10 @@ public class ApplicationContext extends MultiDexApplication {
                   Log.d("JAVA-Privitty", "Privitty message: new_peer_concluded, ignore it");
                   dcContext.deleteMsgs(new int[]{event.getData2Int()});
                   continue;
+                } else if ("new_group_concluded".equalsIgnoreCase(jSubject.getString("type"))) {
+                  Log.d("JAVA-Privitty", "Privitty message: new_group_concluded, ignore it");
+                  dcContext.deleteMsgs(new int[]{event.getData2Int()});
+                  continue;
                 }
                 Log.d("JAVA-Privitty", "Privitty message, punt it to libpriv. Sub: " + dcMsg.getSubject());
                 PrivJNI privJni = DcHelper.getPriv(getApplicationContext());
@@ -391,6 +395,15 @@ public class ApplicationContext extends MultiDexApplication {
       Util.runOnAnyBackgroundThread(() -> {
         DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
         msg.setSubject("{'privitty':'true', 'type':'SSS_REVOKED'}");
+        String base64Msg = Base64.getEncoder().encodeToString(pdu);
+        msg.setText(base64Msg);
+        int msgId = dcContext.sendMsg(chatId, msg);
+      });
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_GROUP_ADD_ACCEPTED) {
+      Log.d("JAVA-Privitty", "Congratulations! New chat group is ready.");
+      Util.runOnAnyBackgroundThread(() -> {
+        DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
+        msg.setSubject("{'privitty':'true', 'type':'new_group_concluded'}");
         String base64Msg = Base64.getEncoder().encodeToString(pdu);
         msg.setText(base64Msg);
         int msgId = dcContext.sendMsg(chatId, msg);

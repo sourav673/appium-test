@@ -52,11 +52,13 @@ public class PrivJNI {
     public final static int PRV_APP_STATUS_PEER_SSS_REVOKED         = 22;
     public final static int PRV_APP_STATUS_PEER_OTSP_SSS            = 23;
     public final static int PRV_APP_STATUS_DELETE_CHAT              = 24;
-
+    public final static int PRV_APP_STATUS_GROUP_ALREADY_EXISTS     = 25;
+    public final static int PRV_APP_STATUS_GROUP_ADD_ACCEPTED       = 26;
     /*
      * NOTE: Add any event above PRV_APP_STATUS_LIB_LAST and update PRV_APP_STATUS_LIB_LAST
      */ 
-    public final static int PRV_APP_STATUS_LIB_LAST                 = 25;
+    public final static int PRV_APP_STATUS_LIB_LAST                 = 27;
+
 
     /*
      * NOTE: SSS status types
@@ -66,6 +68,7 @@ public class PrivJNI {
     public final static int PRV_SSS_STATE_TYPE_SSS_REQUEST          = 2;
     public final static int PRV_SSS_STATE_TYPE_SSS_REVOKED          = 3;
     public final static int PRV_SSS_STATE_TYPE_SSS_BLOCKED          = 4;
+    public final static int PRV_SSS_STATE_TYPE_SSS_DELETED          = 5;
 
 
     private Context context = null;
@@ -92,6 +95,7 @@ public class PrivJNI {
     public native boolean revokeMsgs(int chatId, String filenames);
     public native boolean isChatVersion(String mime_header);
     public native int getFileAccessState(int chat_id, String file_name);
+    public native byte[] createChatGroup(int chatId, String ChatGroupName);
 }
 
 

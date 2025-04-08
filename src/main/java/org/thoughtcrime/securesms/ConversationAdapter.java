@@ -298,6 +298,10 @@ public class ConversationAdapter <V extends View & BindableConversationItem>
           dcMsg.setText("Establishing guaranteed full control over your shared data, please wait ...");
           dcMsg.setSubject("");
           return MESSAGE_TYPE_INFO;
+        } else if ("new_group_add".equalsIgnoreCase(jSubject.getString("type")) || "new_group_concluded".equalsIgnoreCase(jSubject.getString("type"))) {
+          dcMsg.setText("This group is Privitty secure—take control and revoke data anytime.");
+          dcMsg.setSubject("");
+          return MESSAGE_TYPE_INFO;
         } else if ("new_peer_complete".equalsIgnoreCase(jSubject.getString("type")) || "new_peer_conclude".equalsIgnoreCase(jSubject.getString("type"))) {
           dcMsg.setText("You are Privitty secure—take control and revoke data anytime.");
           dcMsg.setSubject("");
@@ -309,6 +313,7 @@ public class ConversationAdapter <V extends View & BindableConversationItem>
         } else if ("SSS_REQUEST".equalsIgnoreCase(jSubject.getString("type"))) {
           dcMsg.setText("Requesting access from the owner ...");
           dcMsg.setSubject("");
+          //Toast.makeText(this, "Requesting access from the owner ...", Toast.LENGTH_LONG).show();
           return MESSAGE_TYPE_INFO;
         } else if ("SSS_RESPONSE".equalsIgnoreCase(jSubject.getString("type"))) {
           dcMsg.setText("Granted access for next 15 mins.");

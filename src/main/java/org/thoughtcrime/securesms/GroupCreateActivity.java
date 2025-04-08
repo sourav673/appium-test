@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +23,9 @@ import androidx.loader.app.LoaderManager;
 import com.b44t.messenger.DcChat;
 import com.b44t.messenger.DcContact;
 import com.b44t.messenger.DcContext;
+import com.b44t.messenger.DcMsg;
+import com.b44t.messenger.PrivJNI;
+import com.b44t.messenger.PrivEvent;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -42,10 +46,12 @@ import org.thoughtcrime.securesms.util.ViewUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Base64;
 
 public class GroupCreateActivity extends PassphraseRequiredActionBarActivity
                                  implements ItemClickListener
 {
+  private static final String TAG = GroupCreateActivity.class.getSimpleName();
 
   public static final String EDIT_GROUP_CHAT_ID = "edit_group_chat_id";
   public static final String CREATE_BROADCAST  = "group_create_broadcast";
@@ -258,12 +264,24 @@ public class GroupCreateActivity extends PassphraseRequiredActionBarActivity
     getAdapter().remove(contactId);
   }
 
+  public boolean isErrorCode(String result) {
+    return result != null && !result.isEmpty() && result.chars().allMatch(Character::isDigit);
+  }
+
   private void createGroup(String groupName) {
+    byte[] prvGroupPDU;
+    String base64Msg = "";
+
     if (broadcast) {
       groupChatId = dcContext.createBroadcastList();
       dcContext.setChatName(groupChatId, groupName);
     } else {
       groupChatId = dcContext.createGroupChat(verified, groupName);
+      Log.i(TAG, "Create a new chat group");
+      PrivJNI privJni = new PrivJNI(GroupCreateActivity.this);
+      prvGroupPDU = privJni.createChatGroup(groupChatId, groupName);
+      base64Msg = Base64.getEncoder().encodeToString(prvGroupPDU);
+      Log.i(TAG, "Received PDUs for group chat");
     }
 
     for (int contactId : getAdapter().getContacts()) {
@@ -271,6 +289,14 @@ public class GroupCreateActivity extends PassphraseRequiredActionBarActivity
     }
     if (avatarBmp!=null) {
       AvatarHelper.setGroupAvatar(this, groupChatId, avatarBmp);
+    }
+
+    if (!broadcast && !(getAdapter().getContacts().isEmpty()) && (base64Msg != null && !base64Msg.isEmpty())) {
+      Log.i(TAG, "Contacts already in the group, time to send NFTs");
+      DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
+      msg.setSubject("{'privitty':'true', 'type':'new_group_add'}");
+      msg.setText(base64Msg);
+      int msgId = dcContext.sendMsg(groupChatId, msg);
     }
 
     attachmentManager.cleanup();
