@@ -29,7 +29,7 @@
         android:id="@+id/footer_prv_indicator"
         android:layout_width="12sp"
         android:layout_height="11sp"
-        android:src="@drawable/privitty_lock"
+        android:src="?attr/privitty_lock"
         android:visibility="gone"
         android:layout_gravity="center_vertical|end"
         android:importantForAccessibility="no"

@@ -68,6 +68,9 @@
     <attr name="file_disallowed_icon" format="reference" />
     <attr name="file_allowed_icon" format="reference" />
     <attr name="dialog_background_color" format="reference|color" />
+    <attr name="intro1" format="reference|color" />
+    <attr name="intro2" format="reference|color" />
+    <attr name="privitty_lock" format="reference|color" />
 
     <attr name="menu_new_conversation_icon" format="reference" />
     <attr name="menu_search_icon" format="reference" />

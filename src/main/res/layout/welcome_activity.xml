@@ -19,7 +19,7 @@
         android:layout_width="256dp"
         android:layout_height="wrap_content"
         android:gravity="bottom"
-        android:src="@drawable/intro2"
+        android:src="?attr/intro2"
         tools:ignore="contentDescription"/>
 
     <TextView
