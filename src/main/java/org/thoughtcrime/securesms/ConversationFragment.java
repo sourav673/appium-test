@@ -333,7 +333,11 @@ public class ConversationFragment extends MessageSelectorFragment
             DcMsg messageRecord = messageRecords.iterator().next();
             DcChat chat = getListAdapter().getChat();
             menu.findItem(R.id.menu_context_details).setVisible(true);
-            menu.findItem(R.id.menu_context_revoke_access).setVisible(true);
+            if (messageRecord.isOutgoing() && messageRecord.hasFile()) {
+                menu.findItem(R.id.menu_context_revoke_access).setVisible(true);
+            } else {
+                menu.findItem(R.id.menu_context_revoke_access).setVisible(false);
+            }
             menu.findItem(R.id.menu_context_share).setVisible(messageRecord.hasFile());
             boolean canReply = canReplyToMsg(messageRecord);
             menu.findItem(R.id.menu_context_reply).setVisible(chat.canSend() && canReply);
@@ -358,7 +362,8 @@ public class ConversationFragment extends MessageSelectorFragment
             }
         }
         //menu.findItem(R.id.menu_context_save_attachment).setVisible(canSave);
-        menu.findItem(R.id.menu_resend).setVisible(canResend);
+        menu.findItem(R.id.menu_context_share).setVisible(false);
+        menu.findItem(R.id.menu_resend).setVisible(false);
     }
 
     static boolean canReplyToMsg(DcMsg dcMsg) {

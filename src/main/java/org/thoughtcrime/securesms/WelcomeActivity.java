@@ -68,7 +68,7 @@ public class WelcomeActivity extends BaseActionBarActivity implements DcEventCen
 
         Button signUpButton = findViewById(R.id.signup_button);
         Button signInButton = findViewById(R.id.signin_button);
-        signInButton.setVisibility(View.INVISIBLE);
+        //signInButton.setVisibility(View.INVISIBLE);
 
         View view = View.inflate(this, R.layout.login_options_view, null);
         AlertDialog signInDialog = new AlertDialog.Builder(this)

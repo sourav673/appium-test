@@ -137,6 +137,7 @@ public class InstantOnboardingActivity extends BaseActionBarActivity implements 
     handleIntent();
   }
 
+  /* Disabling menu for now.
   @Override
   public boolean onPrepareOptionsMenu(Menu menu) {
     menu.clear();
@@ -151,6 +152,7 @@ public class InstantOnboardingActivity extends BaseActionBarActivity implements 
     }
     return super.onPrepareOptionsMenu(menu);
   }
+   */
 
   @Override
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {

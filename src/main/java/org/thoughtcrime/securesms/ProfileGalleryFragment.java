@@ -203,7 +203,7 @@ public class ProfileGalleryFragment
         break;
       }
     }
-    menu.findItem(R.id.menu_resend).setVisible(canResend);
+    menu.findItem(R.id.menu_resend).setVisible(false);
   }
 
   private ProfileGalleryAdapter getListAdapter() {

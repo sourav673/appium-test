@@ -209,7 +209,7 @@ public class ProfileDocumentsFragment
         break;
       }
     }
-    menu.findItem(R.id.menu_resend).setVisible(canResend);
+    menu.findItem(R.id.menu_resend).setVisible(false);
 
     boolean webxdcApp = singleSelection && messageRecords.iterator().next().getType() == DcMsg.DC_MSG_WEBXDC;
     menu.findItem(R.id.menu_add_to_home_screen).setVisible(webxdcApp);

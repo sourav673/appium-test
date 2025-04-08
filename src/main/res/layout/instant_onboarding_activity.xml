@@ -75,6 +75,7 @@
 
     <Button
         style="@style/ButtonSecondary"
+        android:visibility="invisible"
         android:id="@+id/other_options_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
