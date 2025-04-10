@@ -299,9 +299,9 @@ public class DcHelper {
     PrivJNI privJni = getPriv(activity);
     String prvFile;
     if (msg.getFromId() == DcContact.DC_CONTACT_ID_SELF) {
-      prvFile = privJni.decryptFile(msg.getChatId(), srcP.getParent(), msg.getFilename(), true);
+      prvFile = privJni.decryptFile(msg.getChatId(), srcP.getParent(), srcP.getName(), true);
     } else {
-      prvFile = privJni.decryptFile(msg.getChatId(), srcP.getParent(), msg.getFilename(), false);
+      prvFile = privJni.decryptFile(msg.getChatId(), srcP.getParent(), srcP.getName(), false);
     }
     Log.d("JAVA-Privitty", "File Name: " + prvFile);
 

@@ -82,6 +82,7 @@ public class ConversationAdapter <V extends View & BindableConversationItem>
   private static final int MESSAGE_TYPE_VIDEOCHAT_INVITE   = 9;
   private static final int MESSAGE_TYPE_STICKER_INCOMING   = 10;
   private static final int MESSAGE_TYPE_STICKER_OUTGOING   = 11;
+  private static final int MESSAGE_TYPE_PRV_INFO           = 12;
 
   private final Set<DcMsg> batchSelected = Collections.synchronizedSet(new HashSet<DcMsg>());
 
@@ -282,6 +283,7 @@ public class ConversationAdapter <V extends View & BindableConversationItem>
       case MESSAGE_TYPE_INCOMING:        return R.layout.conversation_item_received;
       case MESSAGE_TYPE_INFO:            return R.layout.conversation_item_update;
       case MESSAGE_TYPE_VIDEOCHAT_INVITE:return R.layout.conversation_item_videochat;
+      case MESSAGE_TYPE_PRV_INFO:        return R.layout.conversation_item_blank;
       default: throw new IllegalArgumentException("unsupported item view type given to ConversationAdapter");
     }
   }
@@ -295,34 +297,37 @@ public class ConversationAdapter <V extends View & BindableConversationItem>
       try {
         JSONObject jSubject = new JSONObject(dcMsg.getSubject());
         if ("new_peer_add".equalsIgnoreCase(jSubject.getString("type"))) {
+          // Required
           dcMsg.setText("Establishing guaranteed full control over your shared data, please wait ...");
           dcMsg.setSubject("");
           return MESSAGE_TYPE_INFO;
         } else if ("new_group_add".equalsIgnoreCase(jSubject.getString("type")) || "new_group_concluded".equalsIgnoreCase(jSubject.getString("type"))) {
+          // Required
           dcMsg.setText("This group is Privitty secure—take control and revoke data anytime.");
           dcMsg.setSubject("");
           return MESSAGE_TYPE_INFO;
         } else if ("new_peer_complete".equalsIgnoreCase(jSubject.getString("type")) || "new_peer_conclude".equalsIgnoreCase(jSubject.getString("type"))) {
+          // Required
           dcMsg.setText("You are Privitty secure—take control and revoke data anytime.");
           dcMsg.setSubject("");
           return MESSAGE_TYPE_INFO;
         } else if ("OTSP_SENT".equalsIgnoreCase(jSubject.getString("type"))) {
           dcMsg.setText("You granted 15 mins viewing access.");
-          dcMsg.setSubject("");
-          return MESSAGE_TYPE_INFO;
+          dcMsg.setSubject("PRIVITTY_TOAST_MSG");
+          return MESSAGE_TYPE_OUTGOING;
         } else if ("SSS_REQUEST".equalsIgnoreCase(jSubject.getString("type"))) {
           dcMsg.setText("Requesting access from the owner ...");
-          dcMsg.setSubject("");
+          dcMsg.setSubject("PRIVITTY_TOAST_MSG");
           //Toast.makeText(this, "Requesting access from the owner ...", Toast.LENGTH_LONG).show();
-          return MESSAGE_TYPE_INFO;
+          return MESSAGE_TYPE_OUTGOING;
         } else if ("SSS_RESPONSE".equalsIgnoreCase(jSubject.getString("type"))) {
           dcMsg.setText("Granted access for next 15 mins.");
-          dcMsg.setSubject("");
-          return MESSAGE_TYPE_INFO;
+          dcMsg.setSubject("PRIVITTY_TOAST_MSG");
+          return MESSAGE_TYPE_OUTGOING;
         } else if ("SSS_REVOKED".equalsIgnoreCase(jSubject.getString("type"))) {
           dcMsg.setText("You revoked access");
-          dcMsg.setSubject("");
-          return MESSAGE_TYPE_INFO;
+          dcMsg.setSubject("PRIVITTY_TOAST_MSG");
+          return MESSAGE_TYPE_OUTGOING;
         }
       } catch (Exception e) {
         Log.d("JAVA-Privitty", "This is non-privitty message -- getItemViewType");

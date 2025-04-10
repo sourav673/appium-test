@@ -184,7 +184,16 @@ public class ConversationItem extends BaseConversationItem
     setGutterSizes(messageRecord, showSender);
     setMessageShape(messageRecord);
     setMediaAttributes(messageRecord, showSender);
-    setBodyText(messageRecord);
+
+    if(messageRecord.getSubject().contains("AAAAA")) {
+      ConversationItem.this.setVisibility(GONE);
+      ViewGroup.LayoutParams params = ConversationItem.this.getLayoutParams();
+      params.height = 0;
+      ConversationItem.this.setLayoutParams(params);
+    } else {
+      setBodyText(messageRecord);
+    }
+
     setBubbleState(messageRecord);
     setContactPhoto();
     setGroupMessageStatus();

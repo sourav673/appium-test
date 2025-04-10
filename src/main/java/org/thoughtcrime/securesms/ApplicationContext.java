@@ -11,7 +11,10 @@ import android.net.ConnectivityManager;
 import android.net.LinkProperties;
 import android.net.NetworkCapabilities;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -372,6 +375,9 @@ public class ApplicationContext extends MultiDexApplication {
           fileSessionTimeout, canDownload, canForward,
           numPeerSssRequest, forwardedTo, sentPrivittyProtected);
       });
+      new Handler(Looper.getMainLooper()).post(() -> {
+        Toast.makeText(getApplicationContext(), "You granted 15 mins viewing access.", Toast.LENGTH_SHORT).show();
+      });
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_SSS_REQUEST) {
       Log.d("JAVA-Privitty", "Peer SSS request");
       Util.runOnAnyBackgroundThread(() -> {
@@ -380,6 +386,9 @@ public class ApplicationContext extends MultiDexApplication {
         String base64Msg = Base64.getEncoder().encodeToString(pdu);
         msg.setText(base64Msg);
         int msgId = dcContext.sendMsg(chatId, msg);
+      });
+      new Handler(Looper.getMainLooper()).post(() -> {
+        Toast.makeText(getApplicationContext(), "Requesting access from the owner ...", Toast.LENGTH_SHORT).       show();
       });
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_SSS_RESPONSE) {
       Log.d("JAVA-Privitty", "Peer SSS response");
@@ -390,6 +399,9 @@ public class ApplicationContext extends MultiDexApplication {
         msg.setText(base64Msg);
         int msgId = dcContext.sendMsg(chatId, msg);
       });
+      new Handler(Looper.getMainLooper()).post(() -> {
+        Toast.makeText(getApplicationContext(), "Granted access for next 15 mins.", Toast.LENGTH_SHORT).show();
+      });
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_SSS_REVOKED) {
       Log.d("JAVA-Privitty", "Peer SSS revoked");
       Util.runOnAnyBackgroundThread(() -> {
@@ -398,6 +410,9 @@ public class ApplicationContext extends MultiDexApplication {
         String base64Msg = Base64.getEncoder().encodeToString(pdu);
         msg.setText(base64Msg);
         int msgId = dcContext.sendMsg(chatId, msg);
+      });
+      new Handler(Looper.getMainLooper()).post(() -> {
+        Toast.makeText(getApplicationContext(), "You revoked access", Toast.LENGTH_SHORT).show();
       });
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_GROUP_ADD_ACCEPTED) {
       Log.d("JAVA-Privitty", "Congratulations! New chat group is ready.");
