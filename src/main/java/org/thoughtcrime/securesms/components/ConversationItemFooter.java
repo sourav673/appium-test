@@ -78,25 +78,18 @@ public class ConversationItemFooter extends LinearLayout {
         securePrvIndicatorView.setVisibility(VISIBLE);
         imageview_file_state_indicator.setVisibility(VISIBLE);
 
-
-
-        if (messageRecord.getFromId() != DcContact.DC_CONTACT_ID_SELF) {
-          int fileState = privJNI.getFileAccessState(messageRecord.getChatId(), messageRecord.getFilename());
-          if (fileState == PrivJNI.PRV_SPLITKEYS_STATE_TYPE_SPLITKEYS_ACTIVE) {
-            // access allowed
-            int resId = ThemeUtil.getThemeAttributeResourceId(getContext(), R.attr.file_allowed_icon);
-            imageview_file_state_indicator.setImageResource(resId);
-          } else if (fileState == PrivJNI.PRV_SPLITKEYS_STATE_TYPE_SPLITKEYS_REQUEST) {
-            // access requested
-            int resId = ThemeUtil.getThemeAttributeResourceId(getContext(), R.attr.file_inprogress_icon);
-            imageview_file_state_indicator.setImageResource(resId);
-          } else if ((fileState == PrivJNI.PRV_SPLITKEYS_STATE_TYPE_SPLITKEYS_BLOCKED) || (fileState == PrivJNI.PRV_SPLITKEYS_STATE_TYPE_SPLITKEYS_REVOKED) || (fileState == PrivJNI.PRV_SPLITKEYS_STATE_TYPE_SPLITKEYS_DELETED)) {
-            // access blocked or expired or Revoked
-            int resId = ThemeUtil.getThemeAttributeResourceId(getContext(), R.attr.file_disallowed_icon);
-            imageview_file_state_indicator.setImageResource(resId);
-          }
-        } else {
+        int fileState = privJNI.getFileAccessState(messageRecord.getChatId(), messageRecord.getFilename(), (messageRecord.getFromId() != DcContact.DC_CONTACT_ID_SELF));
+        if (fileState == PrivJNI.PRV_SPLITKEYS_STATE_TYPE_SPLITKEYS_ACTIVE) {
+          // access allowed
           int resId = ThemeUtil.getThemeAttributeResourceId(getContext(), R.attr.file_allowed_icon);
+          imageview_file_state_indicator.setImageResource(resId);
+        } else if (fileState == PrivJNI.PRV_SPLITKEYS_STATE_TYPE_SPLITKEYS_REQUEST) {
+          // access requested
+          int resId = ThemeUtil.getThemeAttributeResourceId(getContext(), R.attr.file_inprogress_icon);
+          imageview_file_state_indicator.setImageResource(resId);
+        } else if ((fileState == PrivJNI.PRV_SPLITKEYS_STATE_TYPE_SPLITKEYS_BLOCKED) || (fileState == PrivJNI.PRV_SPLITKEYS_STATE_TYPE_SPLITKEYS_REVOKED) || (fileState == PrivJNI.PRV_SPLITKEYS_STATE_TYPE_SPLITKEYS_DELETED)) {
+          // access blocked or expired or Revoked
+          int resId = ThemeUtil.getThemeAttributeResourceId(getContext(), R.attr.file_disallowed_icon);
           imageview_file_state_indicator.setImageResource(resId);
         }
       }

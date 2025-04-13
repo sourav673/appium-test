@@ -94,7 +94,7 @@ public class PrivJNI {
     public native boolean cleanMsgs(int chatId, String[] filenames);
     public native boolean revokeMsgs(int chatId, String filenames);
     public native boolean isChatVersion(String mime_header);
-    public native int getFileAccessState(int chat_id, String file_name);
+    public native int getFileAccessState(int chat_id, String file_name, boolean direction);
     public native byte[] createChatGroup(int chatId, String ChatGroupName);
 }
 
