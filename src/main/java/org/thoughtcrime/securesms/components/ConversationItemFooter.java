@@ -82,15 +82,15 @@ public class ConversationItemFooter extends LinearLayout {
 
         if (messageRecord.getFromId() != DcContact.DC_CONTACT_ID_SELF) {
           int fileState = privJNI.getFileAccessState(messageRecord.getChatId(), messageRecord.getFilename());
-          if (fileState == PrivJNI.PRV_SSS_STATE_TYPE_SSS_ACTIVE) {
+          if (fileState == PrivJNI.PRV_SPLITKEYS_STATE_TYPE_SPLITKEYS_ACTIVE) {
             // access allowed
             int resId = ThemeUtil.getThemeAttributeResourceId(getContext(), R.attr.file_allowed_icon);
             imageview_file_state_indicator.setImageResource(resId);
-          } else if (fileState == PrivJNI.PRV_SSS_STATE_TYPE_SSS_REQUEST) {
+          } else if (fileState == PrivJNI.PRV_SPLITKEYS_STATE_TYPE_SPLITKEYS_REQUEST) {
             // access requested
             int resId = ThemeUtil.getThemeAttributeResourceId(getContext(), R.attr.file_inprogress_icon);
             imageview_file_state_indicator.setImageResource(resId);
-          } else if ((fileState == PrivJNI.PRV_SSS_STATE_TYPE_SSS_BLOCKED) || (fileState == PrivJNI.PRV_SSS_STATE_TYPE_SSS_REVOKED) || (fileState == PrivJNI.PRV_SSS_STATE_TYPE_SSS_DELETED)) {
+          } else if ((fileState == PrivJNI.PRV_SPLITKEYS_STATE_TYPE_SPLITKEYS_BLOCKED) || (fileState == PrivJNI.PRV_SPLITKEYS_STATE_TYPE_SPLITKEYS_REVOKED) || (fileState == PrivJNI.PRV_SPLITKEYS_STATE_TYPE_SPLITKEYS_DELETED)) {
             // access blocked or expired or Revoked
             int resId = ThemeUtil.getThemeAttributeResourceId(getContext(), R.attr.file_disallowed_icon);
             imageview_file_state_indicator.setImageResource(resId);

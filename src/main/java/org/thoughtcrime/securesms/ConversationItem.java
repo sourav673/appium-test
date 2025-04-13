@@ -185,7 +185,7 @@ public class ConversationItem extends BaseConversationItem
     setMessageShape(messageRecord);
     setMediaAttributes(messageRecord, showSender);
 
-    if(messageRecord.getSubject().contains("AAAAA")) {
+    if(messageRecord.getSubject().contains("PRIVITTY_TOAST_MSG")) {
       ConversationItem.this.setVisibility(GONE);
       ViewGroup.LayoutParams params = ConversationItem.this.getLayoutParams();
       params.height = 0;

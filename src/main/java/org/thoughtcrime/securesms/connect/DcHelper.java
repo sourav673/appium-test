@@ -307,13 +307,13 @@ public class DcHelper {
 
     Intent intent = null;
 
-    if (prvFile.equals("SSS_EXPIRED") || prvFile.equals("SSS_REQUESTED")) {
+    if (prvFile.equals("SPLITKEYS_EXPIRED") || prvFile.equals("SPLITKEYS_REQUESTED")) {
       Toast.makeText(activity, "Access expired, requesting again", Toast.LENGTH_LONG).show();
       return;
-    } else if (prvFile.equals("SSS_DELETED")) {
+    } else if (prvFile.equals("SPLITKEYS_DELETED")) {
       Toast.makeText(activity, "Peer deleted the file !", Toast.LENGTH_LONG).show();
       return;
-    } else if (prvFile.equals("SSS_REVOKED")) {
+    } else if (prvFile.equals("SPLITKEYS_REVOKED")) {
       Toast.makeText(activity, "Access revoked !", Toast.LENGTH_LONG).show();
       return;
     } else if (prvFile.endsWith(".pdf")) {

@@ -350,7 +350,7 @@ public class ApplicationContext extends MultiDexApplication {
         int msgId = dcContext.sendMsg(chatId, msg);
       });
 
-    } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_OTSP_SSS) {
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_OTSP_SPLITKEYS) {
       Log.d("JAVA-Privitty", "Peer OTSP sent");
       Util.runOnAnyBackgroundThread(() -> {
         DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
@@ -378,11 +378,11 @@ public class ApplicationContext extends MultiDexApplication {
       new Handler(Looper.getMainLooper()).post(() -> {
         Toast.makeText(getApplicationContext(), "You granted 15 mins viewing access.", Toast.LENGTH_SHORT).show();
       });
-    } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_SSS_REQUEST) {
-      Log.d("JAVA-Privitty", "Peer SSS request");
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_SPLITKEYS_REQUEST) {
+      Log.d("JAVA-Privitty", "Peer SPLITKEYS request");
       Util.runOnAnyBackgroundThread(() -> {
         DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
-        msg.setSubject("{'privitty':'true', 'type':'SSS_REQUEST'}");
+        msg.setSubject("{'privitty':'true', 'type':'SPLITKEYS_REQUEST'}");
         String base64Msg = Base64.getEncoder().encodeToString(pdu);
         msg.setText(base64Msg);
         int msgId = dcContext.sendMsg(chatId, msg);
@@ -390,11 +390,11 @@ public class ApplicationContext extends MultiDexApplication {
       new Handler(Looper.getMainLooper()).post(() -> {
         Toast.makeText(getApplicationContext(), "Requesting access from the owner ...", Toast.LENGTH_SHORT).       show();
       });
-    } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_SSS_RESPONSE) {
-      Log.d("JAVA-Privitty", "Peer SSS response");
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_SPLITKEYS_RESPONSE) {
+      Log.d("JAVA-Privitty", "Peer SPLITKEYS response");
       Util.runOnAnyBackgroundThread(() -> {
         DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
-        msg.setSubject("{'privitty':'true', 'type':'SSS_RESPONSE'}");
+        msg.setSubject("{'privitty':'true', 'type':'SPLITKEYS_RESPONSE'}");
         String base64Msg = Base64.getEncoder().encodeToString(pdu);
         msg.setText(base64Msg);
         int msgId = dcContext.sendMsg(chatId, msg);
@@ -402,11 +402,11 @@ public class ApplicationContext extends MultiDexApplication {
       new Handler(Looper.getMainLooper()).post(() -> {
         Toast.makeText(getApplicationContext(), "Granted access for next 15 mins.", Toast.LENGTH_SHORT).show();
       });
-    } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_SSS_REVOKED) {
-      Log.d("JAVA-Privitty", "Peer SSS revoked");
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_SPLITKEYS_REVOKED) {
+      Log.d("JAVA-Privitty", "Peer SPLITKEYS revoked");
       Util.runOnAnyBackgroundThread(() -> {
         DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
-        msg.setSubject("{'privitty':'true', 'type':'SSS_REVOKED'}");
+        msg.setSubject("{'privitty':'true', 'type':'SPLITKEYS_REVOKED'}");
         String base64Msg = Base64.getEncoder().encodeToString(pdu);
         msg.setText(base64Msg);
         int msgId = dcContext.sendMsg(chatId, msg);

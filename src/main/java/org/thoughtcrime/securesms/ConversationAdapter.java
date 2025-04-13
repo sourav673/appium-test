@@ -315,16 +315,16 @@ public class ConversationAdapter <V extends View & BindableConversationItem>
           dcMsg.setText("You granted 15 mins viewing access.");
           dcMsg.setSubject("PRIVITTY_TOAST_MSG");
           return MESSAGE_TYPE_OUTGOING;
-        } else if ("SSS_REQUEST".equalsIgnoreCase(jSubject.getString("type"))) {
+        } else if ("SPLITKEYS_REQUEST".equalsIgnoreCase(jSubject.getString("type"))) {
           dcMsg.setText("Requesting access from the owner ...");
           dcMsg.setSubject("PRIVITTY_TOAST_MSG");
           //Toast.makeText(this, "Requesting access from the owner ...", Toast.LENGTH_LONG).show();
           return MESSAGE_TYPE_OUTGOING;
-        } else if ("SSS_RESPONSE".equalsIgnoreCase(jSubject.getString("type"))) {
+        } else if ("SPLITKEYS_RESPONSE".equalsIgnoreCase(jSubject.getString("type"))) {
           dcMsg.setText("Granted access for next 15 mins.");
           dcMsg.setSubject("PRIVITTY_TOAST_MSG");
           return MESSAGE_TYPE_OUTGOING;
-        } else if ("SSS_REVOKED".equalsIgnoreCase(jSubject.getString("type"))) {
+        } else if ("SPLITKEYS_REVOKED".equalsIgnoreCase(jSubject.getString("type"))) {
           dcMsg.setText("You revoked access");
           dcMsg.setSubject("PRIVITTY_TOAST_MSG");
           return MESSAGE_TYPE_OUTGOING;

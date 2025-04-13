@@ -47,10 +47,10 @@ public class PrivJNI {
     public final static int PRV_APP_STATUS_INVALID_FILE             = 17;
     public final static int PRV_APP_STATUS_FILE_INACCESSIBLE        = 18;
     public final static int PRV_APP_STATUS_AWAITING_PEER_AUTH       = 19;
-    public final static int PRV_APP_STATUS_PEER_SSS_REQUEST         = 20;
-    public final static int PRV_APP_STATUS_PEER_SSS_RESPONSE        = 21;
-    public final static int PRV_APP_STATUS_PEER_SSS_REVOKED         = 22;
-    public final static int PRV_APP_STATUS_PEER_OTSP_SSS            = 23;
+    public final static int PRV_APP_STATUS_PEER_SPLITKEYS_REQUEST   = 20;
+    public final static int PRV_APP_STATUS_PEER_SPLITKEYS_RESPONSE  = 21;
+    public final static int PRV_APP_STATUS_PEER_SPLITKEYS_REVOKED   = 22;
+    public final static int PRV_APP_STATUS_PEER_OTSP_SPLITKEYS      = 23;
     public final static int PRV_APP_STATUS_DELETE_CHAT              = 24;
     public final static int PRV_APP_STATUS_GROUP_ALREADY_EXISTS     = 25;
     public final static int PRV_APP_STATUS_GROUP_ADD_ACCEPTED       = 26;
@@ -61,14 +61,14 @@ public class PrivJNI {
 
 
     /*
-     * NOTE: SSS status types
+     * NOTE: Splitkeys status types
      */
-    public final static int PRV_SSS_STATE_TYPE_NONE                 = 0;
-    public final static int PRV_SSS_STATE_TYPE_SSS_ACTIVE           = 1;
-    public final static int PRV_SSS_STATE_TYPE_SSS_REQUEST          = 2;
-    public final static int PRV_SSS_STATE_TYPE_SSS_REVOKED          = 3;
-    public final static int PRV_SSS_STATE_TYPE_SSS_BLOCKED          = 4;
-    public final static int PRV_SSS_STATE_TYPE_SSS_DELETED          = 5;
+    public final static int PRV_SPLITKEYS_STATE_TYPE_NONE                       = 0;
+    public final static int PRV_SPLITKEYS_STATE_TYPE_SPLITKEYS_ACTIVE           = 1;
+    public final static int PRV_SPLITKEYS_STATE_TYPE_SPLITKEYS_REQUEST          = 2;
+    public final static int PRV_SPLITKEYS_STATE_TYPE_SPLITKEYS_REVOKED          = 3;
+    public final static int PRV_SPLITKEYS_STATE_TYPE_SPLITKEYS_BLOCKED          = 4;
+    public final static int PRV_SPLITKEYS_STATE_TYPE_SPLITKEYS_DELETED          = 5;
 
 
     private Context context = null;
