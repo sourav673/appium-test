@@ -315,6 +315,7 @@ public class ConversationFragment extends MessageSelectorFragment
     @Override
     protected void setCorrectMenuVisibility(Menu menu) {
         Set<DcMsg>         messageRecords = getListAdapter().getSelectedItems();
+        PrivJNI privJni = new PrivJNI(getContext());
 
         if (actionMode != null && messageRecords.size() == 0) {
             actionMode.finish();
@@ -329,6 +330,19 @@ public class ConversationFragment extends MessageSelectorFragment
             menu.findItem(R.id.menu_context_reply_privately).setVisible(false);
             menu.findItem(R.id.menu_add_to_home_screen).setVisible(false);
             menu.findItem(R.id.menu_context_revoke_access).setVisible(false);
+
+            int filesCount = 0;
+            for (DcMsg messageRecord : messageRecords) {
+                if (messageRecord.hasFile()) {
+                    filesCount++;
+                }
+            }
+
+            if (filesCount > 1) {
+                menu.findItem(R.id.menu_context_forward).setVisible(false);
+            } else {
+                menu.findItem(R.id.menu_context_forward).setVisible(true);
+            }
         } else {
             DcMsg messageRecord = messageRecords.iterator().next();
             DcChat chat = getListAdapter().getChat();
@@ -338,6 +352,17 @@ public class ConversationFragment extends MessageSelectorFragment
             } else {
                 menu.findItem(R.id.menu_context_revoke_access).setVisible(false);
             }
+
+            if (messageRecord.hasFile()) {
+              if (privJni.canForwardFile(chat.getId(), messageRecord.getFilename(), !messageRecord.isOutgoing())) {
+                menu.findItem(R.id.menu_context_forward).setVisible(true);
+              } else {
+                menu.findItem(R.id.menu_context_forward).setVisible(false);
+              }
+            } else {
+              menu.findItem(R.id.menu_context_forward).setVisible(true);
+            }
+
             menu.findItem(R.id.menu_context_share).setVisible(messageRecord.hasFile());
             boolean canReply = canReplyToMsg(messageRecord);
             menu.findItem(R.id.menu_context_reply).setVisible(chat.canSend() && canReply);
@@ -346,21 +371,6 @@ public class ConversationFragment extends MessageSelectorFragment
             menu.findItem(R.id.menu_add_to_home_screen).setVisible(messageRecord.getType() == DcMsg.DC_MSG_WEBXDC);
         }
 
-        // if one of the selected items cannot be saved, disable saving.
-        boolean canSave = true;
-        // if one of the selected items is not from self, disable resending.
-        boolean canResend = true;
-        for (DcMsg messageRecord : messageRecords) {
-            if (canSave && !messageRecord.hasFile()) {
-                canSave = false;
-            }
-            if (canResend && !messageRecord.isOutgoing()) {
-                canResend = false;
-            }
-            if (!canSave && !canResend) {
-                break;
-            }
-        }
         //menu.findItem(R.id.menu_context_save_attachment).setVisible(canSave);
         menu.findItem(R.id.menu_context_share).setVisible(false);
         menu.findItem(R.id.menu_resend).setVisible(false);
