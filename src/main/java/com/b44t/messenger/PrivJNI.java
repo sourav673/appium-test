@@ -54,10 +54,13 @@ public class PrivJNI {
     public final static int PRV_APP_STATUS_DELETE_CHAT              = 24;
     public final static int PRV_APP_STATUS_GROUP_ALREADY_EXISTS     = 25;
     public final static int PRV_APP_STATUS_GROUP_ADD_ACCEPTED       = 26;
+    public final static int PRV_APP_STATUS_FILE_FORWARD_REQUEST     = 27;
+    public final static int PRV_APP_STATUS_FILE_FORWARD_RESPONSE    = 28;
+    public final static int PRV_APP_STATUS_FORWARD_PDU              = 29;
     /*
      * NOTE: Add any event above PRV_APP_STATUS_LIB_LAST and update PRV_APP_STATUS_LIB_LAST
      */ 
-    public final static int PRV_APP_STATUS_LIB_LAST                 = 27;
+    public final static int PRV_APP_STATUS_LIB_LAST                 = 30;
 
 
     /*

@@ -316,7 +316,7 @@ public class ApplicationContext extends MultiDexApplication {
   /*
    * C++ --> JAVA callback, to handle various status types.
    */
-  public void onNativeMsgCallback(int chatId, int statusCode, byte[] pdu) {
+  public void onNativeMsgCallback(int chatId, int statusCode, int forwardToChatId, byte[] pdu) {
 
     if (statusCode == PrivJNI.PRV_APP_STATUS_VAULT_IS_READY) {
       Log.d("JAVA-Privitty", "Congratulations! Vault is created\n");
@@ -329,6 +329,16 @@ public class ApplicationContext extends MultiDexApplication {
         String base64Msg = Base64.getEncoder().encodeToString(pdu);
         msg.setText(base64Msg);
         int msgId = dcContext.sendMsg(chatId, msg);
+      });
+
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_FORWARD_PDU) {
+      Log.d("JAVA-Privitty", "Forward pdu to forwardToChatId:" + forwardToChatId);
+      Util.runOnAnyBackgroundThread(() -> {
+        DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
+        msg.setSubject("{'privitty':'true', 'type':'forward_add_request'}");
+        String base64Msg = Base64.getEncoder().encodeToString(pdu);
+        msg.setText(base64Msg);
+        int msgId = dcContext.sendMsg(forwardToChatId, msg);
       });
 
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_ADD_COMPLETE) {
