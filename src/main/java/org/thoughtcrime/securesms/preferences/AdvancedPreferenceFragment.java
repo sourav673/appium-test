@@ -28,6 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.CheckBoxPreference;
+import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 
@@ -95,6 +96,12 @@ public class AdvancedPreferenceFragment extends ListSummaryPreferenceFragment
       dcContext.setConfigInt(CONFIG_SENTBOX_WATCH, enabled? 1 : 0);
       return true;
     });
+
+    EditTextPreference usernamePref = findPreference("pref_allowed_file_access_time");
+    if (usernamePref != null)
+    {
+      usernamePref.setSummaryProvider(EditTextPreference.SimpleSummaryProvider.getInstance());
+    }
 
     bccSelfCheckbox = (CheckBoxPreference) this.findPreference("pref_bcc_self");
     bccSelfCheckbox.setOnPreferenceChangeListener((preference, newValue) -> {
