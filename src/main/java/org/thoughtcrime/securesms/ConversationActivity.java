@@ -75,6 +75,7 @@ import com.b44t.messenger.rpc.RpcException;
 import com.b44t.messenger.util.concurrent.ListenableFuture;
 import com.b44t.messenger.util.concurrent.SettableFuture;
 import com.b44t.messenger.PrivJNI;
+import com.b44t.messenger.PrivEvent;
 
 import org.thoughtcrime.securesms.attachments.Attachment;
 import org.thoughtcrime.securesms.attachments.UriAttachment;
@@ -189,6 +190,7 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
   private ApplicationContext context;
   private Recipient  recipient;
   private DcContext  dcContext;
+  private PrivJNI    privJni;
   private Rpc rpc;
   private DcChat     dcChat                = new DcChat(0, 0);
   private int        chatId;
@@ -202,6 +204,7 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     this.context = ApplicationContext.getInstance(getApplicationContext());
     this.dcContext = DcHelper.getContext(context);
     this.rpc = DcHelper.getRpc(context);
+    this.privJni = new PrivJNI(this.context);
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
     supportRequestWindowFeature(WindowCompat.FEATURE_ACTION_BAR_OVERLAY);
     setContentView(R.layout.conversation_activity);
@@ -630,7 +633,6 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
         .setMessage(getResources().getString(R.string.ask_delete_named_chat, dcChat.getName()))
         .setPositiveButton(R.string.delete, (d, which) -> {
           Log.d("JAVA-Privitty", "Selected chatId: " + (int)chatId);
-          PrivJNI privJni = new PrivJNI(context);
           privJni.cleanChat((int) chatId);
 
           int[] msgs = dcContext.getChatMsgs((int) chatId, 0, 0);
@@ -662,7 +664,6 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
   }
 
   private void handleAddAttachment() {
-    PrivJNI privJni = new PrivJNI(context);
     if(privJni.isChatPrivittyProtected(chatId)) {
       addAttachment(PICK_DOCUMENT);
     } else {
@@ -701,6 +702,18 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
           name = dcContext.getContact(contactIds[0]).getNameNAddr();
         }
       }
+
+      // Privitty handshake should come here.
+      if (dcChat.isProtected()) {
+        if (!privJni.isPeerAdded(chatId)) {
+          //PrivJNI privJni = DcHelper.getPriv(getApplicationContext());
+          PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", "",
+            0, 0, chatId, "", "", "", 0, new byte[0]);
+          privJni.produceEvent(jevent);
+          Log.d("JAVA-Privitty", "Adding a new peer");
+        }
+      }
+
       new AlertDialog.Builder(this)
               .setMessage(getString(R.string.ask_forward, name))
               .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
@@ -1144,7 +1157,6 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
 
             String filename = msg.getFile();
             if (filename.toLowerCase().endsWith(".prv")) {
-              PrivJNI privJni = new PrivJNI(context);
               privJni.freshOtsp(dcChat.getId(), filename);
               Log.d("JAVA-Privitty", "chatId: " + dcChat.getId() + " | Filename: " + filename);
 

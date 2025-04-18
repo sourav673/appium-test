@@ -311,6 +311,10 @@ public class ConversationAdapter <V extends View & BindableConversationItem>
           dcMsg.setText("You are Privitty secure—take control and revoke data anytime.");
           dcMsg.setSubject("");
           return MESSAGE_TYPE_INFO;
+        } else if ("forward_add_request".equalsIgnoreCase(jSubject.getString("type"))) {
+          dcMsg.setText("A file has been forwarded to you.");
+          dcMsg.setSubject("PRIVITTY_TOAST_MSG");
+          return MESSAGE_TYPE_OUTGOING;
         } else if ("OTSP_SENT".equalsIgnoreCase(jSubject.getString("type"))) {
           dcMsg.setText("You granted 15 mins viewing access.");
           dcMsg.setSubject("PRIVITTY_TOAST_MSG");
@@ -318,7 +322,6 @@ public class ConversationAdapter <V extends View & BindableConversationItem>
         } else if ("SPLITKEYS_REQUEST".equalsIgnoreCase(jSubject.getString("type"))) {
           dcMsg.setText("Requesting access from the owner ...");
           dcMsg.setSubject("PRIVITTY_TOAST_MSG");
-          //Toast.makeText(this, "Requesting access from the owner ...", Toast.LENGTH_LONG).show();
           return MESSAGE_TYPE_OUTGOING;
         } else if ("SPLITKEYS_RESPONSE".equalsIgnoreCase(jSubject.getString("type"))) {
           dcMsg.setText("Granted access for next 15 mins.");
