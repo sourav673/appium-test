@@ -667,7 +667,11 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     if(privJni.isChatPrivittyProtected(chatId)) {
       addAttachment(PICK_DOCUMENT);
     } else {
-      Toast.makeText(ConversationActivity.this, "Send a message to enable Privitty security.", Toast.LENGTH_LONG).show();
+      PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", dcChat.getName(), dcChat.getId(), 0, chatId,
+                                       "", "", "", 0, new byte[0]);
+      privJni.produceEvent(jevent);
+      Log.d("JAVA-Privitty", "Adding a new peer");
+      Toast.makeText(ConversationActivity.this, "Enabling Privitty security.", Toast.LENGTH_LONG).show();
     }
 
     // Note: Need to confirm Nilesh.

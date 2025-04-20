@@ -100,6 +100,9 @@ public class PrivJNI {
     public native int getFileAccessState(int chat_id, String file_name, boolean direction);
     public native boolean canDownloadFile(int chat_id, String file_name, boolean direction);
     public native boolean canForwardFile(int chat_id, String file_name, boolean direction);     // Direction: Incoming or Outgoing message
+    public native void setFileAttributes(int chat_id, int recipient_id, String file_name,
+                                         boolean direction, boolean forward_file, boolean download_file,
+                                         int access_time);
     public native byte[] createChatGroup(int chatId, String ChatGroupName);
 }
 

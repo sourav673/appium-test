@@ -176,15 +176,7 @@ public class ApplicationContext extends MultiDexApplication {
                 continue;
               }
             } catch (Exception e) {
-              Log.d("JAVA-Privitty", "This is non-privitty message");
-              if (!privJni.isPeerAdded(chatId)) {
-                PrivJNI privJni = DcHelper.getPriv(getApplicationContext());
-                PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", "",
-                  dcMsg.getId(), dcMsg.getFromId(), chatId,
-                  "", "", "", 0, new byte[0]);
-                privJni.produceEvent(jevent);
-                Log.d("JAVA-Privitty", "Adding a new peer");
-              }
+              Log.e("JAVA-Privitty", "Exception in Privitty message: " + e.getMessage());
             }
           } else {
             if (!privJni.isChatVersion(dcContext.getMimeHeaders(event.getData2Int()))) {
