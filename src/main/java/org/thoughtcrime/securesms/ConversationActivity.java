@@ -25,7 +25,9 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -37,6 +39,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.provider.Browser;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -51,6 +54,8 @@ import android.view.View.OnFocusChangeListener;
 import android.view.View.OnKeyListener;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -64,6 +69,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.WindowCompat;
+import androidx.preference.PreferenceManager;
 
 import com.b44t.messenger.DcChat;
 import com.b44t.messenger.DcContact;
@@ -381,6 +387,10 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
       break;
 
     case PICK_DOCUMENT:
+
+      System.out.println("----------------->>>>");
+
+
       final String docMimeType = MediaUtil.getMimeType(this, data.getData());
       final MediaType docMediaType = MediaUtil.isAudioType(docMimeType) ? MediaType.AUDIO : MediaType.DOCUMENT;
       setMedia(data.getData(), docMediaType);
@@ -663,9 +673,11 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     Util.redPositiveButton(dialog);
   }
 
-  private void handleAddAttachment() {
-    if(privJni.isChatPrivittyProtected(chatId)) {
-      addAttachment(PICK_DOCUMENT);
+  private void handleAddAttachment()
+  {
+    if(privJni.isChatPrivittyProtected(chatId))
+    {
+      openFileAttributeAlert();
     } else {
       PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", dcChat.getName(), dcChat.getId(), 0, chatId,
                                        "", "", "", 0, new byte[0]);
@@ -984,7 +996,8 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     case AttachmentTypeSelector.ADD_GALLERY:
       AttachmentManager.selectGallery(this, PICK_GALLERY); break;
     case AttachmentTypeSelector.ADD_DOCUMENT:
-      AttachmentManager.selectDocument(this, PICK_DOCUMENT); break;
+      AttachmentManager.selectDocument(this, PICK_DOCUMENT);
+      break;
     case AttachmentTypeSelector.INVITE_VIDEO_CHAT:
       new VideochatUtil().invite(this, chatId); break;
     case AttachmentTypeSelector.ADD_CONTACT_INFO:
@@ -999,6 +1012,51 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     case AttachmentTypeSelector.ADD_WEBXDC:
       AttachmentManager.selectWebxdc(this, PICK_WEBXDC); break;
     }
+  }
+
+  private void openFileAttributeAlert()
+  {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setTitle("File Attributes");
+
+    LayoutInflater inflater = LayoutInflater.from(this);
+    View dialogView = inflater.inflate(R.layout.dialog_for_document_permission, null);
+    builder.setView(dialogView);
+
+    CheckBox cbDownload = dialogView.findViewById(R.id.cbDownload);
+    CheckBox cbForward = dialogView.findViewById(R.id.cbForward);
+    EditText etAllowTime = dialogView.findViewById(R.id.etAllowTime);
+
+    etAllowTime.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    String sAllowedFileAccessTime = prefs.getString("pref_allowed_file_access_time", "15");
+    etAllowTime.setText(""+sAllowedFileAccessTime);
+
+    builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+    {
+      @Override
+      public void onClick(DialogInterface dialog, int which)
+      {
+        boolean blDownload = cbDownload.isChecked();
+        boolean blForward = cbForward.isChecked();
+        String sTime = etAllowTime.getText().toString();
+
+        if(sTime.isEmpty() || Integer.parseInt(sTime) == 0)
+        {
+          Toast.makeText(context,"Enter valid allow time in minutes",Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+//      use above values for further usage
+          Toast.makeText(context,"Download: " + blDownload + ", Forward: " + blForward + ", Time: " + sTime,Toast.LENGTH_SHORT).show();
+          addAttachment(PICK_DOCUMENT);
+        }
+      }
+    });
+    builder.setNegativeButton("Cancel", null);
+    builder.create().show();
+
   }
 
   private void startContactChooserActivity() {
