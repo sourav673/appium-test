@@ -319,17 +319,20 @@ public class DcHelper {
     } else if (prvFile.endsWith(".pdf")) {
       // Open pdf
       ActivityPDFViewer.prfFilePath = prvFile;
+//      ActivityPDFViewer.blFlagAllowDownload = true;  // set value for download option visibility
       intent = new Intent((Activity) activity, ActivityPDFViewer.class);
       activity.startActivity(intent);
     } else if (prvFile.endsWith(".png") || prvFile.endsWith(".jpg") || prvFile.endsWith(".jpeg")) {
       // Open Image
       ActivityImageViewer.prfFilePath = prvFile;
+//      ActivityImageViewer.blFlagAllowDownload = true;    // set value for download option visibility
       intent = new Intent((Activity) activity, ActivityImageViewer.class);
       activity.startActivity(intent);
     } else if (prvFile.endsWith(".mp4") || prvFile.endsWith(".mov") || prvFile.endsWith(".mkv") ||
       prvFile.endsWith(".3gp")) {
       // Open Video
       ActivityVideoViewer.prfFilePath = prvFile;
+//      ActivityVideoViewer.blFlagAllowDownload = true;    // set value for download option visibility
       intent = new Intent((Activity) activity, ActivityVideoViewer.class);
       activity.startActivity(intent);
     } else if (prvFile.endsWith(".doc") || prvFile.endsWith(".docx") || prvFile.endsWith(".xlsx") ||
