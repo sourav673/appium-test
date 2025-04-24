@@ -207,7 +207,7 @@
     <string name="pref_read_receipts">Potvrde čitanja</string>
     <string name="pref_read_receipts_explain">Ukoliko ste onemogućili potvrdu čitanja kod sebe, nećete moći vidjeti potvrde čitanja od drugih.</string>
     <string name="pref_use_system_emoji">Koristi emotikone sustava</string>
-    <string name="pref_use_system_emoji_explain">Onemogući ugrađenu Delta Chat podršku za emotikone</string>
+    <string name="pref_use_system_emoji_explain">Onemogući ugrađenu Privitty Chat podršku za emotikone</string>
     <string name="pref_app_access">Pristup aplikaciji</string>
     <string name="pref_chats">Razgovori</string>
     <string name="pref_in_chat_sounds">Zvuk unutar razgovora</string>
@@ -234,7 +234,7 @@
     <!-- permissions -->
     <string name="perm_required_title">Potrebna je dozvola</string>
     <string name="perm_continue">Nastavi</string>
-    <string name="welcome_desktop">Dobro došli u Delta Chat</string>
+    <string name="welcome_desktop">Dobro došli u Privitty Chat</string>
     <string name="global_menu_preferences_language_desktop">Jezik</string>
     <string name="global_menu_file_desktop">Datoteka</string>
     <string name="global_menu_file_quit_desktop">Izlaz</string>
@@ -253,7 +253,8 @@
     <string name="name_desktop">Ime</string>
     <string name="message_detail_sent_desktop">poslano</string>
     <string name="message_detail_received_desktop">primljeno</string>
-    <string name="revoke_access">Revoke Access</string>
-    <string name="previous_page">Previous Page</string>
-    <string name="next_page">Next Page</string>
+    <string name="revoke_access">Opoziv pristupa</string>
+    <string name="previous_page">Prethodna stranica</string>
+    <string name="next_page">Sljedeća stranica</string>
+    <string name="ask_revoke_message">Jeste li sigurni da želite opozvati ovu poruku?</string>
 </resources>
