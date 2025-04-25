@@ -124,6 +124,7 @@
         <item name="privitty_lock">@drawable/privitty_lock_light</item>
         <item name="file_disallowed_icon">@drawable/file_disallowed_light</item>
         <item name="file_allowed_icon">@drawable/file_allowed_light</item>
+        <item name="file_access_request_icon">@drawable/file_access_request_light</item>
         <item name="dialog_background_color">@color/background_material_light</item>
 
         <item name="menu_new_conversation_icon">@drawable/ic_add_white_24dp</item>
@@ -215,6 +216,7 @@
         <item name="privitty_lock">@drawable/privitty_lock_dark</item>
         <item name="file_disallowed_icon">@drawable/file_disallowed_dark</item>
         <item name="file_allowed_icon">@drawable/file_allowed_dark</item>
+        <item name="file_access_request_icon">@drawable/file_access_request_dark</item>
         <item name="dialog_background_color">@color/background_material_dark</item>
 
         <item name="fab_color">@color/gray78</item>

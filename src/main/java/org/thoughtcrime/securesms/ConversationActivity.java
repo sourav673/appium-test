@@ -387,10 +387,6 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
       break;
 
     case PICK_DOCUMENT:
-
-      System.out.println("----------------->>>>");
-
-
       final String docMimeType = MediaUtil.getMimeType(this, data.getData());
       final MediaType docMediaType = MediaUtil.isAudioType(docMimeType) ? MediaType.AUDIO : MediaType.DOCUMENT;
       setMedia(data.getData(), docMediaType);
@@ -722,7 +718,6 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
       // Privitty handshake should come here.
       if (dcChat.isProtected()) {
         if (!privJni.isPeerAdded(chatId)) {
-          //PrivJNI privJni = DcHelper.getPriv(getApplicationContext());
           PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", "",
             0, 0, chatId, "", "", "", 0, new byte[0]);
           privJni.produceEvent(jevent);
@@ -734,6 +729,9 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
               .setMessage(getString(R.string.ask_forward, name))
               .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
                 SendRelayedMessageUtil.immediatelyRelay(this, chatId);
+
+                // Privitty: Forward file to user will come here.
+
                 successfulForwardingAttempt = true;
               })
               .setNegativeButton(R.string.cancel, (dialogInterface, i) -> finish())
@@ -1016,6 +1014,10 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
 
   private void openFileAttributeAlert()
   {
+    AttachmentManager.blAccessDownload = false;
+    AttachmentManager.blAccessForward = false;
+    AttachmentManager.iAccessTime = 0;
+
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle("File Attributes");
 
@@ -1030,26 +1032,23 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     etAllowTime.setInputType(InputType.TYPE_CLASS_NUMBER);
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-    String sAllowedFileAccessTime = prefs.getString("pref_allowed_file_access_time", "15");
-    etAllowTime.setText(""+sAllowedFileAccessTime);
+    String sAllowedFileAccessTime = prefs.getString("pref_allowed_file_access_time", "25");
+    etAllowTime.setText("" + sAllowedFileAccessTime);
 
     builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
     {
       @Override
       public void onClick(DialogInterface dialog, int which)
       {
-        boolean blDownload = cbDownload.isChecked();
-        boolean blForward = cbForward.isChecked();
-        String sTime = etAllowTime.getText().toString();
+        AttachmentManager.blAccessDownload = cbDownload.isChecked();
+        AttachmentManager.blAccessForward = cbForward.isChecked();
+        String sTime = etAllowTime.getText().toString().trim();
+        AttachmentManager.iAccessTime = Integer.parseInt(sTime);
 
-        if(sTime.isEmpty() || Integer.parseInt(sTime) == 0)
-        {
+        if(sTime.isEmpty() || AttachmentManager.iAccessTime == 0) {
           Toast.makeText(context,"Enter valid allow time in minutes",Toast.LENGTH_LONG).show();
-        }
-        else
-        {
-//      use above values for further usage
-          Toast.makeText(context,"Download: " + blDownload + ", Forward: " + blForward + ", Time: " + sTime,Toast.LENGTH_SHORT).show();
+        } else {
+          Toast.makeText(context,"Download: " + AttachmentManager.blAccessDownload + ", Forward: " + AttachmentManager.blAccessForward + ", Time: " + sTime,Toast.LENGTH_SHORT).show();
           addAttachment(PICK_DOCUMENT);
         }
       }

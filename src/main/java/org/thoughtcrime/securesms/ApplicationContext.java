@@ -176,13 +176,13 @@ public class ApplicationContext extends MultiDexApplication {
                 continue;
               }
             } catch (Exception e) {
-              Log.e("JAVA-Privitty", "Exception in Privitty message: " + e.getMessage());
+              Log.w("JAVA-Privitty", "Exception in Privitty message: " + e.getMessage());
             }
           } else {
             if (!privJni.isChatVersion(dcContext.getMimeHeaders(event.getData2Int()))) {
               Log.d("JAVA-Privitty", "This message is from E-MAIL client");
               DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
-              String user_msg = "Please install privitty chat APP to secure your data";
+              String user_msg = "Please install Privitty Chat App to secure your data";
               msg.setText(user_msg);
               int msgId = dcContext.sendMsg(chatId, msg);
             }
@@ -425,10 +425,6 @@ public class ApplicationContext extends MultiDexApplication {
         msg.setText(base64Msg);
         int msgId = dcContext.sendMsg(chatId, msg);
       });
-    } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_ENCRYPTED) {
-      Log.d("JAVA-Privitty", "Event PRV_APP_STATUS_FILE_ENCRYPTED is not implemented via event queue");
-    } else if (statusCode == PrivJNI.PRV_APP_STATUS_FILE_INACCESSIBLE) {
-      Log.d("JAVA-Privitty", "Failed to open file for reading");
     } else {
       Log.e("JAVA-Privitty", "StatusCode: " + statusCode);
     }

@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.thoughtcrime.securesms.R;
 import me.relex.photodraweeview.PhotoDraweeView;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -36,41 +35,33 @@ public class ActivityImageViewer extends AppCompatActivity
     public static boolean blFlagAllowDownload = true;
     private File file = null;
 
-
-
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState)
-    {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_image_viewer);
       getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
       file = new File(prfFilePath);
-      if (!file.exists())
-      {
+      if (!file.exists()) {
           Toast.makeText(this, "Image file not found!", Toast.LENGTH_SHORT).show();
-      }
-      else {
+      } else {
         PhotoDraweeView mPhotoDraweeView = findViewById(R.id.photo_drawee_view);
         mPhotoDraweeView.setPhotoUri(Uri.fromFile(file));
       }
     }
 
   @Override
-  public boolean onCreateOptionsMenu(Menu menu)
-  {
-    if(blFlagAllowDownload)
-    {
+  public boolean onCreateOptionsMenu(Menu menu) {
+    if (blFlagAllowDownload) {
       getMenuInflater().inflate(R.menu.file_download_menu, menu);
     }
     return true;
   }
+
   @Override
-  public boolean onOptionsItemSelected(@NonNull MenuItem item)
-  {
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
       int id = item.getItemId();
-      if (id == R.id.menu_download)
-      {
+      if (id == R.id.menu_download) {
         fileDownload(file);
         return true;
       }
@@ -79,7 +70,7 @@ public class ActivityImageViewer extends AppCompatActivity
 
   @Override
     public void finish() {
-      if(file != null) {
+      if (file != null) {
         file.delete();
         Log.d(TAG, "File destroyed after viewing");
       }
@@ -104,8 +95,7 @@ public class ActivityImageViewer extends AppCompatActivity
     try
     {
       InputStream in = new FileInputStream(sourceFile);
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-      {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         // Android 10 and above
         ContentValues values = new ContentValues();
         values.put(MediaStore.Downloads.DISPLAY_NAME, outputFileName);
@@ -116,8 +106,7 @@ public class ActivityImageViewer extends AppCompatActivity
         Uri collection = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
         Uri fileUri = resolver.insert(collection, values);
 
-        try (OutputStream out = resolver.openOutputStream(fileUri))
-        {
+        try (OutputStream out = resolver.openOutputStream(fileUri)) {
           copyStream(in, out);
         }
 
@@ -125,9 +114,7 @@ public class ActivityImageViewer extends AppCompatActivity
         values.put(MediaStore.Downloads.IS_PENDING, 0);
         resolver.update(fileUri, values, null, null);
 
-      }
-      else
-      {
+      } else {
         // Android 9 and below
         File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         File outFile = new File(downloadDir, outputFileName);

@@ -106,6 +106,8 @@ public class AttachmentManager {
   private @Nullable Uri             videoCaptureUri;
   private boolean                   attachmentPresent;
   private boolean                   hidden;
+  public static boolean blAccessDownload, blAccessForward;
+  public static Integer iAccessTime;
 
   public AttachmentManager(@NonNull Activity activity, @NonNull AttachmentListener listener) {
     this.context            = activity;
@@ -668,10 +670,10 @@ public class AttachmentManager {
                                       @NonNull  Uri     uri,
                                       @Nullable String fileName,
                                       @Nullable String mimeType,
-                                                long    dataSize,
-                                                int     width,
-                                                int     height,
-                                                int     chatId)
+                                      long    dataSize,
+                                      int     width,
+                                      int     height,
+                                      int     chatId)
     {
       if (mimeType == null) {
         mimeType = "application/octet-stream";
@@ -709,7 +711,6 @@ public class AttachmentManager {
         }
 
         // Protect files with Privitty
-        //if (fileName != null && fileName.endsWith(".pdf")) {
         if (fileName != null) {
           DcContext dcContext = DcHelper.getContext(context);
           DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_FILE);
@@ -722,6 +723,8 @@ public class AttachmentManager {
           msg.setFile(prvFile, MediaUtil.OCTET);
           msg.setSubject("{'privitty':'true', 'type':'privfile'}");
           dcContext.setDraft(chatId, msg);
+
+          privJni.setFileAttributes(chatId, fileName + ".prv", true, blAccessDownload, blAccessForward, iAccessTime);
 
           /* Adding message detail to the DB
           int fromId = msg.getFromId();

@@ -87,12 +87,11 @@ public class PrivJNI {
     public native String freshOtsp(int chatId, String path);
     public native String decryptFile(int chatId, String path, String filename, boolean direction);
     public native boolean isPeerAdded(int chatId);
-    public native boolean isChatPrivittyProtected(int chatId);
     public native void addMessage(int msg_id, int chat_id, int p_id, String msg_text, String msg_type,
                                   String media_path, String file_name, int file_session_timeout,
                                   int can_download, int can_forward, int num_peer_sss_request,
                                   String forwarded_to, int sent_privitty_protected);
-
+    public native boolean isChatPrivittyProtected(int chatId);
     public native boolean cleanChat(int chatId);
     public native boolean cleanMsgs(int chatId, String[] filenames);
     public native boolean revokeMsgs(int chatId, String filenames);
@@ -100,9 +99,23 @@ public class PrivJNI {
     public native int getFileAccessState(int chat_id, String file_name, boolean direction);
     public native boolean canDownloadFile(int chat_id, String file_name, boolean direction);
     public native boolean canForwardFile(int chat_id, String file_name, boolean direction);     // Direction: Incoming or Outgoing message
-    public native void setFileAttributes(int chat_id, int recipient_id, String file_name,
-                                         boolean direction, boolean forward_file, boolean download_file,
-                                         int access_time);
+    /*
+     * Set the file attributes for a file that owner is sharing in the UI.
+     */
+    public native void setFileAttributes(int chat_id, String file_name, boolean direction,
+                                         boolean download_file, boolean forward_file, int access_time);
+    /*
+     * Add peer request to whom this file is being forwarded.
+     */
+    public native boolean forwardPeerAdd(int source_chat_id, String file_path, String file_name, boolean dir,
+                                       int fwd_to_chat_id, String fwd_to_name);
+
+    /*
+     * Set the file attributes for a `forwarded` file by the file owner in the UI
+     */
+    public native void setFileForwardAttributes(int chat_id, int recipient_id, String file_name,
+                                                boolean direction, boolean download_file, boolean forward_file,
+                                                int access_time);
     public native byte[] createChatGroup(int chatId, String ChatGroupName);
 }
 

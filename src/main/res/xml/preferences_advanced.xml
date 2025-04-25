@@ -28,8 +28,8 @@
         <EditTextPreference
             android:key="pref_allowed_file_access_time"
             android:title="Allowed file access time in minutes"
-            android:summary="15"
-            android:defaultValue="15"
+            android:summary="25"
+            android:defaultValue="25"
             android:dialogTitle="Enter minutes"
             android:inputType="number"/>
 

@@ -290,6 +290,21 @@ public class DcHelper {
       return;
     }
 
+    if (false) {
+      // Add check for permissions here
+      new AlertDialog.Builder(activity)
+        .setTitle("Confirmation")
+        .setMessage("Are you sure?")
+        .setPositiveButton("Yes", (dialog, which) -> {
+          // Handle Yes action
+        })
+        .setNegativeButton("No", (dialog, which) -> {
+          // Handle No action
+        })
+        .show();
+      return;
+    }
+
     DcMsg msg = dcContext.getMsg(msg_id);
     String path = msg.getFile();
 
@@ -319,20 +334,32 @@ public class DcHelper {
     } else if (prvFile.endsWith(".pdf")) {
       // Open pdf
       ActivityPDFViewer.prfFilePath = prvFile;
-//      ActivityPDFViewer.blFlagAllowDownload = true;  // set value for download option visibility
+      if (msg.getFromId() != DcContact.DC_CONTACT_ID_SELF) {
+        ActivityPDFViewer.blFlagAllowDownload = privJni.canDownloadFile(msg.getChatId(), srcP.getName(), false);
+      } else {
+        ActivityPDFViewer.blFlagAllowDownload = false;
+      }
       intent = new Intent((Activity) activity, ActivityPDFViewer.class);
       activity.startActivity(intent);
     } else if (prvFile.endsWith(".png") || prvFile.endsWith(".jpg") || prvFile.endsWith(".jpeg")) {
       // Open Image
       ActivityImageViewer.prfFilePath = prvFile;
-//      ActivityImageViewer.blFlagAllowDownload = true;    // set value for download option visibility
+      if (msg.getFromId() != DcContact.DC_CONTACT_ID_SELF) {
+        ActivityImageViewer.blFlagAllowDownload = privJni.canDownloadFile(msg.getChatId(), srcP.getName(), false);
+      } else {
+        ActivityImageViewer.blFlagAllowDownload = false;
+      }
       intent = new Intent((Activity) activity, ActivityImageViewer.class);
       activity.startActivity(intent);
     } else if (prvFile.endsWith(".mp4") || prvFile.endsWith(".mov") || prvFile.endsWith(".mkv") ||
       prvFile.endsWith(".3gp")) {
       // Open Video
       ActivityVideoViewer.prfFilePath = prvFile;
-//      ActivityVideoViewer.blFlagAllowDownload = true;    // set value for download option visibility
+      if (msg.getFromId() != DcContact.DC_CONTACT_ID_SELF) {
+        ActivityVideoViewer.blFlagAllowDownload = privJni.canDownloadFile(msg.getChatId(), srcP.getName(), false);
+      } else {
+        ActivityVideoViewer.blFlagAllowDownload = false;
+      }
       intent = new Intent((Activity) activity, ActivityVideoViewer.class);
       activity.startActivity(intent);
     } else if (prvFile.endsWith(".doc") || prvFile.endsWith(".docx") || prvFile.endsWith(".xlsx") ||
