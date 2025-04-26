@@ -4,8 +4,6 @@
     <string name="app_name">Privitty Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-   <!-- deprecated, the word "or" to separate blocks in the user interface that are mutually exclusive -->
-    <string name="or_separator">or</string>
     <string name="clear_search">Clear Search</string>
     <!-- a noun, used on a button, short for "show link" -->
     <string name="link">Link</string>
@@ -539,10 +537,6 @@
     <string name="multidevice_transfer_done_devicemsg">ℹ️ Profile transferred to your second device.</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="preparing_account">Preparing profile…</string>
-    <!-- deprecated, shown beside progress bar, stay short -->
-    <string name="waiting_for_receiver">Waiting for receiver…</string>
-    <!-- deprecated, shown beside progress bar, stay short -->
-    <string name="receiver_connected">Receiver connected…</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="transferring">Transferring…</string>
     <string name="troubleshooting">Troubleshooting</string>
@@ -742,8 +736,6 @@
     <string name="pref_app_access">App Access</string>
     <string name="pref_chats">Chats</string>
     <string name="pref_in_chat_sounds">In-Chat Sounds</string>
-    <!-- deprecated -->
-    <string name="pref_message_text_size">Message Font Size</string>
     <string name="pref_view_log">View Log</string>
     <string name="pref_saved_log">Saved the log to \"Downloads\" folder</string>
     <string name="pref_save_log_failed">Failed to save the log</string>
@@ -1029,8 +1021,6 @@
     <string name="mailto_link_could_not_be_decoded">mailto link could not be decoded: %1$s</string>
 
     <!-- notifications  -->
-    <!-- deprecated, use mark_as_read or mark_as_read_short -->
-    <string name="notify_dismiss">Dismiss</string>
     <string name="notify_reply_button">Reply</string>
     <string name="notify_new_message">New message</string>
     <string name="notify_background_connection_enabled">Background connection enabled</string>
@@ -1159,6 +1149,9 @@
     <string name="notifications_avg_minutes">On average every %1$d minutes</string>
     <string name="notifications_avg_hours">On average every %1$d hours</string>
     <string name="last_check_at">Checked at %1$s</string>
+    <string name="system_settings">System Settings</string>
+    <!-- shown below the button "System Settings" on the notification screen. this is a hint about what can be edited on System Settings' Notification page - eg. the notification type (banner, lock screen, notification centre), sound, badges and so on. no need to be exhaustive here, it is only to give the user an idea. -->
+    <string name="system_settings_notify_explain_ios">Edit type, badges, preview and more</string>
     <!-- iOS webxdc selector -->
     <string name="webxdc_selector_empty_hint">Apps received or sent in any chat will appear here. \"Files\" shows apps just downloaded.</string>
     <!-- iOS webxdc shortcut page -->

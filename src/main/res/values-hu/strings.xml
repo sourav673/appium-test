@@ -4,8 +4,6 @@
     <string name="app_name">Privitty Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Mégse</string>
-   <!-- deprecated, the word "or" to separate blocks in the user interface that are mutually exclusive -->
-    <string name="or_separator">vagy</string>
     <string name="clear_search">Keresés kiürítése</string>
     <!-- a noun, used on a button, short for "show link" -->
     <string name="link">Hivatkozás</string>
@@ -18,7 +16,7 @@
     <string name="off">Kikapcsolva</string>
     <string name="def">Alapértelmezett</string>
     <string name="default_value">Alapértelmezett (%1$s)</string>
-    <string name="default_value_as_above">Alapértelmezett (ugyanaz, mint fent)</string>
+    <string name="default_value_as_above">Alapértelmezett (ugyanaz, mint fentebb)</string>
     <string name="custom">Egyéni</string>
     <string name="none">Egyik sem</string>
     <string name="automatic">Automatikus</string>
@@ -184,6 +182,8 @@
     <string name="webxdc_app">Alkalmazás</string>
     <!-- plural of "App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_apps">Alkalmazások</string>
+    <string name="webxdc_store_url">Alkalmazás-választó-webcím</string>
+    <string name="webxdc_store_url_explain">Ha be van állítva, akkor a webcím lesz használva mint alkalmazás-választó az alapértelmezett helyett</string>
     <string name="unknown">Ismeretlen</string>
 
     <string name="green">Zöld</string>
@@ -535,10 +535,6 @@
     <string name="multidevice_transfer_done_devicemsg">ℹ️ A profil átkerül az Ön második eszközére.</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="preparing_account">Profil készítése…</string>
-    <!-- deprecated, shown beside progress bar, stay short -->
-    <string name="waiting_for_receiver">Várakozás a vevőeszközre…</string>
-    <!-- deprecated, shown beside progress bar, stay short -->
-    <string name="receiver_connected">Vevőeszköz kapcsolódott…</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="transferring">Átvitel…</string>
     <string name="troubleshooting">Hibaelhárítás</string>
@@ -738,8 +734,6 @@
     <string name="pref_app_access">Alkalmazás-hozzáférés</string>
     <string name="pref_chats">Csevegések</string>
     <string name="pref_in_chat_sounds">Csevegésen belüli hangok</string>
-    <!-- deprecated -->
-    <string name="pref_message_text_size">Üzenetek betűmérete</string>
     <string name="pref_view_log">Naplófájl megtekintése</string>
     <string name="pref_saved_log">A naplófájl elmentve a „Letöltések” mappába</string>
     <string name="pref_save_log_failed">Nem sikerült elmenteni a naplófájlt</string>
@@ -1025,8 +1019,6 @@
     <string name="mailto_link_could_not_be_decoded">Nem sikerült dekódolni a mailto-hivatkozást: %1$s</string>
 
     <!-- notifications  -->
-    <!-- deprecated, use mark_as_read or mark_as_read_short -->
-    <string name="notify_dismiss">Elvetés</string>
     <string name="notify_reply_button">Válasz</string>
     <string name="notify_new_message">Új üzenet</string>
     <string name="notify_background_connection_enabled">Háttérkapcsolat engedélyezve</string>
@@ -1157,9 +1149,6 @@
     <string name="last_check_at">Ellenőrizve ekkor: %1$s</string>
     <!-- iOS webxdc selector -->
     <string name="webxdc_selector_empty_hint">A bármelyik csevegésben kapott vagy küldött alkalmazások itt fognak megjelenni. A „Fájlok” az éppen letöltött alkalmazásokat jeleníti meg.</string>
-    <!-- iOS webxdc shortcut page -->
-    <string name="shortcut_step1_tap_share_btn">Kattintson a megosztás gombra</string>
-    <string name="shortcut_step2_tap_add_to_home_screen">Válassza a „Hozzáadás a kezdőképernyőhöz” lehetőséget, hogy az alkalmazást hozzáadja a kezdőképernyőhöz.</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">A Privitty Chat az eszköze kameráját használja fényképek és videók készítésére és küldésére, valamint QR-kódok beolvasására.</string>
     <string name="InfoPlist_NSContactsUsageDescription">A Privitty Chat a névjegyek segítségével megjeleníti azon e-mail-címek listáját, amelyekkel cseveghet. A Privitty Chatnek nincs központi kiszolgálója, a névjegyeit nem küldjük el sehova.</string>
@@ -1168,6 +1157,7 @@
     <string name="InfoPlist_NSMicrophoneUsageDescription">A Privitty Chat az eszköze mikrofonját használja a hangüzenetek és a hangos videók rögzítésére, valamint küldésére.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">A Privitty Chat segítségével kiválaszthatja, hogy mely fényképeket szeretné elküldeni a könyvtárából.</string>
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">A Privitty Chat el akarja menteni a képeket az eszköze fotótárába.</string>
+
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
     <string name="pref_instant_delivery">Azonnali kézbesítés</string>
     <string name="pref_background_notifications">Háttérkapcsolat használata</string>

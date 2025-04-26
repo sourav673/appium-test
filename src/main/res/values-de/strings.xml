@@ -4,8 +4,6 @@
     <string name="app_name">Privitty Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Abbruch</string>
-   <!-- deprecated, the word "or" to separate blocks in the user interface that are mutually exclusive -->
-    <string name="or_separator">oder</string>
     <string name="clear_search">Suche löschen</string>
     <!-- a noun, used on a button, short for "show link" -->
     <string name="link">Link</string>
@@ -537,10 +535,6 @@
     <string name="multidevice_transfer_done_devicemsg">ℹ️ Profil wurde auf Ihr Zweitgerät übertragen.</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="preparing_account">Profil vorbereiten…</string>
-    <!-- deprecated, shown beside progress bar, stay short -->
-    <string name="waiting_for_receiver">Warte auf Empfänger…</string>
-    <!-- deprecated, shown beside progress bar, stay short -->
-    <string name="receiver_connected">Empfänger verbunden…</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="transferring">Transfer…</string>
     <string name="troubleshooting">Fehlersuche</string>
@@ -740,8 +734,6 @@
     <string name="pref_app_access">App-Zugriff</string>
     <string name="pref_chats">Chats</string>
     <string name="pref_in_chat_sounds">In-Chat-Klänge</string>
-    <!-- deprecated -->
-    <string name="pref_message_text_size">Schriftgröße</string>
     <string name="pref_view_log">Protokoll anzeigen</string>
     <string name="pref_saved_log">Die Logdatei wurde im Downloads Ordner gespeichert.</string>
     <string name="pref_save_log_failed">Logdatei konnte nicht gespeichert werden.</string>
@@ -1027,8 +1019,6 @@
     <string name="mailto_link_could_not_be_decoded">Mailto-Link konnte nicht dekodiert werden: %1$s</string>
 
     <!-- notifications  -->
-    <!-- deprecated, use mark_as_read or mark_as_read_short -->
-    <string name="notify_dismiss">Verwerfen</string>
     <string name="notify_reply_button">Antworten</string>
     <string name="notify_new_message">Neue Nachricht</string>
     <string name="notify_background_connection_enabled">Hintergrundverbindung aktiviert</string>
@@ -1157,11 +1147,20 @@
     <string name="notifications_avg_minutes">Im Mittel alle %1$d Minuten</string>
     <string name="notifications_avg_hours">Im Mittel alle %1$d Stunden</string>
     <string name="last_check_at">Überprüft um %1$s</string>
+    <string name="system_settings">Systemeinstellungen</string>
+    <!-- shown below the button "System Settings" on the notification screen. this is a hint about what can be edited on System Settings' Notification page - eg. the notification type (banner, lock screen, notification centre), sound, badges and so on. no need to be exhaustive here, it is only to give the user an idea. -->
+    <string name="system_settings_notify_explain_ios">Töne, Vorschau, Stil und mehr bearbeiten</string>
     <!-- iOS webxdc selector -->
     <string name="webxdc_selector_empty_hint">Empfangene oder gesendete Apps werden hier angezeigt. Unter \"Dateien\" können Sie auf heruntergeladene Apps zugreifen.</string>
-    <!-- iOS webxdc shortcut page -->
-    <string name="shortcut_step1_tap_share_btn">\"Teilen\" anklicken</string>
-    <string name="shortcut_step2_tap_add_to_home_screen">\"Zum Home-Bildschirm\" auswählen, um die App zum Startbildschirm hinzuzufügen</string>
+    <!-- iOS shortcut widget -->
+    <!-- use the same translation for "Shortcuts" as the system is using, often the term "Shortcut" stays untranslated; check eg. how the "Shortcuts" system app is called in your locale -->
+    <string name="shortcuts_widget_title">Shortcuts</string>
+    <!-- use the same translation for "Widget" as the system is using; often the term "Widget" stays untranslated -->
+    <string name="shortcuts_widget_description">Delta Chat\'s \"Zum Widget hinzufügen\" fügt Chats hinzu</string>
+    <!-- use the same translation for "Widget" as the system is using; often the term "Widget" stays untranslated -->
+    <string name="remove_from_widget">Aus Widget entfernen</string>
+    <!-- use the same translation for "Widget" as the system is using; often the term "Widget" stays untranslated -->
+    <string name="add_to_widget">Zum Widget hinzufügen</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Privitty Chat verwendet die Kamera, um Fotos aufzunehmen und zu versenden und um QR-Codes zu scannen.</string>
     <string name="InfoPlist_NSContactsUsageDescription">Privitty Chat verwendet die Kontakte, um eine Liste von E-Mail-Adressen anzuzeigen, an die Sie schreiben können. Privitty Chat hat keine Server; das Adressbuch wird nicht versandt.</string>
