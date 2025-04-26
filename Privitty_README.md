@@ -55,7 +55,7 @@ NOTE: Merging with latest delta-chat code would mean, you might delete `libs` fo
 
 *Step 1: Clone the Private Repository Locally*
 ```
-git clone https://github.com/Privitty/priv-deltachat-android.git
+git clone https://github.com/Privitty/privitty-deltchat-android.git
 cd priv-deltachat-android
 git submodule update --init --recursive
 ```
