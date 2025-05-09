@@ -724,7 +724,7 @@ public class AttachmentManager {
           msg.setSubject("{'privitty':'true', 'type':'privfile'}");
           dcContext.setDraft(chatId, msg);
 
-          privJni.setFileAttributes(chatId, fileName + ".prv", true, blAccessDownload, blAccessForward, iAccessTime);
+          privJni.setFileAttributes(chatId, prvFile, true, blAccessDownload, blAccessForward, iAccessTime);
 
           /* Adding message detail to the DB
           int fromId = msg.getFromId();

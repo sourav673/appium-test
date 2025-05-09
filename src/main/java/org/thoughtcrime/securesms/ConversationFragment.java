@@ -17,6 +17,7 @@
 package org.thoughtcrime.securesms;
 
 import static com.b44t.messenger.DcContact.DC_CONTACT_ID_SELF;
+import static org.thoughtcrime.securesms.ConversationActivity.forwardMessages;
 import static org.thoughtcrime.securesms.util.RelayUtil.setForwardingMessageIds;
 
 import android.annotation.SuppressLint;
@@ -354,7 +355,7 @@ public class ConversationFragment extends MessageSelectorFragment
             }
 
             if (messageRecord.hasFile()) {
-              if (privJni.canForwardFile(chat.getId(), messageRecord.getFilename(), !messageRecord.isOutgoing())) {
+              if (privJni.canForwardFile(chat.getId(), messageRecord.getFilename(), messageRecord.isOutgoing())) {
                 menu.findItem(R.id.menu_context_forward).setVisible(true);
               } else {
                 menu.findItem(R.id.menu_context_forward).setVisible(false);
@@ -466,6 +467,7 @@ public class ConversationFragment extends MessageSelectorFragment
         Intent composeIntent = new Intent();
         int[] msgIds = DcMsg.msgSetToIds(messageRecords);
         setForwardingMessageIds(composeIntent, msgIds);
+        forwardMessages = messageRecords;
         ConversationListRelayingActivity.start(this, composeIntent);
         getActivity().overridePendingTransition(R.anim.slide_from_right, R.anim.fade_scale_out);
     }
@@ -973,6 +975,7 @@ public class ConversationFragment extends MessageSelectorFragment
                     actionMode.finish();
                     return true;
                 case R.id.menu_context_forward:
+                    ConversationActivity.srcChatId = chatId;
                     handleForwardMessage(getListAdapter().getSelectedItems());
                     actionMode.finish();
                     return true;

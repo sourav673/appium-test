@@ -54,7 +54,7 @@ public class RelayUtil {
         }
     }
 
-    static int[] getForwardedMessageIDs(Activity activity) {
+    public static int[] getForwardedMessageIDs(Activity activity) {
         try {
             return activity.getIntent().getIntArrayExtra(FORWARDED_MESSAGE_IDS);
         } catch (NullPointerException npe) {

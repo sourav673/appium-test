@@ -131,10 +131,12 @@ import org.thoughtcrime.securesms.util.views.ProgressDialog;
 import org.thoughtcrime.securesms.util.views.Stub;
 import org.thoughtcrime.securesms.video.recode.VideoRecoder;
 import org.thoughtcrime.securesms.videochat.VideochatUtil;
+import org.thoughtcrime.securesms.ConversationAdapter.ItemClickListener;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -204,6 +206,8 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
   private boolean    isDefaultSms             = true;
   private boolean    isSecurityInitialized    = false;
   private boolean successfulForwardingAttempt = false;
+  public static long srcChatId = 0, destChatId = 0;
+  public static Set<DcMsg> forwardMessages = null;
 
   @Override
   protected void onCreate(Bundle state, boolean ready) {
@@ -638,7 +642,6 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     AlertDialog dialog = new AlertDialog.Builder(this)
         .setMessage(getResources().getString(R.string.ask_delete_named_chat, dcChat.getName()))
         .setPositiveButton(R.string.delete, (d, which) -> {
-          Log.d("JAVA-Privitty", "Selected chatId: " + (int)chatId);
           privJni.cleanChat((int) chatId);
 
           int[] msgs = dcContext.getChatMsgs((int) chatId, 0, 0);
@@ -675,6 +678,7 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
     {
       openFileAttributeAlert();
     } else {
+      Log.d("JAVA-Privitty", "isContactRequest: " + dcContext.getChat(chatId).isContactRequest());
       PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", dcChat.getName(), dcChat.getId(), 0, chatId,
                                        "", "", "", 0, new byte[0]);
       privJni.produceEvent(jevent);
@@ -715,7 +719,7 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
         }
       }
 
-      // Privitty handshake should come here.
+      // Privitty handshake
       if (dcChat.isProtected()) {
         if (!privJni.isPeerAdded(chatId)) {
           PrivEvent jevent = new PrivEvent(PrivJNI.PRV_EVENT_ADD_NEW_PEER, "", "",
@@ -730,7 +734,15 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
               .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
                 SendRelayedMessageUtil.immediatelyRelay(this, chatId);
 
-                // Privitty: Forward file to user will come here.
+                for (DcMsg messageRecord : forwardMessages) {
+                  if (messageRecord.hasFile()) {
+                    // Privitty forward file
+                    destChatId = chatId;
+                    String path = messageRecord.getFile();
+                    File srcPath = new File(path);
+                    privJni.forwardPeerAdd((int)srcChatId, (int)destChatId, dcChat.getName(), srcPath.getParent(), srcPath.getName(), true);
+                  }
+                }
 
                 successfulForwardingAttempt = true;
               })
@@ -1219,7 +1231,6 @@ public class ConversationActivity extends PassphraseRequiredActionBarActivity
             String filename = msg.getFile();
             if (filename.toLowerCase().endsWith(".prv")) {
               privJni.freshOtsp(dcChat.getId(), filename);
-              Log.d("JAVA-Privitty", "chatId: " + dcChat.getId() + " | Filename: " + filename);
 
               int fromId = msg.getFromId();
               String msgText = "PRV_FILE_SENT";

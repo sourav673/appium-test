@@ -149,6 +149,7 @@ public class ApplicationContext extends MultiDexApplication {
           DcMsg dcMsg = dcContext.getMsg(event.getData2Int());
           int chatId = event.getData1Int();
 
+          Log.d("JAVA-Privitty", "isContactRequest: " + dcContext.getChat(chatId).isContactRequest());
           if ( ((dcMsg.showPadlock() == 1) && !dcContext.getChat(chatId).isContactRequest()) ) {
             try {
               // Encrypted or guaranteed E2E (using QR)
@@ -377,9 +378,6 @@ public class ApplicationContext extends MultiDexApplication {
           fileSessionTimeout, canDownload, canForward,
           numPeerSssRequest, forwardedTo, sentPrivittyProtected);
       });
-      new Handler(Looper.getMainLooper()).post(() -> {
-        Toast.makeText(getApplicationContext(), "You granted 15 mins viewing access.", Toast.LENGTH_SHORT).show();
-      });
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_SPLITKEYS_REQUEST) {
       Log.d("JAVA-Privitty", "Peer SPLITKEYS request");
       Util.runOnAnyBackgroundThread(() -> {
@@ -389,9 +387,6 @@ public class ApplicationContext extends MultiDexApplication {
         msg.setText(base64Msg);
         int msgId = dcContext.sendMsg(chatId, msg);
       });
-      new Handler(Looper.getMainLooper()).post(() -> {
-        Toast.makeText(getApplicationContext(), "Requesting access from the owner ...", Toast.LENGTH_SHORT).       show();
-      });
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_SPLITKEYS_RESPONSE) {
       Log.d("JAVA-Privitty", "Peer SPLITKEYS response");
       Util.runOnAnyBackgroundThread(() -> {
@@ -400,9 +395,6 @@ public class ApplicationContext extends MultiDexApplication {
         String base64Msg = Base64.getEncoder().encodeToString(pdu);
         msg.setText(base64Msg);
         int msgId = dcContext.sendMsg(chatId, msg);
-      });
-      new Handler(Looper.getMainLooper()).post(() -> {
-        Toast.makeText(getApplicationContext(), "Granted access for next 15 mins.", Toast.LENGTH_SHORT).show();
       });
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_SPLITKEYS_REVOKED) {
       Log.d("JAVA-Privitty", "Peer SPLITKEYS revoked");
@@ -416,6 +408,15 @@ public class ApplicationContext extends MultiDexApplication {
       new Handler(Looper.getMainLooper()).post(() -> {
         Toast.makeText(getApplicationContext(), "You revoked access", Toast.LENGTH_SHORT).show();
       });
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_PEER_SPLITKEYS_DELETED) {
+      Log.d("JAVA-Privitty", "Peer SPLITKEYS deleted");
+      Util.runOnAnyBackgroundThread(() -> {
+        DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
+        msg.setSubject("{'privitty':'true', 'type':'SPLITKEYS_DELETED'}");
+        String base64Msg = Base64.getEncoder().encodeToString(pdu);
+        msg.setText(base64Msg);
+        int msgId = dcContext.sendMsg(chatId, msg);
+      });
     } else if (statusCode == PrivJNI.PRV_APP_STATUS_GROUP_ADD_ACCEPTED) {
       Log.d("JAVA-Privitty", "Congratulations! New chat group is ready.");
       Util.runOnAnyBackgroundThread(() -> {
@@ -424,6 +425,26 @@ public class ApplicationContext extends MultiDexApplication {
         String base64Msg = Base64.getEncoder().encodeToString(pdu);
         msg.setText(base64Msg);
         int msgId = dcContext.sendMsg(chatId, msg);
+      });
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_FORWARD_SPLITKEYS_REQUEST ||
+               statusCode == PrivJNI.PRV_APP_STATUS_REVERT_FORWARD_SPLITKEYS_REQUEST) {
+      Log.d("JAVA-Privitty", "Relay message: " + statusCode + " ChatId: " + chatId + " ForwardToChatId: " + forwardToChatId );
+      Util.runOnAnyBackgroundThread(() -> {
+        DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
+        msg.setSubject("{'privitty':'true', 'type':'relay_message'}");
+        String base64Msg = Base64.getEncoder().encodeToString(pdu);
+        msg.setText(base64Msg);
+        int msgId = dcContext.sendMsg(chatId, msg);
+      });
+    } else if (statusCode == PrivJNI.PRV_APP_STATUS_RELAY_FORWARD_SPLITKEYS_REQUEST ||
+               statusCode == PrivJNI.PRV_APP_STATUS_RELAY_BACKWARD_SPLITKEYS_RESPONSE) {
+      Log.d("JAVA-Privitty", "Relay message: " + statusCode + " ChatId: " + chatId + " ForwardToChatId: " + forwardToChatId );
+      Util.runOnAnyBackgroundThread(() -> {
+        DcMsg msg = new DcMsg(dcContext, DcMsg.DC_MSG_TEXT);
+        msg.setSubject("{'privitty':'true', 'type':'relay_message'}");
+        String base64Msg = Base64.getEncoder().encodeToString(pdu);
+        msg.setText(base64Msg);
+        int msgId = dcContext.sendMsg(forwardToChatId, msg);
       });
     } else {
       Log.e("JAVA-Privitty", "StatusCode: " + statusCode);

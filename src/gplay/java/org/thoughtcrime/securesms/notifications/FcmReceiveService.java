@@ -29,6 +29,7 @@ public class FcmReceiveService extends FirebaseMessagingService {
 
   public static void register(Context context) {
 
+    Log.i("Priv-token", "FCM already registered: " + FcmReceiveService.prefixedToken);
     if (FcmReceiveService.prefixedToken != null) {
       Log.i(TAG, "FCM already registered");
       triedRegistering = true;
@@ -102,6 +103,7 @@ public class FcmReceiveService extends FirebaseMessagingService {
 
   @Override
   public void onNewToken(@NonNull String rawToken) {
+    Log.i("Priv-token", "rawToken: " + rawToken);
     prefixedToken = addPrefix(rawToken);
     Log.i(TAG, "new FCM token: " + prefixedToken);
     ApplicationContext.dcAccounts.setPushDeviceToken(prefixedToken);

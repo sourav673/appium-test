@@ -331,6 +331,10 @@ public class ConversationAdapter <V extends View & BindableConversationItem>
           dcMsg.setText("You revoked access");
           dcMsg.setSubject("PRIVITTY_TOAST_MSG");
           return MESSAGE_TYPE_OUTGOING;
+        } else if ("SPLITKEYS_DELETED".equalsIgnoreCase(jSubject.getString("type"))) {
+          dcMsg.setText("Requesting for a deleted message");
+          dcMsg.setSubject("PRIVITTY_TOAST_MSG");
+          return MESSAGE_TYPE_OUTGOING;
         }
       } catch (Exception e) {
         Log.d("JAVA-Privitty", "This is non-privitty message -- getItemViewType");
