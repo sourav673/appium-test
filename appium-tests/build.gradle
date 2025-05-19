@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+    implementation 'io.appium:java-client:8.3.0'
+}
+
+// Register custom source set
+sourceSets {
+    appiumTest {
+        java {
+            srcDirs = ['src/java']
+        }
+        resources {
+            srcDirs = ['src/resources']
+        }
+        compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+// Add task to run Appium test
+task runTwoDeviceTest(type: JavaExec) {
+    group = "verification"
+    description = "Run Appium-based TwoDeviceTest"
+    classpath = sourceSets.appiumTest.runtimeClasspath
+    mainClass.set("com.b44t.messenger.appium.deviceTest.TwoDeviceTest")
+    dependsOn tasks.named("compileAppiumTestJava")
+}
+task runSingleDeviceTest(type: JavaExec) {
+    group = "verification"
+    description = "Run Appium-based SingleDeviceTest"
+    classpath = sourceSets.appiumTest.runtimeClasspath
+    mainClass.set("com.b44t.messenger.appium.deviceTest.SingleDeviceTest")
+    dependsOn tasks.named("compileAppiumTestJava")
+}
+
+// Optional: JUnit-compatible test task
+task appiumTest(type: Test) {
+    testClassesDirs = sourceSets.appiumTest.output.classesDirs
+    classpath = sourceSets.appiumTest.runtimeClasspath
+    useJUnit()
+}
+
+test {
+    useJUnit()
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true
+    }
+}
