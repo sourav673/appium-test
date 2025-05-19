@@ -51,7 +51,7 @@ jobs:
         run: |
           curl -u "swa_TtVXzOfwV54:TgSazzF4ms6zyc1Cv7M7" \
           -X POST "https://api-cloud.browserstack.com/app-automate/upload" \
-          -F "file=build/outputs/apk/gplay/debug/*.apk"
+          -F "file=@build/outputs/apk/gplay/debug/*.apk"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
