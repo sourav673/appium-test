@@ -43,6 +43,11 @@
             <artifactId>cucumber-core</artifactId>
             <version>7.21.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.browserstack</groupId>
+            <artifactId>browserstack-java-sdk</artifactId>
+            <version>LATEST</version>
+        </dependency>
     </dependencies>
 
 </project>

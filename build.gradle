@@ -30,7 +30,7 @@ android {
         versionCode 708
         versionName "1.50.5"
 
-        applicationId "com.b44t.messenger"
+        applicationId "chat.delta.privitty"
         multiDexEnabled true
 
         minSdkVersion 21
@@ -206,6 +206,13 @@ dependencies {
     implementation 'com.facebook.fresco:fresco:2.5.0'
     implementation 'me.relex:photodraweeview:2.1.0'
 
+    // ✅ Selenium Java and UI support
+    implementation 'org.seleniumhq.selenium:selenium-java:4.28.1'
+    implementation 'org.seleniumhq.selenium:selenium-support:4.28.1'
+
+    // ✅ Appium Java client
+    implementation 'io.appium:java-client:9.4.0'
+    
     gplayImplementation('com.google.firebase:firebase-messaging:24.0.0') { // for PUSH notifications
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
