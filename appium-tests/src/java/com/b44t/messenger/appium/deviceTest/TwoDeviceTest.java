@@ -77,14 +77,28 @@ public class TwoDeviceTest {
                             "//android.widget.TextView[@text='How are you?']"
                     ));
 
-                  System.out.println("📄 Trying to open Document...");
-                  WebElement docMsg = wait.until(ExpectedConditions.elementToBeClickable(
-                    AppiumBy.androidUIAutomator("new UiSelector().text(\"samplepdf_c127xUOU.pdf.prv\")")
-                  ));
-                  docMsg.click();
-                  Thread.sleep(3000); // let the document viewer open
-                  base.driver.navigate().back(); // go back to chat
-                  System.out.println("✅ Document opened successfully.");
+                  // ✅ Open Document (First media message)
+
+                    System.out.println("📄 Trying to open Document...");
+                    WebElement docMsg1 = wait.until(ExpectedConditions.elementToBeClickable(
+                      AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"chat.delta.privitty:id/container\").instance(0)")
+                    ));
+                    docMsg1.click();
+                    Thread.sleep(3000); // let the document viewer open
+                    base.driver.navigate().back(); // go back to chat
+                    System.out.println("✅ Document opened successfully.");
+
+                  // ✅ Open Document (First media message)
+
+                    System.out.println("📄 Trying to open Document...");
+                    WebElement docMsg2 = wait.until(ExpectedConditions.elementToBeClickable(
+                      AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"chat.delta.privitty:id/container\").instance(1)")
+                    ));
+                    docMsg2.click();
+                    Thread.sleep(3000); // let the document viewer open
+                    base.driver.navigate().back(); // go back to chat
+                    System.out.println("✅ second Document opened successfully.");
+
 
                     if (messageBubble != null && messageBubble.isDisplayed()) {
                         messageReceived = true;
