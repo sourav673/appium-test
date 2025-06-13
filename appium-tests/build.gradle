@@ -7,51 +7,53 @@ repositories {
 }
 
 dependencies {
+    // JUnit 4 and 5 - you likely only need one
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+
+    // Appium Java client
     implementation 'io.appium:java-client:8.3.0'
 }
 
-// Register custom source set
+// ✅ Custom source set for Appium tests
 sourceSets {
     appiumTest {
-        java {
-            srcDirs = ['src/java']
-        }
-        resources {
-            srcDirs = ['src/resources']
-        }
+        java.srcDir 'src/java'
+        resources.srcDir 'src/resources'
         compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
         runtimeClasspath += output + compileClasspath
     }
 }
 
-// Add task to run Appium test
+// ✅ Run TwoDeviceTest with main() method
 task runTwoDeviceTest(type: JavaExec) {
     group = "verification"
     description = "Run Appium-based TwoDeviceTest"
     classpath = sourceSets.appiumTest.runtimeClasspath
     mainClass.set("com.b44t.messenger.appium.deviceTest.TwoDeviceTest")
-    dependsOn tasks.named("compileAppiumTestJava")
+    dependsOn compileAppiumTestJava
 }
+
+// ✅ Run SingleDeviceTest with main() method
 task runSingleDeviceTest(type: JavaExec) {
     group = "verification"
     description = "Run Appium-based SingleDeviceTest"
     classpath = sourceSets.appiumTest.runtimeClasspath
     mainClass.set("com.b44t.messenger.appium.deviceTest.SingleDeviceTest")
-    dependsOn tasks.named("compileAppiumTestJava")
+    dependsOn compileAppiumTestJava
 }
 
-// Optional: JUnit-compatible test task
+// ✅ Optional: run JUnit-style tests in appiumTest (only if you use @Test methods)
 task appiumTest(type: Test) {
     testClassesDirs = sourceSets.appiumTest.output.classesDirs
     classpath = sourceSets.appiumTest.runtimeClasspath
     useJUnit()
 }
 
+// Default test config
 test {
-    useJUnit()
+    useJUnitPlatform()
     testLogging {
         events "passed", "skipped", "failed"
         showStandardStreams = true

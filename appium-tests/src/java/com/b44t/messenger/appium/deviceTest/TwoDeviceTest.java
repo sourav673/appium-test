@@ -25,14 +25,17 @@ public class TwoDeviceTest {
     // This test is designed to run on two different devices.
     // Make sure to run the test on two different devices/emulators.
     public static void main(String[] args) {
-        String deviceName1 = "Google Pixel 7";   // or any device from BrowserStack
-        String osVersion1 = "13.0";
-        String deviceName2 = "Google Pixel 6";
-        String osVersion2 = "12.0";
-        String appUrl = "bs://e38684eb01dd899453b904406f4c3d82ec441e75"; // e.g., "bs://<app-id>"
+//        String deviceName1 = "ZD2226SZNF";   // or any device from BrowserStack
+//        String osVersion1 = "14.0";
+//        String deviceName2 = "emulator-5554";
+//        String osVersion2 = "15.0";
+//        String appUrl = "bs://e38684eb01dd899453b904406f4c3d82ec441e75"; // e.g., "bs://<app-id>"
 
-        Thread user1 = new Thread(() -> runUser1(deviceName1, osVersion1, appUrl), "User1Thread");
-        Thread user2 = new Thread(() -> runUser2(deviceName2, osVersion2, appUrl), "User2Thread");
+//        Thread user1 = new Thread(() -> runUser1(deviceName1, osVersion1, appUrl), "User1Thread");
+//        Thread user2 = new Thread(() -> runUser2(deviceName2, osVersion2, appUrl), "User2Thread");
+
+        Thread user1 = new Thread(() -> runUser1("ZD2226SZNF", 4723), "User1Thread");
+        Thread user2 = new Thread(() -> runUser2("emulator-5554", 4725), "User2Thread");
 
         user1.start();
         user2.start();
@@ -45,16 +48,18 @@ public class TwoDeviceTest {
         }
     }
 
-    public static void runUser1(String deviceName, String osVersion, String appUrl) {
+//    public static void runUser1(String deviceName, String osVersion, String appUrl) {
+    public static void runUser1(String udid, int port) {
         BaseTest base = new BaseTest();
         try {
-            base.setupDriver(deviceName, osVersion, appUrl);
+            base.setupDriver(udid, port);
             LoginPage login = new LoginPage(base.driver);
             InvitePage invite = new InvitePage(base.driver);
 
             login.login("User1");
             sharedInviteLink = invite.generateInviteLink();
             System.out.println("✅ User1 generated invite: " + sharedInviteLink);
+            WebDriverWait wait = new WebDriverWait(base.driver, Duration.ofSeconds(10));
 
             // Wait for User2's message
             boolean messageReceived = false;
@@ -71,6 +76,15 @@ public class TwoDeviceTest {
                     WebElement messageBubble = base.driver.findElement(By.xpath(
                             "//android.widget.TextView[@text='How are you?']"
                     ));
+
+                  System.out.println("📄 Trying to open Document...");
+                  WebElement docMsg = wait.until(ExpectedConditions.elementToBeClickable(
+                    AppiumBy.androidUIAutomator("new UiSelector().text(\"samplepdf_c127xUOU.pdf.prv\")")
+                  ));
+                  docMsg.click();
+                  Thread.sleep(3000); // let the document viewer open
+                  base.driver.navigate().back(); // go back to chat
+                  System.out.println("✅ Document opened successfully.");
 
                     if (messageBubble != null && messageBubble.isDisplayed()) {
                         messageReceived = true;
@@ -124,10 +138,11 @@ public class TwoDeviceTest {
         }
     }
 
-    public static void runUser2(String deviceName, String osVersion, String appUrl) {
+//    public static void runUser2(String deviceName, String osVersion, String appUrl) {
+      public static void runUser2(String udid, int port) {
         BaseTest base = new BaseTest();
         try {
-            base.setupDriver(deviceName, osVersion, appUrl);
+            base.setupDriver(udid, port);
             LoginPage login = new LoginPage(base.driver);
             InvitePage invite = new InvitePage(base.driver);
 
@@ -163,6 +178,8 @@ public class TwoDeviceTest {
             wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//android.widget.TextView[contains(@text,'Privitty secure')]")
             )).click();
+
+//            Sending Document
             wait.until(ExpectedConditions.elementToBeClickable(
                     By.id("chat.delta.privitty:id/attach_button")
             )).click();
@@ -177,6 +194,41 @@ public class TwoDeviceTest {
             wait.until(ExpectedConditions.elementToBeClickable(
                     AppiumBy.accessibilityId("Send")
             )).click();
+
+//            sending image
+            wait.until(ExpectedConditions.elementToBeClickable(
+                    By.id("chat.delta.privitty:id/attach_button")
+            )).click();
+            wait.until(ExpectedConditions.elementToBeClickable(
+                    AppiumBy.id("chat.delta.privitty:id/cbDownload")
+            )).click();
+            base.driver.findElement(AppiumBy.id("chat.delta.privitty:id/etAllowTime")).sendKeys("1");
+            base.driver.findElement(AppiumBy.id("android:id/button1")).click();
+            wait.until(ExpectedConditions.elementToBeClickable(
+                    AppiumBy.xpath("(//android.widget.ImageView[@resource-id=\"com.google.android.documentsui:id/icon_thumb\"])[2]")
+            )).click();
+            wait.until(ExpectedConditions.elementToBeClickable(
+                    AppiumBy.accessibilityId("Send")
+            )).click();
+
+//            sending video
+            wait.until(ExpectedConditions.elementToBeClickable(
+                    By.id("chat.delta.privitty:id/attach_button")
+            )).click();
+            wait.until(ExpectedConditions.elementToBeClickable(
+                    AppiumBy.id("chat.delta.privitty:id/cbDownload")
+            )).click();
+            base.driver.findElement(AppiumBy.id("chat.delta.privitty:id/etAllowTime")).sendKeys("1");
+            base.driver.findElement(AppiumBy.id("android:id/button1")).click();
+            wait.until(ExpectedConditions.elementToBeClickable(
+                    AppiumBy.xpath("(//android.widget.ImageView[@resource-id=\"com.google.android.documentsui:id/icon_thumb\"])[3]")
+            )).click();
+            wait.until(ExpectedConditions.elementToBeClickable(
+                    AppiumBy.accessibilityId("Send")
+            )).click();
+
+            Thread.sleep(5000);
+
 
 //            Delete Chat and Rejoin
             wait.until(ExpectedConditions.elementToBeClickable(
@@ -195,15 +247,6 @@ public class TwoDeviceTest {
                     AppiumBy.accessibilityId("Navigate up")
             )).click();
             invite.joinViaInviteLink(sharedInviteLink);
-
-
-//            moreOption.click();
-//            menu.click();
-//            deleteChat.click();
-//            Btn1.click();
-//            back.click();
-//            Thread.sleep(2000);
-//            invite.joinViaInviteLink(sharedInviteLink);
 
         } catch (Exception e) {
             System.out.println("❌ User2 error: " + e.getMessage());
