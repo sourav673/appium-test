@@ -47,11 +47,11 @@ jobs:
       - name: Build APK
         run: ./gradlew --no-daemon assembleGplayDebug
 
-      - name: Upload App to BrowserStack
-        run: |
-          curl -u "swa_TtVXzOfwV54:TgSazzF4ms6zyc1Cv7M7" \
-          -X POST "https://api-cloud.browserstack.com/app-automate/upload" \
-          -F "file=@build/outputs/apk/gplay/debug/privitty-deltchat-android-gplay-debug-1.50.5.apk"
+#      - name: Upload App to BrowserStack
+#        run: |
+#          curl -u "swa_TtVXzOfwV54:TgSazzF4ms6zyc1Cv7M7" \
+#          -X POST "https://api-cloud.browserstack.com/app-automate/upload" \
+#          -F "file=@build/outputs/apk/gplay/debug/privitty-deltchat-android-gplay-debug-1.50.5.apk"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
